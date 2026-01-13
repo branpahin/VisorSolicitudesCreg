@@ -1,0 +1,36 @@
+@if(solicitud){
+    <div  class="min-h-screen bg-gray-50 p-6">
+
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-xl font-semibold text-gray-800">
+            Solicitud #{{ solicitud?.numeroRadicado }}
+            </h1>
+
+            <button
+            (click)="volverHome()"
+            class="flex items-center gap-2 px-4 py-2 rounded-lg border border-orange-400 text-orange-500 hover:bg-orange-50 transition">
+            <i class="pi pi-arrow-left"></i>
+            Regresar
+            </button>
+        </div>
+
+        <!-- Tabs -->
+        <p-tabs value="0" class="tw-tabs">
+            <p-tablist>
+                <p-tab value="0">Detalles</p-tab>
+                <p-tab value="1">Anexos</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+                <p-tabpanel value="0">
+                    <app-detalles [solicitud]="solicitud"></app-detalles>
+                </p-tabpanel>
+
+                <p-tabpanel value="1">
+                    <app-anexos></app-anexos>
+                </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+
+    </div>     
+}

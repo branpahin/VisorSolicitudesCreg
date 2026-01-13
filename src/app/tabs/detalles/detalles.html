@@ -1,0 +1,58 @@
+<p-accordion [multiple]="true" class="w-full tw-accordion">
+
+  <!-- DATOS GENERALES -->
+  <p-accordion-panel value="0">
+    <p-accordion-header>Datos generales</p-accordion-header>
+    <p-accordion-content>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        <div><b>Radicado:</b> {{ solicitud.numeroRadicado }}</div>
+        <div><b>Estado:</b> {{ solicitud.cregEstado?.descripcion }}</div>
+        <div><b>Fecha registro:</b> {{ solicitud.fechaRegistro | date:'short' }}</div>
+        <div><b>Fecha prevista operación:</b> {{ solicitud.fechaPrevistaOper | date }}</div>
+      </div>
+    </p-accordion-content>
+  </p-accordion-panel>
+
+  <!-- INFORMACIÓN DEL CLIENTE -->
+  <p-accordion-panel value="1">
+    <p-accordion-header>Información del cliente</p-accordion-header>
+    <p-accordion-content>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        <div><b>Nombre:</b> {{ solicitud.nombreCliente }}</div>
+        <div><b>Identificación:</b> {{ solicitud.numeroIdentificacion }}</div>
+        <div><b>Tipo cliente:</b> {{ solicitud.cregTipoCliente?.descripcion }}</div>
+        <div><b>Estrato:</b> {{ solicitud.cregEstratoSocioeconomico?.descripcion }}</div>
+        <div class="md:col-span-2">
+          <b>Dirección:</b> {{ solicitud.direccion }}
+        </div>
+      </div>
+    </p-accordion-content>
+  </p-accordion-panel>
+
+  <!-- UBICACIÓN -->
+  <p-accordion-panel value="2">
+    <p-accordion-header>Ubicación</p-accordion-header>
+    <p-accordion-content>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        <div><b>Ciudad:</b> {{ solicitud.cregCiudad?.nombreCiudad }}</div>
+        <div><b>Departamento:</b> {{ solicitud.cregDepartamento?.nombreDepartamento }}</div>
+        <div><b>Subestación:</b> {{ solicitud.codSubestacion }}</div>
+        <div><b>Transformador:</b> {{ solicitud.codTransformador }}</div>
+      </div>
+    </p-accordion-content>
+  </p-accordion-panel>
+
+  <!-- TECNOLOGÍA -->
+  <p-accordion-panel value="3">
+    <p-accordion-header>Tecnología</p-accordion-header>
+    <p-accordion-content>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        <div><b>Tipo generación:</b> {{ solicitud.cregTipoGeneracion?.descripcion }}</div>
+        <div><b>Capacidad nominal (kW):</b> {{ solicitud.capacidadNominal }}</div>
+        <div><b>Potencia máxima declarada:</b> {{ solicitud.potenciaMaximaDeclarada }}</div>
+        <div><b>Nivel de tensión:</b> {{ solicitud.nivelTension }} V</div>
+      </div>
+    </p-accordion-content>
+  </p-accordion-panel>
+
+</p-accordion>

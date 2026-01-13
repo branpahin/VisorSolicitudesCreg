@@ -1,0 +1,76 @@
+.login-bg {
+  background-image: url('../../../../public/assets/eep/energia-login.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+img.img-fluid{
+  position: absolute;
+  height: clamp(80px, 12vw, 150px); 
+  width: auto;
+  top: -2px;
+  left: -30px;
+}
+
+.myform {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 1rem;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 1.1rem;
+  outline: 0;
+  max-width: 420px;
+}
+
+.login-title {
+  top: 231px;
+  left: 734px;
+
+  text-align: center;
+  letter-spacing: 0px;
+  color: #202020;
+  opacity: 1;
+  font-size: 26px;
+  font-family: 'Montserrat-Bold';
+}
+
+.login-description {
+  top: 307px;
+  left: 734px;
+  letter-spacing: 0px;
+  color: #202020;
+  font-size: 14px;
+  font-family: 'Montserrat-Regular';
+  opacity: 1;
+}
+
+.login-labels {
+  width: 100%;
+  font-size: 14px;
+  text-align: left;
+  letter-spacing: 1px;
+  color: #504f4f;
+  opacity: 1;
+  font-family: 'Montserrat-Bold';
+}
+
+.btn-login {
+  background: #e2650f 0% 0% no-repeat padding-box;
+  box-shadow: 0px 4px 8px #1C818E1F;
+  opacity: 1;
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
+  font-family: 'Montserrat-Bold';
+}

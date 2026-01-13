@@ -1,3 +1,61 @@
 /* You can add global styles to this file, and also import other style files */
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @import "tailwindcss";
+
+
+@font-face {
+  font-family: 'Montserrat-Bold';
+  src: local('Montserrat-Bold'), url('/assets/fonts/Montserrat/Montserrat-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Montserrat-SemiBold';
+  src: local('Montserrat-SemiBold'), url('/assets/fonts/Montserrat/Montserrat-SemiBold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Montserrat-Regular';
+  src: local('Montserrat-Regular'), url('/assets/fonts/Montserrat/Montserrat-Regular.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+
+.tw-tabs {
+  --p-tabs-tablist-background: theme(colors.gray.100);
+  --p-tabs-tab-background: theme(colors.gray.100);
+  --p-tabs-tabpanel-background:theme(colors.gray.100);
+  --p-tabs-tab-active-background: theme(colors.gray.200);
+  --p-tabs-tab-color: theme(colors.gray.700);
+  --p-tabs-tab-active-color: theme(colors.gray.900);
+}
+
+.tw-accordion {
+  --p-accordion-header-background: theme(colors.gray.100);
+  --p-accordion-header-hover-background: theme(colors.gray.200);
+  --p-accordion-header-color: theme(colors.gray.800);
+  --p-content-background: theme(colors.gray.50);
+}
+
+.p-dialog{
+    background:white !important;
+    color: #e2650f !important;
+}
+
+.btn {
+    font-size: 0.9rem;
+}
+
+.container{
+    align-content: start;
+    align-items: start;
+    text-align: left;
+}

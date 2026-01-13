@@ -1,0 +1,56 @@
+<div class="login-bg min-h-screen flex items-center justify-center">
+    <a>
+        <img class="img-fluid" src="assets/eep/logoEEP_dynamic.svg" alt="img logo login" />
+    </a>
+
+    <div class="col-md-5 mx-auto">
+        <div id="first">
+        <div class="myform form">
+            <div class="logo mb-3 mt-8">
+            <div class="col-md-12 ">
+                <div class="logo-app text-center">
+                
+                <!-- <p-divider></p-divider> -->
+                </div>
+                <div class="container-info-login">
+                <label class="login-title">Empresa de Energía de Pereira</label>
+                <br />
+                <label class="login-description">Busca tu solicitud</label>
+                </div>
+            </div>
+            </div>
+
+            <div class="container">
+                <div class="container-info-login">
+                <div class="mb-3 row">
+                    <label class="mb-2 login-labels" for="email">Número de solicitud</label>
+                    <input [(ngModel)]="numeroSolicitud" class="w-full border border-[#d1d5db] rounded-lg p-2" 
+                    placeholder="Numero de solicitud" />
+                </div>
+
+                <div class="mb-3 row">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                    <label class="login-labels" for="password">Ciudad</label>
+                    </div>
+                    <p-select
+                        [options]="ciudades"
+                        optionLabel="name"
+                        optionValue="code"
+                        [(ngModel)]="ciudad"
+                        placeholder="Seleccione una ciudad"
+                        class="w-full rounded-xl">
+                    </p-select>
+                </div>
+
+                <div class="mb-3 row">
+                    <div class="d-grid align-items-center text-center">
+                        <button (click)="buscar()" class="btn btn-lg btn-block btn-login p-2 rounded-xl">BUSCAR</button>
+                    </div>
+                </div>
+
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
