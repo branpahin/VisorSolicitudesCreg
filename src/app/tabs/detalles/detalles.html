@@ -1,58 +1,1216 @@
-<p-accordion [multiple]="true" class="w-full tw-accordion">
 
-  <!-- DATOS GENERALES -->
-  <p-accordion-panel value="0">
-    <p-accordion-header>Datos generales</p-accordion-header>
-    <p-accordion-content>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-        <div><b>Radicado:</b> {{ solicitud.numeroRadicado }}</div>
-        <div><b>Estado:</b> {{ solicitud.cregEstado?.descripcion }}</div>
-        <div><b>Fecha registro:</b> {{ solicitud.fechaRegistro | date:'short' }}</div>
-        <div><b>Fecha prevista operación:</b> {{ solicitud.fechaPrevistaOper | date }}</div>
+   <div class="min-h-screen bg-gray-50 p-6 overflow-hidden">
+    <div class="card flex justify-center h-full">
+        <form [formGroup]="form">
+          <p-accordion #formTabsItem [(value)]="activeFormIndex"
+            class="w-full overflow-y-auto">
+            <!-- Tipo de generación -->
+            <p-accordion-panel value="0">
+              <p-accordion-header>Tipo de generación</p-accordion-header>
+              <p-accordion-content>
+                <div class="">
+                  <!-- -->
+                  <div class="row mb-3">
+                    <!--Tipo-->
+                    <div class="form-group col-12 col-md-6 mb-3">
+                      <label class="formLabel">Tipo*</label>
+                      <select id="codTipoGeneracion" class="form-select formInput" formControlName="codTipoGeneracion"
+                        [ngClass]="formDataValidate('codTipoGeneracion')" (change)="onSelectType()">
+                        <option value="-1" selected></option>
+                        <option *ngFor="let idType of lstIdTypes" [value]="idType.id">
+                          {{ idType.descripcion }} - {{idType.abreviatura}}
+                        </option>
+                      </select>
+                    </div>
+                    <!--Validación Entrega Excedentes A La Red-->
+                    <div class="form-group col" *ngIf="canDeliverSurplusesNetwork">
+                      <label class="formLabel">Si es GD, AGPE o AGGE, ¿Entrega excedentes a la
+                        red?:*</label>
+                      <div class="mt-2">
+                        <div class="form-check form-check-inline">
+                          <label class="form-check-label formInput" for="inlineRadio1">SI</label>
+                          <input id="entregaExcedentes" class="form-check-input formInput" type="radio" [value]="true"
+                            formControlName="entregaExcedentes"
+                            [ngClass]="formDataValidate('entregaExcedentes')">
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <label class="form-check-label formInput" for="inlineRadio2">NO</label>
+                          <input class="form-check-input formInput" type="radio" [value]="false"
+                            formControlName="entregaExcedentes"
+                            [ngClass]="formDataValidate('entregaExcedentes')">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group col">
+                      <label class="formLabel">¿El OR suministra o instala los activos de conexión?:*</label>
+                      <div class="mt-2">
+                        <div class="form-check form-check-inline">
+                          <label class="form-check-label formInput" for="inlineRadio1">SI</label>
+                          <input id="ORInstalaActivos" class="form-check-input formInput" type="radio" [value]="true"
+                            formControlName="ORInstalaActivos" [ngClass]="formDataValidate('ORInstalaActivos')">
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <label class="form-check-label formInput" for="inlineRadio2">NO</label>
+                          <input class="form-check-input formInput" type="radio" [value]="false"
+                            formControlName="ORInstalaActivos" [ngClass]="formDataValidate('ORInstalaActivos')">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Fecha Prevista -->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formLabel">Fecha prevista de entrada en operación*</label>
+                      <input id="fechaPrevistaOper" class="form-control formInput" type="date"
+                        formControlName="fechaPrevistaOper" [min]="minDate"
+                        [ngClass]="formDataValidate('fechaPrevistaOper')">
+                    </div>
+                  </div>
+                  <!-- Clasificación del proyecto según su capacidad -->
+                  <div class="row mb-2">
+                    <!-- *ngIf="(canDeliverSurplusesNetwork && form.get('entregaExcedentes')?.value) ||
+                          (generationTypeSelected && generationTypeSelected.abreviatura == 'GD')"> -->
+                    <div class="form-group col">
+                      <label class="formLabel">Clasificación del proyecto según su capacidad*</label>
+                      <select id="codClasificacionProyecto" class="form-select formInput"
+                        formControlName="codClasificacionProyecto"
+                        [ngClass]="formDataValidate('codClasificacionProyecto')">
+                        <option [value]="-1" selected></option>
+                        <option *ngFor="let clasification of validProjectClasification" [value]="clasification.id">
+                          {{ clasification.descripcion }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </p-accordion-content>
+            </p-accordion-panel>
+            <!-- <p-accordionTab header="Tipo de generación">
+              
+            </p-accordionTab> -->
+            <!-- Información del cliente -->
+            <p-accordion-panel value="1">
+              <p-accordion-header>Información del cliente</p-accordion-header>
+              <p-accordion-content>
+                <div class="">
+                  <!-- Comercializador que lo atiende -->
+                  <div class="row mb-2">
+                    <!-- Comercializador que lo atiende -->
+                    <div class="form-group col">
+                      <label class="formLabel">Comercializador que lo atiende*</label>
+                      <div class="mt-2">
+                        <div class="form-check form-check-inline" *ngFor="let item of lstComercializadores">
+                          <input class="form-check-input formInput mt-1" type="radio"
+                            [id]="'codComercializador_' + item.id" [value]="item.id"
+                            formControlName="codComercializador"
+                            [ngClass]="formDataValidate('codComercializador')">
+                          <label class="form-check-label formInput" [for]="'codComercializador_' + item.id">
+                            {{ item.descripcion }}
+                          </label>
+                        </div>
+                        <div class="form-group col"
+                          *ngIf="form.get('codComercializador')?.value == comercializador.Otro">
+                          <input id="nombreOtroComercializador" class="form-control formInput"
+                            formControlName="nombreOtroComercializador"
+                            [ngClass]="formDataValidate('nombreOtroComercializador')">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!--Numero Cuenta / Codigo SIC -->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <!--Numero Cuenta Cliente-->
+                      <div class="form-group col">
+                        <label class="formLabel">No. de cuenta cliente*</label>
+                        <input id="codCuentaCliente" class="form-control formInput" type="number"
+                          formControlName="codCuentaCliente" [ngClass]="formDataValidate('codCuentaCliente')">
+                      </div>
+                      <!--Código SIC
+                      <div class="form-group col" *ngIf="form.get('codComercializador')?.value == 0">
+                        <label class="formLabel">Código SIC - Frt*</label>
+                        <input id="codigoSic" class="form-control formInput" type="number" formControlName="codigoSic"
+                          [ngClass]="formDataValidate('codigoSic')">
+                        <div class="validation-error">
+                          <ng- *ngFor="let validation of validation_messages.codigoSic">
+                            <div *ngIf="validate('codigoSic',validation.type)">
+                              {{ validation.message }}
+                            </div>
+                          </ng->
+                        </div>
+                      </div>-->
+                    </div>
+                  </div>
+                  <!--Nombre Cliente-->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formLabel">Nombre del cliente*</label>
+                      <input id="nombreCliente" class="form-control formInput" type="text"
+                        formControlName="nombreCliente" [ngClass]="formDataValidate('nombreCliente')">
+                    </div>
+                  </div>
+                  <!--Identificación Cliente-->
+                  <div class="row mb-2">
+                    <!--Tipo Identificación-->
+                    <div class="form-group col">
+                      <label class="formLabel">Tipo Identificación*</label>
+                      <select id="codTipoIdentificacionCliente" class="form-select formInput"
+                        formControlName="codTipoIdentificacionCliente"
+                        [ngClass]="formDataValidate('codTipoIdentificacionCliente')">
+                        <option value="-1" selected></option>
+                        <option *ngFor="let idType of lstIdentificationType" [value]="idType.id">
+                          {{ idType.descripcion }}
+                        </option>
+                      </select>
+                    </div>
+                    <!--Identificación-->
+                    <div class="form-group col">
+                      <label class="formLabel">N° Identificación*</label>
+                      <input id="numeroIdentificacionCliente" type="text" class="form-control formInput"
+                        placeholder="N° Identificación" formControlName="numeroIdentificacionCliente"
+                        [ngClass]="formDataValidate('numeroIdentificacionCliente')">
+                    </div>
+                  </div>
+                  <!--Dirección-->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formLabel">Dirección*</label>
+                      <input id="direccionCliente" type="text" class="form-control formInput" placeholder="Dirección"
+                        formControlName="direccionCliente" [ngClass]="formDataValidate('direccionCliente')">
+                    </div>
+                  </div>
+                  <!-- Residencia -->
+                  <div class="row mb-2">
+                    <!--Departamento-->
+                    <!--
+                    <div class="form-group col">
+                      <label class="formLabel">Departamento*</label>
+                      <select id="codDepartamentoCliente" class="form-select formInput"
+                        formControlName="codDepartamentoCliente" [ngClass]="formDataValidate('codDepartamentoCliente')"
+                        placeholder='Departamento' (change)="onSelectDepartment()">
+                        <option value="" selected></option>
+                        <option *ngFor="let department of lstDepartments" [value]="department.id">
+                          {{ department.nombreDepartamento }}
+                        </option>
+                      </select>
+                      <div class="validation-error">
+                        <ng- *ngFor="let validation of validation_messages.codDepartamentoCliente">
+                          <div *ngIf="
+                                                  (form.get('codDepartamentoCliente')?.hasError(validation.type) &&
+                                                    form.get('codDepartamentoCliente')?.dirty) ||
+                                                  (form.get('codDepartamentoCliente')?.touched &&
+                                                    form.get('codDepartamentoCliente')?.hasError(validation.type))
+                                                ">
+                            {{ validation.message }}
+                          </div>
+                        </ng->
+                      </div>
+                    </div>
+                    -->
+                    <!--Municipio-->
+                    
+                    <div class="form-group col" >
+                      <label class="formLabel">Municipio*</label>
+                      <ng-select class="formInput custom" id="codMunicipioCliente" [items]="filteredTowns"
+                        bindLabel="nombreCompleto" bindValue="id"
+                        formControlName="codMunicipioCliente" [ngClass]="formDataValidate('codMunicipioCliente')"
+                        (change)="onChangeTowns()" [searchable]="true" [clearable]="true" (search)="onSearch($event)">
+                      </ng-select>
+                    </div>
+                    <!--Barrio-->
+                    <!--
+                    <div class="form-group col">
+                      <label class="formLabel">BARRIO*</label>
+                      <input id="barrioCliente" type="text" class="form-control formInput" placeholder="Barrio"
+                        formControlName="barrioCliente" [ngClass]="formDataValidate('barrioCliente')">
+                      <div class="validation-error">
+                        <ng- *ngFor="let validation of validation_messages.barrioCliente">
+                          <div *ngIf="
+                                                  (form.get('barrioCliente')?.hasError(validation.type) &&
+                                                    form.get('barrioCliente')?.dirty) ||
+                                                  (form.get('barrioCliente')?.touched &&
+                                                    form.get('barrioCliente')?.hasError(validation.type))
+                                                ">
+                            {{ validation.message }}
+                          </div>
+                        </ng->
+                      </div>
+                    </div>
+                  -->
+                  </div>
+                  <!-- Email / Contacto-->
+                  <div class="row mb-2">
+                    <!--Email-->
+                    <div class="form-group col">
+                      <label class="formLabel">Email*</label>
+                      <input id="emailCliente" type="email" formControlName="emailCliente"
+                        class="form-control formInput" placeholder="E-mail"
+                        [ngClass]="formDataValidate('emailCliente')">
+                    </div>
+                    <!--Número Contacto-->
+                    <div class="form-group col">
+                      <label class="formLabel">Teléfono/Celular*</label>
+                      <input id="telefonoCliente" type="text" class="form-control formInput"
+                        placeholder="Número de Contacto" formControlName="telefonoCliente"
+                        [ngClass]="formDataValidate('telefonoCliente')">
+                    </div>
+                  </div>
+                  <!--  -->
+                  <div class="row mb-2">
+                    <!--Tipo Cliente-->
+                    <div class="form-group col">
+                      <label class="formLabel">Tipo de cliente*</label>
+                      <select id="codTipoCliente" class="form-select formInput" formControlName="codTipoCliente"
+                        [ngClass]="formDataValidate('codTipoCliente')">
+                        <option value="-1" selected></option>
+                        <option *ngFor="let idType of lstClientType" [value]="idType.id">
+                          {{ idType.descripcion }}
+                        </option>
+                      </select>
+                    </div>
+                    <!--Otro Tipo Cliente-->
+                    <div class="form-group col" *ngIf="form.get('codTipoCliente')?.value == 5">
+                      <label class="formLabel">Otro tipo de cliente</label>
+                      <input id="otroTipoCliente" type="email" formControlName="otroTipoCliente"
+                        class="form-control formInput" [ngClass]="formDataValidate('otroTipoCliente')">
+
+                    </div>
+                  </div>
+                  <!-- Estrato Socioeconomico-->
+                  <div class="row mb-2" *ngIf="form.get('codTipoCliente')?.value == 1 && form.get('codEstratoCliente')!.value">
+                    <!-- Estrato -->
+                    <div class="form-group col">
+                      <label class="formLabel">Estrato*</label>
+                      <select id="codEstratoCliente" class="form-select formInput" formControlName="codEstratoCliente"
+                        [ngClass]="formDataValidate('codEstratoCliente')">
+                        <option value="-1" selected></option>
+                        <option *ngFor="let idType of lstSocioeconomicStratum" [value]="idType.id">
+                          {{ idType.id > 0 ? idType.id : idType.descripcion }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </p-accordion-content>
+            </p-accordion-panel>
+            <!-- <p-accordionTab header="Información del cliente">
+              
+            </p-accordionTab> -->
+            <!-- Información del inmueble -->
+            <p-accordion-panel value="2">
+              <p-accordion-header>Información del inmueble</p-accordion-header>
+              <p-accordion-content>
+                <div class="">
+                  <!--Dirección de ubicación del proyecto-->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formLabel">Dirección de ubicación del proyecto*</label>
+                      <input id="direccionInmueble" type="text" class="form-control formInput" placeholder="Dirección"
+                        formControlName="direccionInmueble" [maxlength]="100"
+                        [ngClass]="formDataValidate('direccionInmueble')">
+                    </div>
+                  </div>
+                  <!-- Municipio/Localidad-->
+
+                  <div class="form-group col">
+                    <label class="formLabel">Municipio*</label>
+                    <ng-select class="formInput custom" id="codMunicipioCliente" [items]="filteredTowns"
+                      bindLabel="nombreCompleto" bindValue="id" placeholder="Buscar municipio..."
+                      formControlName="codMunicipioInmueble" [ngClass]="formDataValidate('codMunicipioInmueble')"
+                      (change)="onChangeTowns()" [searchable]="true" [clearable]="true" (search)="onSearch($event)">
+                    </ng-select>
+                  </div>
+                  <!-- Corregimiento / Vereda  -->
+                  <div class="row mb-2">
+                    <!--Corregimiento-->
+                    <div class="form-group col">
+                      <label class="formLabel">Corregimiento (Si aplica)</label>
+                      <input id="corregimientoInmueble" type="text" class="form-control formInput"
+                        formControlName="corregimientoInmueble" [ngClass]="formDataValidate('corregimientoInmueble')">
+                    </div>
+                    <!--Vereda-->
+                    <div class="form-group col">
+                      <label class="formLabel">Vereda (Si aplica)</label>
+                      <input id="veredaInmueble" type="text" class="form-control formInput"
+                        formControlName="veredaInmueble" [ngClass]="formDataValidate('veredaInmueble')">
+                    </div>
+                  </div>
+                  <!--Ubicación georreferenciada wgs84 (de googlemaps)-->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formLabel">Ubicación georreferenciada wgs84 (de googlemaps) *</label>
+                      <input id="ubicacionGeoWGS" type="text" class="form-control formInput"
+                        formControlName="ubicacionGeoWGS" [ngClass]="formDataValidate('ubicacionGeoWGS')">
+                    </div>
+                  </div>
+                  <!--Campo número de poste o código del transformador más cercano-->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formLabel">Campo número de poste o código del transformador más cercano (Para nivel
+                        de tensión 1) *</label>
+                      <input id="numeroPosteTransformador" type="text" class="form-control formInput"
+                        formControlName="numeroPosteTransformador"
+                        [ngClass]="formDataValidate('numeroPosteTransformador')">
+                    </div>
+                  </div>
+                </div>
+              </p-accordion-content>
+            </p-accordion-panel>
+            <!-- <p-accordionTab header="Información del inmueble">
+              
+            </p-accordionTab> -->
+            <!-- Tipo de tecnología utilizada -->
+            <p-accordion-panel value="3">
+              <p-accordion-header>Tipo de tecnología utilizada</p-accordion-header>
+              <p-accordion-content>
+                <div class="">
+                  <!-- Tecnología Utilizada -->
+                  <div class="row mb-2">
+                    <div id="divTecnologiaUtilizada" class="form-group col">
+                      <label class="formLabel">Tecnología Utilizada*</label>
+                      <div class="mt-2">
+                        <div class="form-check form-check-inline" *ngFor="let type of lstTechnologyType; let i =index">
+                          <input class="form-check-input form-check-label formInput mt-1" [disabled]="request"
+                            type="radio" (change)="onCheckTechnologyType(null,i,true)" [checked]="type.selected">
+                          <label class="form-check-label form-check-label formInput" for="inlineRadio1">{{
+                            type.descripcion }}</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!--Otro tipo de tecnología-->
+                <div class="row mb-2">
+                  <div class="form-group col" *ngIf="isAnotherTechnologyTypeSelected">
+                    <label class="formLabel">Otro tipo de tecnología*</label>
+                    <input id="otroTipoTecnologia" class="form-control formInput" type="text"
+                      formControlName="otroTipoTecnologia" [ngClass]="formDataValidate('otroTipoTecnologia')">
+                  </div>
+                </div>
+                <!--Si el usuario selecciono mas de un tipo de tecnología-->
+                <div class="row mb-2">
+                  <div class="form-group col" *ngIf="multipleTechSelected">
+                    <label class="formLabel">Si utiliza más de una tecnología favor marcar todas las
+                      casillas correspondientes e indicar acá la capacidad en kW por
+                      tecnología*</label>
+                    <input id="capacidadPorTecnologia" class="form-control formInput" type="text"
+                      formControlName="capacidadPorTecnologia" [ngClass]="formDataValidate('capacidadPorTecnologia')">
+                  </div>
+                </div>
+                <!--Validaciones Si o No -->
+                <!--Cuenta con almacenamiento de energía-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel"> Cuenta con almacenamiento de energía:*</label>
+                    <select id="cuentaConAlmacenamientoEnergia" class="form-select formInput"
+                      [ngClass]="formDataValidate('cuentaConAlmacenamientoEnergia')"
+                      formControlName="cuentaConAlmacenamientoEnergia">
+                      <option value="-1" selected></option>
+                      <option *ngFor="let validate of lstYesOrNot" [value]="validate.value">
+                        {{ validate.description }}
+                      </option>
+                    </select>
+                  </div>
+                  <!--Indique Capacidad En (kW)-->
+                  <div class="form-group col"
+                    *ngIf="form.get('cuentaConAlmacenamientoEnergia')?.value == 'true' || form.get('cuentaConAlmacenamientoEnergia')?.value == true">
+                    <label class="formLabel">Indique capacidad en (kW):</label>
+                    <input id="capacidadEnKw" class="form-control formInput" type="text" formControlName="capacidadEnKw"
+                      [ngClass]="formDataValidate('capacidadEnKw')">
+                  </div>
+                  <!--Indique Capacidad En (KWh)-->
+                  <div class="form-group col"
+                    *ngIf="form.get('cuentaConAlmacenamientoEnergia')?.value  == 'true' || form.get('cuentaConAlmacenamientoEnergia')?.value == true">
+                    <label class="formLabel">Indique capacidad en (kWh):</label>
+                    <input id="capacidadEnKwh" class="form-control formInput" type="number"
+                      formControlName="capacidadEnKwh" [ngClass]="formDataValidate('capacidadEnKwh')">
+                  </div>
+                </div>
+                <!--Validaciones Si o No -->
+                <div class="row mb-2">
+                  <!--Sistema basado en inversores-->
+                  <div class="form-group col">
+                    <label class="formLabel">Sistema basado en inversores:*</label>
+                    <label class="formLabel">(Incluye fotovoltaico y eólico full converte)</label>
+                    <select id="sistemaBasadoInversores" class="form-select formInput"
+                      formControlName="sistemaBasadoInversores" [ngClass]="formDataValidate('sistemaBasadoInversores')">
+                      <option value="-1" selected></option>
+                      <option *ngFor="let validate of lstYesOrNot" [value]="validate.value">
+                        {{ validate.description }}
+                      </option>
+                    </select>
+                  </div>
+                  <!--Sistema basado en máquinas sincrónicas-->
+                  <div class="form-group col mt-4">
+
+                    <label class="formLabel">Sistema basado en máquinas sincrónicas:*</label>
+                    <select id="sistemaBasadoMaquinasSincronicas" class="form-select formInput"
+                      formControlName="sistemaBasadoMaquinasSincronicas"
+                      [ngClass]="formDataValidate('sistemaBasadoMaquinasSincronicas')">
+                      <option value="-1" selected></option>
+                      <option *ngFor="let validate of lstYesOrNot" [value]="validate.value">
+                        {{ validate.description }}
+                      </option>
+                    </select>
+                  </div>
+                  <!--Sistema basado en máquinas asincrónicas-->
+                  <div class="form-group col mt-4">
+                    <label class="formLabel">Sistema basado en máquinas asincrónicas:*</label>
+                    <select id="sistemaBasadoMaquinasNoSincronicas" class="form-select formInput"
+                      formControlName="sistemaBasadoMaquinasNoSincronicas"
+                      [ngClass]="formDataValidate('sistemaBasadoMaquinasNoSincronicas')">
+                      <option value="-1" selected></option>
+                      <option *ngFor="let validate of lstYesOrNot" [value]="validate.value">
+                        {{ validate.description }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <!--Otros-->
+                <div class="row mb-2">
+                  <!--Otros-->
+                  <div class="form-group col">
+                    <div class="form-check ">
+                      <label class="form-check-label form-check-label formLabel">Otro</label>
+                      <input id="otroAlmacenamientoEnergia" class="form-check-input form-check-label formInput mt-1"
+                        type="checkbox" formGroupName="otroAlmacenamientoEnergia"
+                        (change)="onAnotherEnergyStorageChange($event)">
+                    </div>
+                    <input id="otroSistema" class="form-control formInput" type="text" formControlName="otroSistema"
+                      [ngClass]="formDataValidate('otroSistema')" *ngIf="form.get('otroAlmacenamientoEnergia')?.value">
+                  </div>
+                </div>
+              </p-accordion-content>
+            </p-accordion-panel>
+            <!-- <p-accordionTab header="Tipo de tecnología utilizada">
+              
+            </p-accordionTab> -->
+            <!-- Información de la tecnología de generación de energía(inversores)-->
+            <p-accordion-panel value="4" *ngIf="sistemaBasadoInversores">
+              <p-accordion-header>Información de la tecnología de generación de energía (aplica para generación basada
+                en inversores)</p-accordion-header>
+              <p-accordion-content>
+                <div class="">
+                  <!-- -->
+                  <div class="row mb-2">
+                    <!-- Potencia por panel -->
+                    <div class="form-group col">
+                      <label class="formLabel">Potencia por panel (W):*</label>
+                      <input id="potenciaPorPanel" type="text" class="form-control formInput"
+                        formControlName="potenciaPorPanel" [ngClass]="formDataValidate('potenciaPorPanel')">
+                    </div>
+                    <!-- Número de paneles -->
+                    <div class="form-group col">
+                      <label class="formLabel">Número de paneles:*</label>
+                      <input id="numeroDePaneles" type="text" class="form-control formInput"
+                        formControlName='numeroDePaneles' [ngClass]="formDataValidate('numeroDePaneles')">
+                    </div>
+                  </div>
+                  <!--Posee relé de flujo inverso-->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formLabel">Posee relé de flujo inverso:*</label>
+                      <select id="poseeReleDeFlujoInverso" class="form-select formInput"
+                        formControlName="poseeReleDeFlujoInverso"
+                        [ngClass]="formDataValidate('poseeReleDeFlujoInverso')">
+                        <option selected></option>
+                        <option *ngFor="let validate of lstYesOrNot" [value]="validate.value">
+                          {{ validate.description }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <!-- -->
+                  <div class="row mb-2">
+                    <!-- Capacidad en DC (kW DC) -->
+                    <div class="form-group col">
+                      <label class="formLabel">Capacidad en DC (kW DC):</label>
+                      <input id="capacidadDCInversor" type="number" class="form-control formInput"
+                        formControlName="capacidadDCInversor" [ngClass]="formDataValidate('capacidadDCInversor')">
+                    </div>
+                    <!--Potencia total en AC (kW AC) -->
+                    <div class="form-group col">
+                      <label class="formLabel">Potencia total en AC (kW AC):</label>
+                      <input id="potenciaTotalACInversor" type="number" class="form-control formInput"
+                        formControlName="potenciaTotalACInversor"
+                        [ngClass]="formDataValidate('potenciaTotalACInversor')">
+                    </div>
+                    <!-- Voltaje salida del Inversor (V): -->
+                    <div class="form-group col">
+                      <label class="formLabel">Voltaje salida del Inversor (V):</label>
+                      <input id="voltajeSalidaInversor" type="number" class="form-control formInput"
+                        formControlName="voltajeSalidaInversor" [ngClass]="formDataValidate('voltajeSalidaInversor')">
+                    </div>
+                  </div>
+                  <!-- -->
+                  <div class="row mb-2">
+                    <!-- Voltaje entrada del Inversor (V) -->
+                    <div class="form-group col">
+                      <label class="formLabel">Voltaje entrada del Inversor (V):</label>
+                      <input id="voltajeEntradaInversor" type="number" class="form-control formInput"
+                        formControlName="voltajeEntradaInversor" [ngClass]="formDataValidate('voltajeEntradaInversor')">
+                    </div>
+                    <!--Número de inversores -->
+                    <div class="form-group col">
+                      <label class="formLabel">Número de inversores:</label>
+                      <input id="numeroInversores" type="number" class="form-control formInput"
+                        formControlName="numeroInversores" [ngClass]="formDataValidate('numeroInversores')">
+                    </div>
+                    <!-- Número de fases -->
+                    <div class="form-group col">
+                      <label class="formLabel">Número de fases:</label>
+                      <input id="numeroFases" type="number" class="form-control formInput" formControlName="numeroFases"
+                        [ngClass]="formDataValidate('numeroFases')">
+                    </div>
+                  </div>
+                  <!--Cuenta con control central de planta (PPC)-->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formLabel">Cuenta con control central de planta (PPC):*</label>
+                      <select id="cuentaControlCentralPlanta" class="form-select formInput"
+                        formControlName="cuentaControlCentralPlanta"
+                        [ngClass]="formDataValidate('cuentaControlCentralPlanta')">
+                        <option selected></option>
+                        <option *ngFor="let validate of lstYesOrNot" [value]="validate.value">
+                          {{ validate.description }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <!-- -->
+                  <div class="row mb-2">
+                    <!--Fabricante de los inversores -->
+                    <div class="form-group col">
+                      <label class="formLabel">Fabricante de los inversores:*</label>
+                      <input id="fabricanteInversores" type="text" class="form-control formInput"
+                        formControlName="fabricanteInversores" [ngClass]="formDataValidate('fabricanteInversores')">
+                    </div>
+                    <!-- Modelo de los inversores -->
+                    <div class="form-group col">
+                      <label class="formLabel">Modelo de los inversores:*</label>
+                      <input id="modeloInversores" type="text" class="form-control formInput"
+                        formControlName="modeloInversores" [ngClass]="formDataValidate('modeloInversores')">
+                    </div>
+                  </div>
+                  <!--Cumple estándar UL 1741-2010 o superior-->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formLabel">Cumple estándar UL 1741-2010 o superior:*</label>
+                      <select id="cumpleEstandarUL1741_2010" class="form-select formInput"
+                        formControlName="cumpleEstandarUL1741_2010"
+                        (change)="onStandardChanges('cumpleEstandarUL1741_2010','versionEstandarUL1741_2010')"
+                        [ngClass]="formDataValidate('cumpleEstandarUL1741_2010')">
+                        <option selected></option>
+                        <option *ngFor="let validate of lstYesOrNot" [value]="validate.value">
+                          {{ validate.description }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="form-group col-4" *ngIf="yesOrNotValidate('cumpleEstandarUL1741_2010')">
+                      <label class="formLabel">Versión (año):</label>
+                      <input type="number" class="form-control formInput" formControlName="versionEstandarUL1741_2010"
+                        [ngClass]="formDataValidate('versionEstandarUL1741_2010')">
+
+                    </div>
+                  </div>
+                  <!--Cumple estándar IEC 61727-2004 o superior-->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formLabel">Cumple estándar IEC 61727-2004 o superior:*</label>
+                      <select id="cumpleEstandarIEC61727_2004" class="form-select formInput"
+                        formControlName="cumpleEstandarIEC61727_2004"
+                        (change)="onStandardChanges('cumpleEstandarIEC61727_2004','versionEstandarIEC61727_2004')"
+                        [ngClass]="formDataValidate('cumpleEstandarIEC61727_2004')">
+                        <option selected></option>
+                        <option *ngFor="let validate of lstYesOrNot" [value]="validate.value">
+                          {{ validate.description }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="form-group col-4" *ngIf="yesOrNotValidate('cumpleEstandarIEC61727_2004')">
+                      <label class="formLabel">Versión (año):</label>
+                      <input id="versionEstandarIEC61727_2004" type="number" class="form-control formInput"
+                        formControlName="versionEstandarIEC61727_2004"
+                        [ngClass]="formDataValidate('versionEstandarIEC61727_2004')">
+
+                    </div>
+                  </div>
+                  <!--Nota estandares-->
+                  <div class="row p-2 mb-2">
+                    <div class="form-group col">
+                      <label class="formInput">Nota: Tener en cuenta que los inversores deben cumplir
+                        el estándar UL 1741-2010 (o superior), o el estándar IEC 61727-2004 (o
+                        superior). Si no se cumple con alguno de estos dos estándares, la solicitud
+                        de conexión será rechazada. Para su información, los dos estándares
+                        referenciados están alineados con el estándar IEEE 1547 de 2003. Para
+                        certificar esta información se deben considerar los plazos y procedimientos
+                        establecidos en la Resolución CREG 174 de 2021 o aquella que la modifique o
+                        sustituya.</label>
+                    </div>
+                  </div>
+                  <!--Transformador del punto de conexión (titulo) -->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formLabel">Transformador del punto de conexión (aplica cuando el
+                        punto de conexión con el Operador de Red-OR sea en el nivel de tensión N2 o
+                        N3):</label>
+                    </div>
+                  </div>
+                  <!--Transformador del punto de conexión  -->
+                  <div class="row p-1 mb-2">
+                    <!-- Potencia nominal (kVA) -->
+                    <div class="form-group col-4">
+                      <label class="formLabel">Potencia nominal (kVA):</label>
+                      <input id="transfoPotNominalInv" type="number" class="form-control formInput"
+                        formControlName="transfoPotNominalInv">
+                    </div>
+
+                    <!-- Impedancia de C.C. (%) -->
+                    <div class="form-group col-4">
+                      <label class="formLabel">Impedancia de C.C. (%):</label>
+                      <input id="transfoImpedanciaCcInv" type="number" class="form-control formInput"
+                        formControlName="transfoImpedanciaCcInv">
+                    </div>
+
+                    <!-- Grupo de conexión -->
+                    <div class="form-group col-4">
+                      <label class="formLabel">Grupo de conexión:</label>
+                      <input id="transfoGrupoConexInv" type="text" class="form-control formInput"
+                        formControlName="transfoGrupoConexInv">
+                    </div>
+                  </div>
+                  <!--Nota -->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formLabel">En caso de que sea un AGPE o AGGE y no entregue
+                        excedentes (o si los entrega y se encuentran limitados al valor de máxima
+                        potencia declarada), indicar los elementos de protección, control o maniobra
+                        que limitan la inyección de energía a la red (por ejemplo: i) Relé de
+                        potencia inversa; ii) Regulación automática del inversor vs. carga y; iii)
+                        Protecciones internas inherentes al inversor)</label>
+                      <textarea class="form-control formInput" rows="4" cols="50"
+                        formControlName="notaTecnoInversores"></textarea>
+                    </div>
+                  </div>
+                </div>
+              </p-accordion-content>
+            </p-accordion-panel>
+            <!-- <p-accordionTab
+              header="Información de la tecnología de generación de energía (aplica para generación basada en inversores)"
+              *ngIf="sistemaBasadoInversores">
+              
+            </p-accordionTab> -->
+            <!-- Información de la tecnología de generación de energía NO basada en inversores -->
+            <p-accordion-panel value="5" *ngIf="nonInverterBasedPowerGenerationTechnology">
+              <p-accordion-header>Información de la tecnología de generación de energía NO basada en inversores (excepto
+                aerogeneradores)</p-accordion-header>
+              <p-accordion-content>
+                <div class="">
+                  <!-- -->
+                  <div class="row mb-2">
+                    <!-- Fabricante del Generador -->
+                    <div class="form-group col">
+                      <label class="formLabel">Fabricante del Generador:*</label>
+                      <input id="fabricanteGenerador" type="text" class="form-control formInput"
+                        formControlName="fabricanteGenerador" [ngClass]="formDataValidate('fabricanteGenerador')">
+                    </div>
+                    <!-- Modelo del Generador -->
+                    <div class="form-group col">
+                      <label class="formLabel">Modelo del Generador:*</label>
+                      <input id="modeloGenerador" type="text" class="form-control formInput"
+                        formControlName="modeloGenerador" [ngClass]="formDataValidate('modeloGenerador')">
+                    </div>
+                  </div>
+                  <!-- -->
+                  <div class="row mb-2">
+                    <!-- Voltaje del generador (V) -->
+                    <div class="form-group col">
+                      <label class="formLabel">Voltaje del generador (V):</label>
+                      <input id="voltajeGenerador" type="number" class="form-control formInput"
+                        formControlName="voltajeGenerador" [ngClass]="formDataValidate('voltajeGenerador')">
+                    </div>
+                    <!--Potencia nominal (kVA) -->
+                    <div class="form-group col">
+                      <label class="formLabel">Potencia nominal (kVA):*</label>
+                      <input id="potenciaNominal" type="number" class="form-control formInput"
+                        formControlName="potenciaNominal" [ngClass]="formDataValidate('potenciaNominal')">
+                    </div>
+                    <!-- Factor de potencia -->
+                    <div class="form-group col">
+                      <label class="formLabel">Factor de potencia:*</label>
+                      <input id="factorPotencia" type="number" class="form-control formInput"
+                        formControlName="factorPotencia" [ngClass]="formDataValidate('factorPotencia')">
+                    </div>
+                    <!-- Número de fases -->
+                    <div class="form-group col">
+                      <label class="formLabel">Número de fases:*</label>
+                      <input id="numeroFasesNoBasadaEnInversores" type="number" class="form-control formInput"
+                        formControlName="numeroFasesNoBasadaEnInversores"
+                        [ngClass]="formDataValidate('numeroFasesNoBasadaEnInversores')">
+
+                    </div>
+                  </div>
+                  <!--Transformador del punto de conexión (titulo) -->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formLabel">Transformador del punto de conexión (aplica cuando el
+                        punto de conexión con el Operador de Red-OR sea en el nivel de tensión N2 o
+                        N3):</label>
+                    </div>
+                  </div>
+                  <!--Transformador del punto de conexión  -->
+                  <div class="row p-1 mb-2">
+                    <!-- Potencia nominal (kVA) -->
+                    <div class="form-group col-4">
+                      <label class="formLabel">Potencia nominal (kVA):</label>
+                      <input id="transfoPotNominal" type="number" class="form-control formInput"
+                        formControlName="transfoPotNominal">
+                    </div>
+                    <!-- Impedancia de C.C. (%) -->
+                    <div class="form-group col-4">
+                      <label class="formLabel">Impedancia de C.C. (%):</label>
+                      <input id="transfoImpedanciaCc" type="number" class="form-control formInput"
+                        formControlName="transfoImpedanciaCc">
+                    </div>
+                    <!-- Grupo de conexión -->
+                    <div class="form-group col-4">
+                      <label class="formLabel">Grupo de conexión:</label>
+                      <input id="transfoGrupoConex" type="text" class="form-control formInput"
+                        formControlName="transfoGrupoConex">
+                    </div>
+                  </div>
+                  <!--Nota -->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formLabel">En caso de que sea un AGPE o AGGE y no entregue
+                        excedentes o si los entrega y se encuentran limitados al valor de máxima
+                        potencia declarada, indicar los elementos de protección, control o maniobra
+                        que limitan la inyección de energía a la red (por ejemplo: Relé de potencia
+                        inversa)</label>
+                      <textarea id="notaTecnoNoInversores" class="form-control formInput"
+                        formControlName="descripcionElementos" rows="4" cols="50"></textarea>
+                    </div>
+                  </div>
+                  <!--Cumple estándar IEEE 1547-2003 o superior-->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formLabel">Cumple estándar IEEE 1547-2003 o superior:*</label>
+                      <select id="cumpleEstandarIEEE1547_2003" class="form-select formInput"
+                        formControlName="cumpleEstandarIEEE1547_2003"
+                        (change)="onStandardChanges('cumpleEstandarIEEE1547_2003','anioIeee1547')"
+                        [ngClass]="formDataValidate('cumpleEstandarIEEE1547_2003')">
+                        <option selected></option>
+                        <option *ngFor="let validate of lstYesOrNot" [value]="validate.value">
+                          {{ validate.description }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="form-group col-4" *ngIf="yesOrNotValidate('cumpleEstandarIEEE1547_2003')">
+                      <label class="formLabel">Versión (año):</label>
+                      <input id="anioIeee1547" type="number" class="form-control formInput"
+                        formControlName="anioIeee1547" [ngClass]="formDataValidate('anioIeee1547')">
+                    </div>
+                  </div>
+                  <!--Nota -->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formInput">Nota: Para certificar esta información se tiene plazo
+                        hasta antes de entrar en operación, conforme las reglas del RETIE y del
+                        artículo 14 de la Resolución CREG 174 de 2021 o aquella que la modifique o
+                        sustituya. Se aclara que el cumplimiento de este estándar no es requisito
+                        para el momento de aprobación de la solicitud de conexión, es decir, en la
+                        aplicación de los pasos 1 al 5 del literal vi del Anexo 5 Resolución CREG
+                        174 de 2021 o en la aplicación de los pasos 1 al 6 del literal vii del Anexo
+                        5 Resolución CREG 174 de 2021.</label>
+                    </div>
+                  </div>
+                </div>
+              </p-accordion-content>
+            </p-accordion-panel>
+            <!-- <p-accordionTab
+              header="Información de la tecnología de generación de energía NO basada en inversores (excepto aerogeneradores)"
+              *ngIf="nonInverterBasedPowerGenerationTechnology">
+              
+            </p-accordionTab> -->
+            <!-- Información de la tecnología de generación de energía eólica-->
+            <p-accordion-panel value="6" *ngIf="windPowerGenerationTechnology">
+              <p-accordion-header>Información de la tecnología de generación de energía eólica sea o no su interface con
+                la red basada en inversores</p-accordion-header>
+              <p-accordion-content>
+                <div class="">
+                  <!-- -->
+                  <div class="row mb-2">
+                    <!-- Fabricante del Aerogenerador -->
+                    <div class="form-group col">
+                      <label class="formLabel">Fabricante del Aerogenerador:*</label>
+                      <input id="fabricanteAerogenerador" type="text" class="form-control formInput"
+                        formControlName="fabricanteAerogenerador"
+                        [ngClass]="formDataValidate('fabricanteAerogenerador')">
+                    </div>
+                    <!-- Modelo -->
+                    <div class="form-group col">
+                      <label class="formLabel">Modelo:*</label>
+                      <input id="modeloAerogenerador" type="text" class="form-control formInput"
+                        formControlName="modeloAerogenerador" [ngClass]="formDataValidate('modeloAerogenerador')">
+                    </div>
+                  </div>
+                  <!-- -->
+                  <div class="row mb-2">
+                    <!-- Voltaje AC (V) -->
+                    <div class="form-group col">
+                      <label class="formLabel">Voltaje AC (V):</label>
+                      <input id="voltajeAc" type="number" class="form-control formInput" formControlName="voltajeAc"
+                        [ngClass]="formDataValidate('voltajeAc')">
+                    </div>
+                    <!--Potencia nominal (kW) -->
+                    <div class="form-group col">
+                      <label class="formLabel">Potencia nominal (kW):*</label>
+                      <input id="potenciaNominalEol" type="number" class="form-control formInput"
+                        formControlName="potenciaNominalEol" [ngClass]="formDataValidate('potenciaNominalEol')">
+                    </div>
+                    <!-- Numero de aerogeneradores -->
+                    <div class="form-group col">
+                      <label class="formLabel">Numero de aerogeneradores:*</label>
+                      <input id="numAerogeneradores" type="number" class="form-control formInput"
+                        formControlName="numAerogeneradores" [ngClass]="formDataValidate('numAerogeneradores')">
+                    </div>
+                  </div>
+                  <!--Tipo de aerogenerador -->
+                  <div class="row mb-2">
+                    <!-- Tipo de aerogenerador -->
+                    <div class="form-group col">
+                      <label class="formLabel">Tipo de aerogenerador (DFIG, Full converter o máquina
+                        directamente acoplada)*</label>
+                      <!-- <input type="number" class="form-control formInput"> -->
+                      <select id="codTipoAerogenerador" class="form-select formInput"
+                        formControlName="codTipoAerogenerador" [ngClass]="formDataValidate('codTipoAerogenerador')">
+                        <option selected></option>
+                        <option *ngFor="let windTurbineType of lstWindTurbineType" [value]="windTurbineType.id">
+                          {{ windTurbineType.descripcion }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <!--Cuenta con control central de planta (PPC)-->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formLabel">Cuenta con control central de planta (PPC)*</label>
+                      <select id="cuentaConControlCentralPlanta" class="form-select formInput"
+                        formControlName="cuentaConControlCentralPlanta"
+                        [ngClass]="formDataValidate('cuentaConControlCentralPlanta')">
+                        <option selected></option>
+                        <option *ngFor="let validate of lstYesOrNot" [value]="validate.value">
+                          {{ validate.description }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <!--Transformador del punto de conexión (titulo) -->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formLabel">Transformador del punto de conexión (aplica cuando el
+                        punto de conexión con el Operador de Red-OR sea en el nivel de tensión N2 o
+                        N3)</label>
+                    </div>
+                  </div>
+                  <!--Transformador del punto de conexión  -->
+                  <div class="row p-1 mb-2">
+                    <!-- Potencia nominal (kVA) -->
+                    <div class="form-group col-4">
+                      <label class="formLabel">Potencia nominal (kVA):</label>
+                      <input id="transfoPotNominalEol" type="number" class="form-control formInput"
+                        formControlName="transfoPotNominalEol">
+                    </div>
+                    <!-- Impedancia de C.C. (%) -->
+                    <div class="form-group col-4">
+                      <label class="formLabel">Impedancia de C.C. (%):</label>
+                      <input id="transfoImpedanciaCcEol" type="number" class="form-control formInput"
+                        formControlName="transfoImpedanciaCcEol">
+                    </div>
+                    <!-- Grupo de conexión -->
+                    <div class="form-group col-4">
+                      <label class="formLabel">Grupo de conexión:</label>
+                      <input id="transfoGrupoConexEol" type="text" class="form-control formInput"
+                        formControlName="transfoGrupoConexEol">
+                    </div>
+                  </div>
+                  <!--Nota -->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formLabel">En caso de que sea un AGPE o AGGE y no entregue
+                        excedentes o si los entrega y se encuentran limitados al valor de máxima
+                        potencia declarada, indicar los elementos de protección, control o maniobra
+                        que limitan la inyección de energía a la red (por ejemplo: Relé de potencia
+                        inversa)</label>
+                      <textarea id="descripcionElementosEol" class="form-control formInput" rows="4" cols="50"
+                        formControlName="descripcionElementosEol">
+                                          </textarea>
+                    </div>
+                  </div>
+                  <!--Cumple estándar IEEE 1547-2003 o superior-->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formLabel">Cumple estándar IEEE 1547-2003 o superior:*</label>
+                      <select id="cumpleEstandarIEEE1547_2003_Eolica" class="form-select formInput"
+                        formControlName="cumpleEstandarIEEE1547_2003_Eolica"
+                        (change)="onStandardChanges('cumpleEstandarIEEE1547_2003_Eolica','anioIeee1547_Eolica')"
+                        [ngClass]="formDataValidate('cumpleEstandarIEEE1547_2003_Eolica')">
+                        <option selected></option>
+                        <option *ngFor="let validate of lstYesOrNot" [value]="validate.value">
+                          {{ validate.description }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="form-group col-4" *ngIf="yesOrNotValidate('cumpleEstandarIEEE1547_2003_Eolica')">
+                      <label class="formLabel">Versión (año):</label>
+                      <input id="anioIeee1547_Eolica" type="number" class="form-control formInput"
+                        formControlName="anioIeee1547_Eolica" [ngClass]="formDataValidate('anioIeee1547_Eolica')">
+                    </div>
+                  </div>
+                  <!--Nota 1 -->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formInput">Nota 1: Si no es basada en inversores: para certificar
+                        esta información se tiene plazo hasta antes de entrar en operación, conforme
+                        las reglas del RETIE y del artículo 14 de la Resolución CREG 174 de 2021. Se
+                        aclara que el cumplimiento de este estandar no es requisito para el momento
+                        de aprobación de la solicitud de conexión, es decir, en la aplicación de los
+                        pasos 1 al 5 del literal vi del Anexo 5 Resolución CREG 174 de 2021 o en la
+                        aplicación de los pasos 1 al 6 del literal vii del Anexo 5 Resolución CREG
+                        174 de 2021.</label>
+                    </div>
+                  </div>
+                  <!--Nota 2 -->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formInput">Nota 2: Si es basada en inversores: se debe cumplir el
+                        estandar. Si no se cumple el estándar, la solicitud de conexión será
+                        rechazada. Para certificar esta información se deben considerar los plazos y
+                        procedimientos establecidos en la Resolución CREG 174 de 2021 o aquella que
+                        la modifique o sustituya.</label>
+                    </div>
+                  </div>
+                </div>
+              </p-accordion-content>
+            </p-accordion-panel>
+            <!-- <p-accordionTab
+              header="Información de la tecnología de generación de energía eólica sea o no su interface con la red basada en inversores"
+              *ngIf="windPowerGenerationTechnology">
+              
+            </p-accordionTab> -->
+            <!-- Datos del punto de conexión -->
+            <p-accordion-panel value="7">
+              <p-accordion-header>Datos del punto de conexión</p-accordion-header>
+              <p-accordion-content>
+                <!-- Capacidad nominal o instalada del sistema (kW) -->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Capacidad nominal o instalada del sistema (kW)*</label>
+                    <label class="formLabel">Es la capacidad continua a plena carga del sistema de
+                      generación del autogenerador o el generador que se conecta al SIN, bajo las
+                      condiciones especificadas según el diseño del fabricante. Si la conexión es
+                      a través de inversores, corresponde a la suma de las capacidades nominales
+                      de los inversores en el lado de corriente alterna o con conexión al
+                      SIN</label>
+                    <input id="capacidadNominalOInstalada" type="number"
+                      class="form-control formInput" formControlName="capacidadNominalOInstalada"
+                      [ngClass]="formDataValidate('capacidadNominalOInstalada')">
+                  </div>
+                </div>
+                <!--Potencia máxima declarada -->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Potencia máxima declarada (kW)*</label>
+                    <label class="formLabel">Deberá ser menor o igual a la capacidad instalada o
+                      nominal, y será la máxima capacidad que se puede entregar a la red en la
+                      frontera comercial. En caso de que no cuente con un elemento que limite la
+                      potencia a entregar a la red, debe ser igual a la capacidad nominal o
+                      instalada</label>
+                    <input id="potenciaMaximaDeclarada" type="number" class="form-control formInput"
+                      formControlName="potenciaMaximaDeclarada" [ngClass]="formDataValidate('potenciaMaximaDeclarada')">
+                  </div>
+                </div>
+                <!-- Nivel de tensión -->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Nivel de tensión (kV)*</label>
+                    <input id="nivelTension" type="number" class="form-control formInput" formControlName="nivelTension"
+                      [ngClass]="formDataValidate('nivelTension')" readonly>
+                  </div>
+                </div>
+                <!-- Si entrega excedentes, código de la subestación, transformador o circuito -->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Si entrega excedentes, código de la subestación, transformador o circuito
+                      al cual se realizará la conexión*</label>
+                    <input id="codTransformador" type="text" class="form-control formInput"
+                      formControlName="codTransformador" [ngClass]="formDataValidate('codTransformador')" readonly>
+                  </div>
+                </div>
+              </p-accordion-content>
+            </p-accordion-panel>
+            <!-- <p-accordionTab header="Datos del punto de conexión">
+              
+            </p-accordionTab> -->
+            <!-- Protección Anti-isla  -->
+            <p-accordion-panel value="8">
+              <p-accordion-header>Protección Anti-isla (Describa las características de la protección a
+                instalar)</p-accordion-header>
+              <p-accordion-content>
+                <div class="">
+                  <!--Para sistemas de generación basados en inversores o aerogeneradores, ¿La función de protección está en dichos elementos?-->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formLabel">Para sistemas de generación basados en inversores o
+                        aerogeneradores, ¿La función de protección está en dichos elementos? <small
+                          *ngIf="sistemaBasadoInversores">*</small> </label>
+                      <select id="proteccionAntiIslaInstalada" class="form-select formInput"
+                        formControlName="proteccionAntiIslaInstalada"
+                        [ngClass]="formDataValidate('proteccionAntiIslaInstalada')">
+                        <option selected></option>
+                        <option *ngFor="let validate of lstYesOrNot" [value]="validate.value">
+                          {{ validate.description }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <!--Nota -->
+                  <div class="row mb-2" *ngIf="!yesOrNotValidate('proteccionAntiIslaInstalada')">
+                    <div class="form-group col">
+                      <label class="formLabel">Si la respuesta anterior es NO, describir brevemente
+                        como se garantiza la función de la protección Anti-isla (arreglo de
+                        protecciones). Es importante mencionar que este requerimiento es esencial
+                        para garantizar la calidad y seguridad de la prestación del servicio de
+                        energía eléctrica. En el caso que esta protección no sea instalada la
+                        solicitud será rechazada).</label>
+                      <textarea id="proteccionAntiIslaNoInstaladaDescripcion" class="form-control formInput" rows="4"
+                        cols="50" formControlName="proteccionAntiIslaNoInstaladaDescripcion"
+                        [ngClass]="formDataValidate('proteccionAntiIslaNoInstaladaDescripcion')">
+                                          </textarea>
+                    </div>
+                  </div>
+                </div>
+              </p-accordion-content>
+            </p-accordion-panel>
+            <!-- <p-accordionTab header="Protección Anti-isla (Describa las características de la protección a instalar)">
+              
+            </p-accordionTab> -->
+            <!--Documentos que debe aportar el solicitante para la aprobación de la solicitud de la conexión del proyecto-->
+            <p-accordion-panel value="9">
+              <p-accordion-header>Documentos que debe aportar el solicitante para la aprobación de la solicitud de la
+                conexión del proyecto</p-accordion-header>
+              <p-accordion-content>
+                <div class="">
+                  <div class="mb-2" [innerHtml]="notes.Documents"></div>
+                </div>
+              </p-accordion-content>
+            </p-accordion-panel>
+            <!-- <p-accordionTab
+              header="Documentos que debe aportar el solicitante para la aprobación de la solicitud de la conexión del proyecto">
+              
+            </p-accordionTab> -->
+            <!--Condiciones que debe tener en cuenta el solicitante para la aprobación de la conexión del proyecto-->
+            <p-accordion-panel value="10">
+              <p-accordion-header>Condiciones que debe tener en cuenta el solicitante para la aprobación de la conexión
+                del proyecto</p-accordion-header>
+              <p-accordion-content>
+                <div class="">
+                  <div class="mb-2" [innerHtml]="notes.Conditions"></div>
+                </div>
+              </p-accordion-content>
+            </p-accordion-panel>
+            <!-- <p-accordionTab
+              header="Condiciones que debe tener en cuenta el solicitante para la aprobación de la conexión del proyecto">
+              
+            </p-accordionTab> -->
+            <!-- Información del sistema de medición -->
+            <p-accordion-panel value="11">
+              <p-accordion-header>Información del sistema de medición</p-accordion-header>
+              <p-accordion-content>
+                <div class="">
+                  <!--Nota-->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formLabel">El medidor en el punto de conexión debe cumplir con los
+                        índices de clase y los transformadores de medida, con la clase de exactitud
+                        establecidos en la Resolución CREG 038 de 2014 o aquella que la modifique,
+                        complemente y/o sustituya. En todo caso, se deben tener en cuenta las
+                        excepciones de que trata el artículo 19 de la Resolución CREG 174 de 2021 o
+                        aquella que la modifique, complemente y/o sustituya</label>
+                    </div>
+                  </div>
+                  <!--¿El cliente suministrará el medidor?-->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formLabel">¿El cliente suministrará el medidor?*</label>
+                      <select id="clienteSuministraraMedidor" class="form-select formInput"
+                        formControlName="clienteSuministraraMedidor"
+                        [ngClass]="formDataValidate('clienteSuministraraMedidor')">
+                        <option selected></option>
+                        <option *ngFor="let validate of lstYesOrNot" [value]="validate.value">
+                          {{ validate.description }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <!--¿El medidor tiene perfil horario?-->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formLabel">¿El medidor tiene perfil horario?*</label>
+                      <select id="medidorTienePerfilHorario" class="form-select formInput"
+                        [ngClass]="formDataValidate('medidorTienePerfilHorario')"
+                        formControlName="medidorTienePerfilHorario">
+                        <option selected></option>
+                        <option *ngFor="let validate of lstYesOrNot" [value]="validate.value">
+                          {{ validate.description }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <!--¿El medidor es bidireccional?-->
+                  <div class="row mb-2">
+                    <div class="form-group col">
+                      <label class="formLabel">¿El medidor es bidireccional?*</label>
+                      <select id="medidorBidireccional" class="form-select formInput"
+                        formControlName="medidorBidireccional" [ngClass]="formDataValidate('medidorBidireccional')">
+                        <option selected></option>
+                        <option *ngFor="let validate of lstYesOrNot" [value]="validate.value">
+                          {{ validate.description }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </p-accordion-content>
+            </p-accordion-panel>
+            <!-- <p-accordionTab header="Información del sistema de medición">
+              
+            </p-accordionTab> -->
+            <!-- Observaciones -->
+            <p-accordion-panel value="12">
+              <p-accordion-header>Observaciones (Aclaraciones que desee realizar sobre el proyecto)</p-accordion-header>
+              <p-accordion-content>
+                <!-- Observaciones-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <textarea formControlName="observaciones" class="form-control formInput" rows="4"
+                      cols="50"></textarea>
+                  </div>
+                </div>
+              </p-accordion-content>
+            </p-accordion-panel>
+            <p-accordion-panel value="13">
+              <p-accordion-header>Notas</p-accordion-header>
+              <p-accordion-content>
+                <div class="">
+                  <!--Notas-->
+                  <div [innerHtml]="notes.NoteOne"></div>
+                  <div class="mt-2" [innerHtml]="notes.NoteTwo"></div>
+                  <div class="mt-2 mb-2" [innerHtml]="notes.NoteThree"></div>
+                </div>
+              </p-accordion-content>
+            </p-accordion-panel>
+          </p-accordion>
+        </form>
       </div>
-    </p-accordion-content>
-  </p-accordion-panel>
-
-  <!-- INFORMACIÓN DEL CLIENTE -->
-  <p-accordion-panel value="1">
-    <p-accordion-header>Información del cliente</p-accordion-header>
-    <p-accordion-content>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-        <div><b>Nombre:</b> {{ solicitud.nombreCliente }}</div>
-        <div><b>Identificación:</b> {{ solicitud.numeroIdentificacion }}</div>
-        <div><b>Tipo cliente:</b> {{ solicitud.cregTipoCliente?.descripcion }}</div>
-        <div><b>Estrato:</b> {{ solicitud.cregEstratoSocioeconomico?.descripcion }}</div>
-        <div class="md:col-span-2">
-          <b>Dirección:</b> {{ solicitud.direccion }}
-        </div>
-      </div>
-    </p-accordion-content>
-  </p-accordion-panel>
-
-  <!-- UBICACIÓN -->
-  <p-accordion-panel value="2">
-    <p-accordion-header>Ubicación</p-accordion-header>
-    <p-accordion-content>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-        <div><b>Ciudad:</b> {{ solicitud.cregCiudad?.nombreCiudad }}</div>
-        <div><b>Departamento:</b> {{ solicitud.cregDepartamento?.nombreDepartamento }}</div>
-        <div><b>Subestación:</b> {{ solicitud.codSubestacion }}</div>
-        <div><b>Transformador:</b> {{ solicitud.codTransformador }}</div>
-      </div>
-    </p-accordion-content>
-  </p-accordion-panel>
-
-  <!-- TECNOLOGÍA -->
-  <p-accordion-panel value="3">
-    <p-accordion-header>Tecnología</p-accordion-header>
-    <p-accordion-content>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-        <div><b>Tipo generación:</b> {{ solicitud.cregTipoGeneracion?.descripcion }}</div>
-        <div><b>Capacidad nominal (kW):</b> {{ solicitud.capacidadNominal }}</div>
-        <div><b>Potencia máxima declarada:</b> {{ solicitud.potenciaMaximaDeclarada }}</div>
-        <div><b>Nivel de tensión:</b> {{ solicitud.nivelTension }} V</div>
-      </div>
-    </p-accordion-content>
-  </p-accordion-panel>
-
-</p-accordion>
+    </div>

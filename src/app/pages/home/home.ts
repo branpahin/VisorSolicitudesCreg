@@ -54,7 +54,7 @@ export class Home {
   cargarSolicitud() {
     this.solicitudService.getDatosGeneralesCreg174().subscribe({
       next: (data) => {
-        this.storageService.save('datosGenCreg174',data.data)
+        this.storageService.save('datosGenCreg174',data)
       },
       error: (err) => {
         console.error('Error al cargar solicitud', err);

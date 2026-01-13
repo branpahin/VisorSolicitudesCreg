@@ -28,6 +28,78 @@
   font-style: normal;
 }
 
+:root {
+  --font-size-default: 0.75rem;
+  --surface-a:#ffffff;
+  --surface-b:#f8f9fa;
+  --surface-c:#e9ecef;
+  --surface-d:#dee2e6;
+  --surface-e:#ffffff;
+  --surface-f:#ffffff;
+  --text-color:#495057;
+  --text-color-secondary:#6c757d;
+  --primary-color: #e2650f;
+  --primary-color-hover: #f18730;
+  --secondary-color: #bcbcbd;
+  --tertiary-color: #34b5a4;
+  --primary-color-text:#ffffff;
+  --primary-color-text:#ffffff;
+  --font-family:-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  --surface-0: #ffffff;
+  --surface-50: #FAFAFA;
+  --surface-100: #F5F5F5;
+  --surface-200: #EEEEEE;
+  --surface-300: #E0E0E0;
+  --surface-400: #BDBDBD;
+  --surface-500: #9E9E9E;
+  --surface-600: #757575;
+  --surface-700: #616161;
+  --surface-800: #424242;
+  --surface-900: #212121;
+  --gray-50: #FAFAFA;
+  --gray-100: #F5F5F5;
+  --gray-200: #EEEEEE;
+  --gray-300: #E0E0E0;
+  --gray-400: #BDBDBD;
+  --gray-500: #9E9E9E;
+  --gray-600: #757575;
+  --gray-700: #616161;
+  --gray-800: #424242;
+  --gray-900: #212121;
+  --content-padding:1.25rem;
+  --inline-spacing:0.5rem;
+  --border-radius:6px;
+  --surface-ground:#eff3f8;
+  --surface-section:#ffffff;
+  --surface-card:#ffffff;
+  --surface-overlay:#ffffff;
+  --surface-border:#dfe7ef;
+  --surface-hover:#f6f9fc;
+  --focus-ring: 0 0 0 0.2rem #C7D2FE;
+  --maskbg: rgba(0, 0, 0, 0.4);
+  color-scheme: light;
+  --p-content-background:white !important;;
+  --p-text-color:rgb(99, 99, 99) !important;
+  --p-text-muted-color:#a1a1aa !important;
+  --p-accordion-header-color: #848488 !important;
+  --p-select-background:var(--gray-100) !important; 
+  --p-overlay-select-background: var(--gray-100) !important; 
+  --p-select-color: #424242 !important;
+  --p-list-option-selected-background: #848488 !important;
+  --p-list-option-selected-focus-background: #848488 !important;
+  --p-form-field-focus-border-color: rgba(0, 0, 0, 0.2) !important;
+  --p-list-option-selected-color: #e0e0e4 !important;
+  --p-list-option-selected-focus-color: #e0e0e4 !important;
+  --p-list-option-focus-background: none !important;
+  --p-list-option-focus-color: #848488 !important;
+}
+
+input, select { 
+  border: 1px solid rgba(0, 0, 0, 0.2) !important;
+  border-radius: 0.5rem;
+  color:#424242
+}
+
 
 .tw-tabs {
   --p-tabs-tablist-background: theme(colors.gray.100);
@@ -58,4 +130,42 @@
     align-content: start;
     align-items: start;
     text-align: left;
+}
+
+.p-accordion-header{
+  font-family: 'Montserrat-Bold';
+}
+
+.p-accordion .p-accordion-header:not(.p-disabled) .p-accordion-header-link:focus {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: 0 0 0 0.2rem #fad0a6 !important;
+}
+
+.accordion-wrapper {
+  height: auto;
+  max-height: calc(100vh - 260px); /* ajusta según header/tabs */
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Fix PrimeNG 21 */
+.p-accordion {
+  display: block;
+  overflow: visible;
+}
+
+.p-accordion-panel {
+  contain: layout paint;
+}
+
+/* Evita reservas de altura */
+.p-accordion-content {
+  overflow: hidden !important;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
 }
