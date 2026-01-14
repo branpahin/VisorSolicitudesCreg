@@ -97,7 +97,8 @@
 input, select { 
   border: 1px solid rgba(0, 0, 0, 0.2) !important;
   border-radius: 0.5rem;
-  color:#424242
+  color:#424242;
+  padding: 5px;
 }
 
 
@@ -142,30 +143,26 @@ input, select {
   box-shadow: 0 0 0 0.2rem #fad0a6 !important;
 }
 
-.accordion-wrapper {
-  height: auto;
-  max-height: calc(100vh - 260px); /* ajusta según header/tabs */
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-/* Fix PrimeNG 21 */
-.p-accordion {
-  display: block;
-  overflow: visible;
-}
-
-.p-accordion-panel {
-  contain: layout paint;
-}
-
-/* Evita reservas de altura */
-.p-accordion-content {
-  overflow: hidden !important;
-}
-
 body, html {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
+}
+
+.p-accordion,
+.p-accordion-content,
+.p-accordion-header {
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+/* Permite que el contenido crezca en móvil */
+.p-accordion-content {
+  padding: 1rem !important;
+}
+
+/* Header responsive */
+.p-accordion-header-link {
+  flex-wrap: wrap !important;
+  text-align: left !important;
 }

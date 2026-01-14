@@ -1,4 +1,27 @@
 @if(solicitud){
+
+    <header class="relative bg-white shadow-md py-6">
+
+        <!-- Logo -->
+        <div class="absolute top-0 left-0 ">
+            <img
+            src="assets/eep/Logo.png"
+            alt="Logo empresa"
+            class="w-20 sm:w-24 md:w-28 lg:w-32 h-auto"
+            />
+        </div>
+
+        <!-- Título centrado -->
+        <div class="text-center">
+            <h1 class="text-orange-600 text-xl md:text-2xl font-semibold">
+            Sistema de Trámite en Línea
+            </h1>
+            <h2 class="text-orange-600 text-lg md:text-xl font-semibold">
+            Nuevas Conexiones y Autogeneración
+            </h2>
+        </div>
+
+    </header>
     <div  class="min-h-screen bg-gray-50 p-6">
 
         <!-- Header -->
@@ -8,10 +31,10 @@
             </h1>
 
             <button
-            (click)="volverHome()"
-            class="flex items-center gap-2 px-4 py-2 rounded-lg border border-orange-400 text-orange-500 hover:bg-orange-50 transition">
-            <i class="pi pi-arrow-left"></i>
-            Regresar
+                (click)="volverHome()"
+                class="flex items-center gap-2 px-4 py-2 rounded-lg border border-orange-400 text-orange-500 hover:bg-orange-50 transition cursor-pointer">
+                    <i class="pi pi-arrow-left"></i>
+                    Regresar
             </button>
         </div>
 
@@ -33,4 +56,16 @@
         </p-tabs>
 
     </div>     
-}
+}@else {<div class="min-h-screen flex flex-col items-center justify-center bg-gray-50 gap-4">
+
+    <!-- Spinner -->
+    <div
+      class="w-12 h-12 border-4 border-orange-200 border-t-orange-500 rounded-full animate-spin">
+    </div>
+
+    <!-- Texto -->
+    <span class="text-gray-600 text-sm animate-pulse">
+      Cargando solicitud...
+    </span>
+
+  </div>}
