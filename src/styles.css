@@ -166,3 +166,15 @@ body, html {
   flex-wrap: wrap !important;
   text-align: left !important;
 }
+
+.force-light {
+  color-scheme: light !important;
+}
+
+.p-toast-message .p-toast-summary {
+  font-weight: 600;
+}
+
+.p-toast-message .p-toast-detail {
+  color: #374151 !important; /* text-gray-700 */
+}

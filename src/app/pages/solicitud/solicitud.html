@@ -1,6 +1,6 @@
 @if(solicitud){
 
-    <header class="relative bg-white shadow-md py-6">
+    <header class="relative bg-white shadow-md py-6 ">
 
         <!-- Logo -->
         <div class="absolute top-0 left-0 ">
@@ -13,10 +13,10 @@
 
         <!-- Título centrado -->
         <div class="text-center">
-            <h1 class="text-orange-600 text-xl md:text-2xl font-semibold">
+            <h1 class="text-[#e2650f] text-xl md:text-2xl font-semibold">
             Sistema de Trámite en Línea
             </h1>
-            <h2 class="text-orange-600 text-lg md:text-xl font-semibold">
+            <h2 class="text-[#e2650f] text-lg md:text-xl font-semibold">
             Nuevas Conexiones y Autogeneración
             </h2>
         </div>
@@ -32,7 +32,7 @@
 
             <button
                 (click)="volverHome()"
-                class="flex items-center gap-2 px-4 py-2 rounded-lg border border-orange-400 text-orange-500 hover:bg-orange-50 transition cursor-pointer">
+                class="flex items-center gap-2 px-4 py-2 rounded-lg border border-[#e2650f] text-[#e2650f] hover:bg-orange-50 transition cursor-pointer">
                     <i class="pi pi-arrow-left"></i>
                     Regresar
             </button>
@@ -43,6 +43,7 @@
             <p-tablist>
                 <p-tab value="0">Detalles</p-tab>
                 <p-tab value="1">Anexos</p-tab>
+                <p-tab value="2">Historial</p-tab>
             </p-tablist>
             <p-tabpanels>
                 <p-tabpanel value="0">
@@ -50,7 +51,11 @@
                 </p-tabpanel>
 
                 <p-tabpanel value="1">
-                    <app-anexos></app-anexos>
+                    <app-anexos [documentos]="solicitud.creg174Anexos"></app-anexos>
+                </p-tabpanel>
+
+                <p-tabpanel value="2">
+                    <app-historial [historico]="solicitud.creg174Historico"></app-historial>
                 </p-tabpanel>
             </p-tabpanels>
         </p-tabs>
@@ -60,7 +65,7 @@
 
     <!-- Spinner -->
     <div
-      class="w-12 h-12 border-4 border-orange-200 border-t-orange-500 rounded-full animate-spin">
+      class="w-12 h-12 border-4 border-orange-200 border-t-[#e2650f] rounded-full animate-spin">
     </div>
 
     <!-- Texto -->
@@ -69,3 +74,4 @@
     </span>
 
   </div>}
+<p-toast position="top-right"></p-toast>

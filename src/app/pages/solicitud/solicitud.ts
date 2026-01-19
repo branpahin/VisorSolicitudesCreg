@@ -5,15 +5,21 @@ import { Anexos } from '../../tabs/anexos/anexos';
 import { SolicitudService } from '../../services/solicitud';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Historial } from '../../tabs/historial/historial';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-solicitud',
   imports: [
     CommonModule,
+    ToastModule,
     TabsModule,
     Detalles,
     Anexos,
+    Historial
   ],
+  providers: [MessageService],
   templateUrl: './solicitud.html',
   styleUrl: './solicitud.css',
 })
@@ -24,7 +30,8 @@ export class Solicitud {
   radicado!: string;
   ciudad!: string;
 
-  constructor(private solicitudService: SolicitudService, private route: ActivatedRoute, private cdr: ChangeDetectorRef, private router: Router){}
+  constructor(private solicitudService: SolicitudService, private route: ActivatedRoute, private cdr: ChangeDetectorRef, 
+    private router: Router , private messageService:MessageService ){}
 
   ngOnInit(): void {
     this.radicado = this.route.snapshot.paramMap.get('radicado')!;
@@ -41,6 +48,19 @@ export class Solicitud {
       },
       error: (err) => {
         console.error('Error al cargar solicitud', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: err?.error || 'No fue posible cargar la solicitud'
+        });
+
+        setTimeout(() => {
+          this.router.navigate(['/']);
+        }, 3000); // espera 3 segundos
+
+        setTimeout(() => {
+          this.router.navigate(['/']);
+        }, 3000);
       }
     });
   }
