@@ -86,7 +86,7 @@ export class Detalles {
   }
 
   ngOnInit(): void {
-    this.datosGenerales = this.storageService.read('datosGenCreg174')
+    this.datosGenerales = this.storageService.read('datosGenCreg')
     this.setMinPreviewDate();   
     setTimeout(() => {
       this.getData();

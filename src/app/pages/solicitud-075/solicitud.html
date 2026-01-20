@@ -1,0 +1,77 @@
+@if(solicitud){
+
+    <header class="relative bg-white shadow-md py-6 ">
+
+        <!-- Logo -->
+        <div class="absolute top-0 left-0 ">
+            <img
+            src="assets/eep/Logo.png"
+            alt="Logo empresa"
+            class="w-20 sm:w-24 md:w-28 lg:w-32 h-auto"
+            />
+        </div>
+
+        <!-- Título centrado -->
+        <div class="text-center">
+            <h1 class="text-[#e2650f] text-xl md:text-2xl font-semibold">
+            Sistema de Trámite en Línea
+            </h1>
+            <h2 class="text-[#e2650f] text-lg md:text-xl font-semibold">
+            Nuevas Conexiones y Autogeneración
+            </h2>
+        </div>
+
+    </header>
+    <div  class="min-h-screen bg-gray-50 p-6">
+
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-xl font-semibold text-gray-800">
+            Solicitud #{{ solicitud?.numeroRadicado }}
+            </h1>
+
+            <button
+                (click)="volverHome()"
+                class="flex items-center gap-2 px-4 py-2 rounded-lg border border-[#e2650f] text-[#e2650f] hover:bg-orange-50 transition cursor-pointer">
+                    <i class="pi pi-arrow-left"></i>
+                    Regresar
+            </button>
+        </div>
+
+        <!-- Tabs -->
+        <p-tabs value="0" class="tw-tabs">
+            <p-tablist>
+                <p-tab value="0">Detalles</p-tab>
+                <p-tab value="1">Anexos</p-tab>
+                <p-tab value="2">Historial</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+                <p-tabpanel value="0">
+                    <app-detalles [request]="solicitud"></app-detalles>
+                </p-tabpanel>
+
+                <p-tabpanel value="1">
+                    <app-anexos [documentos]="solicitud.creg075Anexos"></app-anexos>
+                </p-tabpanel>
+
+                <p-tabpanel value="2">
+                    <app-historial [historico]="solicitud.creg075Historico"></app-historial>
+                </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+
+    </div>     
+}@else {<div class="min-h-screen flex flex-col items-center justify-center bg-gray-50 gap-4">
+
+    <!-- Spinner -->
+    <div
+      class="w-12 h-12 border-4 border-orange-200 border-t-[#e2650f] rounded-full animate-spin">
+    </div>
+
+    <!-- Texto -->
+    <span class="text-gray-600 text-sm animate-pulse">
+      Cargando solicitud...
+    </span>
+
+  </div>}
+<p-toast position="top-right"></p-toast>

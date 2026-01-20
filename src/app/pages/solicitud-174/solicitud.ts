@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { TabsModule } from 'primeng/tabs';
-import { Detalles } from '../../tabs/detalles/detalles';
+import { Detalles } from '../../tabs/detalles-174/detalles';
 import { Anexos } from '../../tabs/anexos/anexos';
 import { SolicitudService } from '../../services/solicitud';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -40,7 +40,7 @@ export class Solicitud {
   }
 
   cargarSolicitud() {
-    this.solicitudService.getSolicitud(this.radicado, this.ciudad).subscribe({
+    this.solicitudService.getSolicitud174(this.radicado, this.ciudad).subscribe({
       next: (data) => {
         this.solicitud = data.data;
         console.log('Solicitud:', this.solicitud);

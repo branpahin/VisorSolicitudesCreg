@@ -1,0 +1,827 @@
+
+   <div class="min-h-screen bg-gray-50 p-6 overflow-hidden">
+    <div class="card flex justify-center h-full force-light">
+        <form [formGroup]="form">
+          <!-- Información Operador de Red -->
+          <p-accordion #formTabsItem [(value)]="activeFormIndex">
+            <!-- Tipo de Conexión -->
+            <p-accordion-panel value="0">
+              <p-accordion-header>Tipo de Conexión</p-accordion-header>
+              <p-accordion-content>
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Tipo de Conexión</label>
+                    <div class="mt-2">
+                      <div class="form-check form-check-inline">
+                        <input id="tipoDeConexionSencilla" formControlName="tipoConexion"
+                          class="form-check-input formInput mt-1" type="radio" [value]="1" />
+                        <label class="form-check-label formInput">Sencilla</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input id="tipoDeConexionCompleja" formControlName="tipoConexion"
+                          class="form-check-input formInput mt-1" type="radio" [value]="2" />
+                        <label class="form-check-label formInput">Compleja</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </p-accordion-content>
+            </p-accordion-panel>
+          
+            <!-- <p-accordionTab header="Tipo de Conexión">
+
+            </p-accordionTab> -->
+
+            <!-- Datos del Solicitante-->
+            <p-accordion-panel value="1">
+              <p-accordion-header>Datos del Solicitante</p-accordion-header>
+              <p-accordion-content>
+                <!-- Nombre o Razón Social-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Nombre o Razón Social</label>
+                    <input id="nombreCliente" name="nombreCliente" class="form-control formInput" type="text" required
+                      placeholder="Nombre o Razón Social del Solicitante" formControlName="nombreCliente"
+                      [ngClass]="formDataValidate('nombreCliente')" maxlength="150" />
+                  </div>
+                </div>
+                <!--Tipo de Persona-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Tipo de Persona</label>
+                    <select id="tipoPersona" name="tipoPersona" formControlName="tipoPersona"
+                      [ngClass]="formDataValidate('tipoPersona')" required (change)="onChange($event)"
+                      class="form-select formInput">
+                      <option value="-1" selected></option>
+                      <option *ngFor="let typePeople of lstTypePeople" [value]="typePeople.id">
+                        {{ typePeople.descripcion }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <!-- Tipo de documento-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Tipo de documento</label>
+                    <select id="tipoDocumento" class="form-select formInput" name="tipoDocumento"
+                      formControlName="tipoDocumento" [ngClass]="formDataValidate('tipoDocumento')" required>
+                      <option value="-1" selected></option>
+                      <option *ngFor="let typeDocument of lstIdTypeDocument" [value]="typeDocument.id">
+                        {{ typeDocument.descripcion }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <!-- Número de Documento-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel"> Número de Documento</label>
+                    <input id="numeroDocumento" class="form-control formInput" type="text" required
+                      formControlName="numeroDocumento" [ngClass]="formDataValidate('numeroDocumento')" maxlength="15" />
+                  </div>
+                </div>
+                <!-- Dirección de correspondencia-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Dirección de correspondencia</label>
+                    <input id="direccionCorrespondencia" class="form-control formInput" type="text" required
+                      placeholder="Dirección" formControlName="direccionCorrespondencia"
+                      [ngClass]="formDataValidate('direccionCorrespondencia')" maxlength="150" />
+                  </div>
+                </div>
+                <!--   Departamento | Municipio -->
+                <div class="row mb-2">
+                  <!--Departamento-->
+                  <div class="form-group col">
+                    <label class="formLabel">Departamento</label>
+                    <select id="codDeparment" formControlName="codDeparment" class="form-select formInput"
+                      (change)="onSelectIdDeparment()" name="codDeparment" [ngClass]="formDataValidate('codDeparment')"
+                      required>
+                      <option value="-1" selected></option>
+                      <option *ngFor="let department of lstDepartments" [value]="department.id">
+                        {{ department.nombreDepartamento }}
+                      </option>
+                    </select>
+                  </div>
+                  <!--Municipio-->
+                  <div class="form-group col">
+                    <label class="formLabel">Municipio</label>
+                    <select id="municipioSolicitante" class="form-select formInput" name="municipioSolicitante"
+                      formControlName="municipioSolicitante" [ngClass]="formDataValidate('municipioSolicitante')"
+                      required>
+                      <option value="-1" selected></option>
+                      <option *ngFor="let town of lstTowns" [value]="town.id">
+                        {{ town.nombreCiudad }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <!-- Celular | Fijo -->
+                <div class="row mb-2">
+                  <!--Celular-->
+                  <div class="form-group col">
+                    <label class="formLabel">Celular</label>
+                    <input id="celular" class="form-control formInput" type="text" name="celular"
+                      formControlName="celular" [ngClass]="formDataValidate('celular')" required />
+                  </div>
+                  <!--Fijo-->
+                  <div class="form-group col">
+                    <label class="formLabel">Fijo</label>
+                    <input id="fijo" class="form-control formInput" type="text" name="fijo" formControlName="fijo"
+                      [ngClass]="formDataValidate('fijo')" />
+                  </div>
+                </div>
+                <!-- Correo electrónico -->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Correo electrónico</label>
+                    <input id="correoElectronico" class="form-control formInput" type="email" placeholder="correo"
+                      name="correoElectronico" formControlName="correoElectronico"
+                      [ngClass]="formDataValidate('correoElectronico')" required maxlength="100" />
+                  </div>
+                </div>
+                <!--Autoriza la notificación mediante correo electrónico -->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Autoriza la notificación mediante correo
+                      electrónico?</label>
+                    <select id="autorizaNotificacionMedianteCorreoElectronico" class="form-select formInput"
+                      name="autorizaNotificacionMedianteCorreoElectronico"
+                      formControlName="autorizaNotificacionMedianteCorreoElectronico" [ngClass]="
+                        formDataValidate(
+                          'autorizaNotificacionMedianteCorreoElectronico'
+                        )
+                      " required class="form-select formInput">
+                      <option value="-1" selected></option>
+                      <option value="true">SI</option>
+                      <option value="false">NO</option>
+                    </select>
+                  </div>
+                </div>
+                <!--El solicitante es el propietario del predio? -->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">
+                      El solicitante es el propietario del predio?</label>
+                    <select id="propietarioPredio" class="form-select formInput" name="propietarioPredio"
+                      formControlName="propietarioPredio" [ngClass]="formDataValidate('propietarioPredio')" required
+                      (change)="onChange($event)" class="form-select formInput">
+                      <option value="-1" selected></option>
+                      <option value="true">SI</option>
+                      <option value="false">NO</option>
+                    </select>
+                    <div>
+                      <span class="formLabel" [hidden]="!propietarioPredioSi">Anexar fotocopia del documento de identidad
+                        de la persona natural o representante legal, según corresponda.</span>
+                      <span class="formLabel" [hidden]="!propietarioPredioNo">Anexar fotocopia del documento de identidad
+                        y carta de autorización por parte del propietario del predio.</span>
+                    </div>
+                  </div>
+                </div>
+              </p-accordion-content>
+            </p-accordion-panel>
+
+            <!-- <p-accordionTab header="Datos del Solicitante">
+
+            </p-accordionTab> -->
+
+            
+
+            <!-- Datos del Suscriptor/Usuario -->
+            <p-accordion-panel value="2" *ngIf="!isApplicantOuwner">
+              <p-accordion-header>Datos del Suscriptor/Usuario</p-accordion-header>
+              <p-accordion-content>
+                <!-- Nombre o Razón Social-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Nombre o Razón Social</label>
+                    <input id="nombreRazonSocial" class="form-control formInput" type="text" required
+                      placeholder="Nombre o Razón Social del Suscriptor" formControlName="nombreRazonSocial"
+                      [ngClass]="formDataValidate('nombreRazonSocial')" maxlength="150" />
+                  </div>
+                </div>
+                <!--Tipo de Persona-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Tipo de Persona</label>
+                    <select id="tipoPersonaSuscriptor" class="form-select formInput" name="tipoPersonaSuscriptor"
+                      formControlName="tipoPersonaSuscriptor" [ngClass]="formDataValidate('tipoPersonaSuscriptor')"
+                      required class="form-select formInput">
+                      <option value="-1" selected></option>
+                      <option *ngFor="let typePeople of lstTypePeople" [value]="typePeople.id">
+                        {{ typePeople.descripcion }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <!-- Tipo de documento-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Tipo de documento</label>
+                    <select id="tipoDocumentoSuscriptor" class="form-select formInput" name="tipoDocumentoSuscriptor"
+                      formControlName="tipoDocumentoSuscriptor" [ngClass]="formDataValidate('tipoDocumentoSuscriptor')"
+                      required class="form-select formInput">
+                      <option value="-1" selected></option>
+                      <option *ngFor="let typeDocument of lstIdTypeDocument" [value]="typeDocument.id">
+                        {{ typeDocument.descripcion }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <!-- Número de Documento-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel"> Número de Documento</label>
+                    <input id="numeroDocumentoSuscriptor" class="form-control formInput" type="text" required
+                      formControlName="numeroDocumentoSuscriptor"
+                      [ngClass]="formDataValidate('numeroDocumentoSuscriptor')" maxlength="15" />
+                  </div>
+                </div>
+                <!-- Dirección de correspondencia-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Dirección de correspondencia</label>
+                    <input id="direccionCorrespondenciaSuscriptor" class="form-control formInput" type="text" required
+                      formControlName="direccionCorrespondenciaSuscriptor"
+                      [ngClass]="formDataValidate('direccionCorrespondenciaSuscriptor')" maxlength="150" />
+                  </div>
+                </div>
+                <!--Departamento | Municipio -->
+                <div class="row mb-2">
+                  <!--Departamento-->
+                  <div class="form-group col">
+                    <label class="formLabel">Departamento</label>
+                    <select id="codeDepartamentoSubscriber" formControlName="codeDepartamentoSubscriber"
+                      class="form-select formInput" (change)="onSelectDepartamentIdSubscriber()"
+                      name="codeDepartamentoSubscriber" [ngClass]="formDataValidate('codeDepartamentoSubscriber')"
+                      required>
+                      <option value="-1" selected></option>
+                      <option *ngFor="let department of lstDepartments" [value]="department.id">
+                        {{ department.nombreDepartamento }}
+                      </option>
+                    </select>
+                  </div>
+                  <!--Municipio-->
+                  <div class="form-group col">
+                    <label class="formLabel">Municipio</label>
+                    <select id="municipioSubscriber" class="form-select formInput" formControlName="municipioSubscriber"
+                      name="municipioSubscriber" [ngClass]="formDataValidate('municipioSubscriber')" required>
+                      <option value="-1" selected></option>
+                      <option *ngFor="let townSubscriber of lstTownsSubscriber" [value]="townSubscriber.id">
+                        {{ townSubscriber.nombreCiudad }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <!-- Celular | Fijo -->
+                <div class="row mb-2">
+                  <!--Celular-->
+                  <div class="form-group col">
+                    <label class="formLabel">Celular</label>
+                    <input id="celularSuscriptor" class="form-control formInput" type="text" required
+                      formControlName="celularSuscriptor" [ngClass]="formDataValidate('celularSuscriptor')" />
+                  </div>
+                  <!--Fijo-->
+                  <div class="form-group col">
+                    <label class="formLabel">Fijo</label>
+                    <input id="fijoSuscriptor" class="form-control formInput" type="text"
+                      formControlName="fijoSuscriptor" />
+                  </div>
+                </div>
+                <!-- Correo electrónico -->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Correo electrónico</label>
+                    <input id="correoElectronicoSuscriptor" class="form-control formInput" type="email"
+                      placeholder="correo" name="correoElectronicoSuscriptor"
+                      formControlName="correoElectronicoSuscriptor"
+                      [ngClass]="formDataValidate('correoElectronicoSuscriptor')" required maxlength="100" />
+                  </div>
+                </div>
+                <!--Autoriza la notificación mediante correo electrónico -->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Autoriza la notificación mediante correo
+                      electrónico?</label>
+                    <select id="autorizaNotificacionMedianteCorreoElectronicoSuscriptor" class="form-select formInput"
+                      name="autorizaNotificacionMedianteCorreoElectronicoSuscriptor"
+                      formControlName="autorizaNotificacionMedianteCorreoElectronicoSuscriptor" [ngClass]="
+                        formDataValidate(
+                          'autorizaNotificacionMedianteCorreoElectronicoSuscriptor'
+                        )
+                      " required>
+                      <option value="-1" selected></option>
+                      <option value="true">SI</option>
+                      <option value="false">NO</option>
+                    </select>
+                  </div>
+                </div>
+              </p-accordion-content>
+            </p-accordion-panel>
+            <!-- <p-accordionTab header="Datos del Suscriptor/Usuario" *ngIf="!isApplicantOuwner">
+              
+            </p-accordionTab> -->
+
+            <!-- Datos del Predio-->
+            <p-accordion-panel value="3" >
+              <p-accordion-header>Datos del Predio</p-accordion-header>
+              <p-accordion-content>
+                <!-- Zona | Numero de identificacion del cliente -NIU -->
+                <div class="row mb-2">
+                  <!--Zona-->
+                  <div class="form-group col">
+                    <label class="formLabel">Zona</label>
+                    <select id="zona" class="form-select formInput" name="zona" formControlName="zona"
+                      [ngClass]="formDataValidate('zona')" required>
+                      <option value="-1" selected></option>
+                      <option *ngFor="let typeZona of lstTypeZona" [value]="typeZona.id">
+                        {{ typeZona.descripcion }}
+                      </option>
+                    </select>
+                  </div>
+                  <!--Numero de identificacion del clinete -NIU-->
+                  <div class="form-group col">
+                    <label class="formLabel">Número de cuenta Cliente - Matrícula
+                      <span class="colorNote bi bi-info-circle-fill"
+                        pTooltip="Campo e información que sólo debe diligenciarse si en el predio ya se tiene una conexión"></span>
+                    </label>
+                    <input id="numeroIdentificacionNIU" class="form-control formInput" type="text" maxlength="15"
+                      formControlName="numeroIdentificacionNIU" />
+                  </div>
+                </div>
+                <!--Localidad | Departamento-->
+                <div class="row mb-2">
+                  <!--Localidad-->
+                  <div class="form-group col">
+                    <label class="formLabel">Localidad</label>
+                    <input id="localidad" class="form-control formInput" type="text" name="localidad"
+                      formControlName="localidad" [ngClass]="formDataValidate('localidad')" required maxlength="50" />
+                  </div>
+                  <!--Departamento-->
+                  <div class="form-group col">
+                    <label class="formLabel">Departamento</label>
+                    <select id="codeDepartamentoSite" class="form-select formInput" formControlName="codeDepartamentoSite"
+                      (change)="onSelectTownsSite()" [ngClass]="formDataValidate('codeDepartamentoSite')" required>
+                      <option value="-1" selected></option>
+                      <option *ngFor="let department of lstDepartments" [value]="department.id">
+                        {{ department.nombreDepartamento }}
+                      </option>
+                    </select>
+                  </div>
+                  <!--Municipio-->
+                  <div class="form-group col">
+                    <label class="formLabel">Municipio</label>
+                    <select id="municipioPredio" class="form-select formInput" name="municipioPredio"
+                      formControlName="municipioPredio" [ngClass]="formDataValidate('municipioPredio')" required>
+                      <option value="-1" selected></option>
+                      <option *ngFor="let townSite of lstTownsSite" [value]="townSite.id">
+                        {{ townSite.nombreCiudad }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <!-- Dirección del predio**-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Dirección del predio
+                      <span class="colorNote bi bi-info-circle-fill"
+                        pTooltip="Adjuntar el certificado de nomenclatura del predio, si esta información no está incluida en el certificado de tradición y libertad.">
+                      </span>
+                    </label>
+                    <input id="direccionDelPredio" class="form-control formInput" type="text" name="direccionDelPredio"
+                      formControlName="direccionDelPredio" [ngClass]="formDataValidate('direccionDelPredio')" required
+                      maxlength="150" />
+                  </div>
+                </div>
+                <!-- Ubicación georreferenciada WGS 84 *-->
+                <div class="row ">
+                  <div class="form-group col">
+                    <label class="formLabel form-text-center">Ubicación georreferenciada WGS 84 *</label>
+                  </div>
+                  <!--Long | Lat | Altura (h) | m -->
+                  <!--Long -->
+                  <div class="form-group col">
+                    <label class="formLabel">Long</label>
+                    <input id="Long" formControlName="Long" class="form-control formInput" type="number" />
+                  </div>
+                  <!--Lat -->
+                  <div class="form-group col">
+                    <label class="formLabel">Lat </label>
+                    <input id="Lat" formControlName="Lat" class="form-control formInput" type="number" />
+                  </div>
+                  <!--Altura (h)-->
+                  <div class="form-group col">
+                    <label class="formLabel">Altura (h) </label>
+                    <input id="altura" formControlName="altura" class="form-control formInput" type="number" />
+                  </div>
+                </div>
+                <!--  Indicaciones de acceso al predio-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Indicaciones de acceso al predio
+                      <span class="colorNote bi bi-info-circle-fill"
+                        pTooltip="Anexar mapa, en caso de considerarlo necesario"></span>
+                    </label>
+                    <div class="form-group col">
+                      <textarea id="descripcion" class="form-control formInput" formControlName="descripcionPredio"
+                        [ngClass]="formDataValidate('descripcionPredio')" rows="4" cols="50" maxlength="500"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <!-- Edificación existente o proyecto?-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Edificación existente o proyecto?</label>
+                    <select id="edificacionExistenteOproyecto" class="form-select formInput"
+                      name="edificacionExistenteOproyecto" formControlName="edificacionExistenteOproyecto" [ngClass]="
+                        formDataValidate('edificacionExistenteOproyecto')
+                      " required>
+                      <option value="-1" selected></option>
+                      <option *ngFor="let existingProject of lstExistingProject" [value]="existingProject.id">
+                        {{ existingProject.descripcion }}
+                      </option>
+                    </select>
+                  </div>
+                  <!--Matrícula inmobiliaria-->
+                  <div class="form-group col">
+                    <label class="formLabel"> Matrícula inmobiliaria</label>
+                    <input id="matriculaInmobiliaria" class="form-control formInput" type="text"
+                      formControlName="matriculaInmobiliaria" />
+                  </div>
+                </div>
+              </p-accordion-content>
+            </p-accordion-panel>
+
+            <!-- <p-accordionTab header="Datos del Predio">
+
+            </p-accordionTab> -->
+
+            <!-- Tipos de uso y actividad económica-->
+
+            <p-accordion-panel value="4" >
+              <p-accordion-header>Tipos de uso y actividad económica</p-accordion-header>
+              <p-accordion-content>
+                <!--Tipo de Uso-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Tipo de Uso</label>
+                    <select id="tipodeUso" class="form-select formInput" name="tipodeUso" formControlName="tipodeUso"
+                      [ngClass]="formDataValidate('tipodeUso')" required class="form-select formInput">
+                      <option value="-1" selected></option>
+                      <option *ngFor="let typeUse of lstTypeUse" [value]="typeUse.id">
+                        {{ typeUse.descripcion }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <!--Cuál?-->
+                <div class="row mb-2" *ngIf="this.form.get('tipodeUso')?.value == 5">
+                  <div class="form-group col">
+                    <label class="formLabel">Cuál?</label>
+                    <input id="cualTipoUso" class="form-control formInput" type="text" formControlName="cualTipoUso"
+                      [ngClass]="formDataValidate('cualTipoUso')" />
+                  </div>
+                </div>
+                <!--Estrato socioeconómico-->
+                <div class="form-group col">
+                  <label class="formLabel">Estrato socioeconómico</label>
+                  <select id="estratoSocioeconomico" class="form-select formInput" name="estratoSocioeconomico"
+                    formControlName="estratoSocioeconomico" [ngClass]="formDataValidate('estratoSocioeconomico')" required
+                    class="form-select formInput">
+                    <option *ngFor="let idType of lstSocioEconomicStratum" [value]="idType.id">
+                      {{ idType.id > 0 ? idType.id : idType.descripcion }}
+                    </option>
+                  </select>
+                </div>
+                <!--Actividad económica industrial CIIU**-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Actividad económica industrial CIIU
+                      <span class="colorNote bi bi-info-circle-fill"
+                        pTooltip="En caso de tener más de una actividad económica indicarlas en las observaciones."></span>
+                    </label>
+
+                    <select id="actividadEconomicaIndustrialCIIU" class="form-select formInput"
+                      name="actividadEconomicaIndustrialCIIU" formControlName="actividadEconomicaIndustrialCIIU"
+                      [ngClass]="
+                        formDataValidate('actividadEconomicaIndustrialCIIU')
+                      " class="form-select formInput">
+                      <option value="-1" selected></option>
+                      <option *ngFor="
+                          let industrialEconomicActivity of lstIndustrialEconomicActivity
+                        " [value]="industrialEconomicActivity.id">
+                        {{ industrialEconomicActivity.descripcion }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </p-accordion-content>
+            </p-accordion-panel>
+
+            <!-- <p-accordionTab header="Tipos de uso y actividad económica">
+              
+            </p-accordionTab> -->
+
+            <!-- Datos de infraestructura eléctrica actual conexiones sencillas-->
+            <p-accordion-panel value="5" >
+              <p-accordion-header>Datos de infraestructura eléctrica actual conexiones sencillas</p-accordion-header>
+              <p-accordion-content>
+                <!--¿Hay red eléctrica cercana al predio? *-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">¿Hay red eléctrica cercana al predio?
+                      <span class="colorNote bi bi-info-circle-fill"
+                        pTooltip="El Operador de Red validará esta información en terreno."></span>
+                    </label>
+                    <select id="hayRedElectricaCercanaAlPredio" class="form-select formInput"
+                      name="hayRedElectricaCercanaAlPredio" formControlName="hayRedElectricaCercanaAlPredio" [ngClass]="
+                        formDataValidate('hayRedElectricaCercanaAlPredio')
+                      " required class="form-select formInput">
+                      <option value="-1" selected></option>
+                      <option value="true">SI</option>
+                      <option value="false">NO</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- Distancia actual del predio a la red más cercana*-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">
+                      Distancia actual del predio a la red más cercana (en metros)
+                      <span class="colorNote bi bi-info-circle-fill"
+                        pTooltip="El Operador de Red validará esta información en terreno."></span>
+                    </label>
+                    <input id="distanciaActualDelPredioALaRedMasCercana" class="form-control formInput" type="text"
+                      placeholder="" formControlName="distanciaActualDelPredioALaRedMasCercana" [ngClass]="
+                        formDataValidate(
+                          'distanciaActualDelPredioALaRedMasCercana'
+                        )
+                      " />
+                  </div>
+                </div>
+                <!--  Número de transformador, poste o elemento de la red eléctrica más cercano*-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">
+                      Número de transformador, poste o elemento de la red
+                      eléctrica más cercano
+                      <span class="colorNote bi bi-info-circle-fill"
+                        pTooltip="El Operador de Red validará esta información en terreno."></span>
+                    </label>
+                    <input id="numeroDeTransformador" class="form-control formInput" type="text" required placeholder=""
+                      formControlName="numeroDeTransformador" [ngClass]="formDataValidate('numeroDeTransformador')" readonly/>
+                  </div>
+                </div>
+
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">
+                      Número de poste de la red eléctrica más cercana
+                      <span class="colorNote bi bi-info-circle-fill"
+                        pTooltip="El Operador de Red validará esta información en terreno."></span>
+                    </label>
+                    <input id="" class="form-control formInput" type="text" required placeholder=""
+                      formControlName="Nodo" [ngClass]="formDataValidate('Nodo')" readonly/>
+                  </div>
+                </div>
+
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">
+                      Circuito de la red eléctrica más cercana
+                      <span class="colorNote bi bi-info-circle-fill"
+                        pTooltip="El Operador de Red validará esta información en terreno."></span>
+                    </label>
+                    <input id="" class="form-control formInput" type="text" required placeholder=""
+                      formControlName="Circuito" [ngClass]="formDataValidate('Circuito')" readonly/>
+                  </div>
+                </div>
+              </p-accordion-content>
+            </p-accordion-panel>
+            <!-- <p-accordionTab header="Datos de infraestructura eléctrica actual conexiones sencillas">
+              
+            </p-accordionTab> -->
+
+            <!-- Detalle del Servicio-->
+            <p-accordion-panel value="6" >
+              <p-accordion-header>Detalle del Servicio</p-accordion-header>
+              <p-accordion-content>
+                <!--Nombre del proyecto -->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Nombre del proyecto</label>
+                    <input id="nombreDelProyecto" class="form-control formInput" type="text" required placeholder=""
+                      formControlName="nombreDelProyecto" [ngClass]="formDataValidate('nombreDelProyecto')"
+                      maxlength="50" />
+                  </div>
+                </div>
+                <!--Tipo de solicitud-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Tipo de solicitud</label>
+                    <select id="tipoSolicitudServicio" class="form-select formInput" name="tipoSolicitudServicio"
+                      formControlName="tipoSolicitudServicio" [ngClass]="formDataValidate('tipoSolicitudServicio')"
+                      required>
+                      <option value="-1" selected></option>
+                      <option *ngFor="let typeRequest of lstTypeRequest" [value]="typeRequest.id">
+                        {{ typeRequest.descripcion }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <!--No de solicitud-->
+                <div class="row mb-2"
+                  *ngIf="this.form.get('tipoSolicitudServicio')?.value == 3 || this.form.get('tipoSolicitudServicio')?.value == 2">
+                  <div class="form-group col">
+                    <label class="formLabel">No de solicitud</label>
+                    <input id="numeroSolicitud" class="form-control formInput" type="text"
+                      formControlName="numeroSolicitud" [ngClass]="formDataValidate('numeroSolicitud')" maxlength="50" />
+                  </div>
+                  <div class="form-group col">
+                    <label class="formLabel">Vigencia</label>
+                    <input id="vigencia" type="date" class="form-control formInput" formControlName="vigencia" />
+                  </div>
+                </div>
+                <!--Tipo de  servicio solicitado-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Tipo de servicio solicitado</label>
+                    <select id="tipoDeServicioSolicitado" class="form-select formInput" name="tipoDeServicioSolicitado"
+                      formControlName="tipoDeServicioSolicitado" [ngClass]="formDataValidate('tipoDeServicioSolicitado')"
+                      required>
+                      <option value="-1" selected></option>
+                      <option *ngFor="
+                          let typeServiceRequested of lstTypeServiceRequested
+                        " [value]="typeServiceRequested.id">
+                        {{ typeServiceRequested.descripcion }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <!--Cuál?-->
+                <div class="row mb-2" *ngIf="this.form.get('tipoDeServicioSolicitado')?.value == 10">
+                  <div class="form-group col">
+                    <label class="formLabel">Cuál?</label>
+                    <input id="cualTipoServicio" class="form-control formInput" type="text"
+                      formControlName="cualTipoServicio" [ngClass]="formDataValidate('cualTipoServicio')" />
+                  </div>
+                </div>
+                <!--Carga existente en kVA-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Carga existente en kVA</label>
+                    <input id="cargaKva" class="form-control formInput" type="number" required formControlName="cargaKva"
+                      [ngClass]="formDataValidate('cargaKva')" />
+                  </div>
+                </div>
+                <!--Carga máxima requerida en kVA-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Carga máxima requerida en kVA</label>
+                    <input id="cargaMaximaRequeridakVA" class="form-control formInput" type="number" required
+                      formControlName="cargaMaximaRequeridakVA" [ngClass]="formDataValidate('cargaMaximaRequeridakVA')" />
+                  </div>
+                </div>
+                <!--Nivel de tensión solicitado-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Nivel de tensión solicitado</label>
+                    <select id="nivelDeTensionSolicitado" class="form-select formInput" name="nivelDeTensionSolicitado"
+                      formControlName="nivelDeTensionSolicitado" [ngClass]="formDataValidate('nivelDeTensionSolicitado')"
+                      required>
+                      <option value="-1" selected></option>
+                      <option *ngFor="
+                          let TypeRequestedVoltageLevel of lstTypeRequestedVoltageLevel
+                        " [value]="TypeRequestedVoltageLevel.id">
+                        {{ TypeRequestedVoltageLevel.descripcion }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <!--El proyecto incluye algún sistema de generación?-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">El proyecto incluye algún sistema de generación?</label>
+                    <br />
+                    <div class="formLabel colorNote bi bi-info-circle-fill mt-1">
+                      El interesado debe revisar si además debe aplicar las
+                      disposiciones establecidas en la Resolución CREG 174 de 2021
+                      o la que la modifique o sustituya.
+                    </div>
+                    <select class="mt-3" id="proyectoSistemaGeneracion" class="form-select formInput"
+                      name="proyectoSistemaGeneracion" formControlName="proyectoSistemaGeneracion"
+                      [ngClass]="formDataValidate('proyectoSistemaGeneracion')" required>
+                      <option value="-1" selected></option>
+                      <option value="true">SI</option>
+                      <option value="false">NO</option>
+                    </select>
+                  </div>
+                </div>
+                <!--Número de cuentas por tipo  y clase de carga acordeon -->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Número de cuentas por tipo y clase de carga (Identificar en
+                      cada casilla el número de cuentas que va a tener el proyecto
+                      por tipo y clase de carga)</label>
+
+                    <section class="SectionTCCarga">
+                      <table *ngIf="listadoDetalleCuentas && listadoDetalleCuentas.length > 0">
+                        <thead>
+                          <tr>
+                            <th>Tipo Carga</th>
+                            <th>Monofásica</th>
+                            <th>Bifásica</th>
+                            <th>Trifásica</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <ng-container *ngFor="let tipoCarga of lstTypeUse; let i = index">
+                            <!-- Mostrar solo la fila correspondiente al tipo de carga seleccionado -->
+                            <ng-container
+                              *ngIf="getDetalleCarga(tipoCarga.id, 1) > 0 || getDetalleCarga(tipoCarga.id, 2) > 0 || getDetalleCarga(tipoCarga.id, 3) > 0">
+                              <tr>
+                                <td>{{ tipoCarga.descripcion }}</td>
+                                <td>{{ getDetalleCarga(tipoCarga.id, 1) }}</td>
+                                <td>{{ getDetalleCarga(tipoCarga.id, 2) }}</td>
+                                <td>{{ getDetalleCarga(tipoCarga.id, 3) }}</td>
+                              </tr>
+                            </ng-container>
+                          </ng-container>
+                          <tr>
+                            <td>Total por Clase</td>
+                            <td>{{ getTotalPorClase(1) }}</td>
+                            <td>{{ getTotalPorClase(2) }}</td>
+                            <td>{{ getTotalPorClase(3) }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table>
+                        <tr>
+                          <td>Total General</td>
+                          <td>{{ getTotalGeneral() }}</td>
+                        </tr>
+                      </table>
+                    </section>
+                  </div>
+                </div>
+
+                <!-- Fecha estimada de entrada en operación -->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">
+                      Fecha estimada de entrada en operación</label>
+                    <input id="fechaEstimadaDeEntradaOperacion" class="form-control formInput" type="date" required
+                      formControlName="fechaEstimadaDeEntradaOperacion" [ngClass]="
+                        formDataValidate('fechaEstimadaDeEntradaOperacion')
+                      " />
+                  </div>
+                </div>
+                <!-- anexar el cronograma de entrada en operación identificando para cada etapa -->
+                <!-- <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">
+                      Si el proyecto se desarrollará por etapas anexar el
+                      cronograma de entrada en operación identificando para cada
+                      etapa: descripción, código de elemento de conexión, carga,
+                      factor de uso y fecha de entrada de la carga.</label>
+
+                    <div class="row mb-2">
+                      <div class="form-group col">
+                        <label class="formLabel">¿Desea descargar y anexar el cronograma de entrada?</label>
+                        <div class="form-check form-check-inline">
+                          <label class="form-check-label formInput">SI</label>
+                          <input id="cronogramadeEntradaSI" class="form-check-input formInput" type="radio" [value]="true"
+                            (change)="onChangeShowSi()" [checked]="showSi" />
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <label class="form-check-label formInput">NO</label>
+                          <input id="cronogramadeEntradaNO" class="form-check-input formInput" type="radio"
+                            [value]="false" (change)="onChangeShowNo()" [checked]="showNo" />
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div> -->
+              </p-accordion-content>
+            </p-accordion-panel>
+
+            <!-- Observacion Solicitantes -->
+            <p-accordion-panel value="7" >
+              <p-accordion-header>Observación Solicitante</p-accordion-header>
+              <p-accordion-content>
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <textarea id="observaciones" formControlName="observaciones" class="form-control formInput" rows="4"
+                      cols="50"></textarea>
+                  </div>
+                </div>
+              </p-accordion-content>
+            </p-accordion-panel>
+            <!-- <p-accordionTab header="Términos y Condiciones" *ngIf="!isToShowDetails">
+              
+            </p-accordionTab> -->
+          </p-accordion>
+        </form>
+      </div>
+    </div>

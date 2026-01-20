@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
-import { Solicitud } from '../solicitud/solicitud';
+import { Solicitud } from '../solicitud-174/solicitud';
 import { SelectModule } from 'primeng/select';
 import { Router } from '@angular/router';
 import { SolicitudService } from '../../services/solicitud';
@@ -31,12 +31,17 @@ export class Home {
     { name: 'Dosquebradas', code: '2' },
   ];
 
+  cregs = [
+    { name: 'Autogeneración', code: '1' },
+    { name: 'Servicio', code: '2' },
+  ];
+
   ciudad!: string;
+  creg!: string;
   numeroSolicitud!: string;
   mostrarDialog: boolean =  true;
 
   constructor(private router: Router, private solicitudService: SolicitudService, private storageService:StorageService) {
-    this.cargarSolicitud();
   }
 
   buscar() {
@@ -44,17 +49,39 @@ export class Home {
 
     this.mostrarDialog = false;
 
-    this.router.navigate([
-      '/solicitud',
-      this.numeroSolicitud,
-      this.ciudad
-    ]);
+    if(this.creg=='1'){
+      this.cargarSolicitud174();
+    }else{
+      this.cargarSolicitud075();
+    }
+    
   }
 
-  cargarSolicitud() {
+  cargarSolicitud174() {
     this.solicitudService.getDatosGeneralesCreg174().subscribe({
       next: (data) => {
-        this.storageService.save('datosGenCreg174',data)
+        this.storageService.save('datosGenCreg',data)
+        this.router.navigate([
+          '/solicitud174',
+          this.numeroSolicitud,
+          this.ciudad
+        ]);
+      },
+      error: (err) => {
+        console.error('Error al cargar solicitud', err);
+      }
+    });
+  }
+
+  cargarSolicitud075() {
+    this.solicitudService.getDatosGeneralesCreg075().subscribe({
+      next: (data) => {
+        this.storageService.save('datosGenCreg',data)
+          this.router.navigate([
+          '/solicitud075',
+          this.numeroSolicitud,
+          this.ciudad
+        ]);
       },
       error: (err) => {
         console.error('Error al cargar solicitud', err);
