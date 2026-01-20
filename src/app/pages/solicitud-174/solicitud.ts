@@ -8,6 +8,8 @@ import { CommonModule } from '@angular/common';
 import { Historial } from '../../tabs/historial/historial';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faCaretLeft } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-solicitud',
@@ -17,7 +19,8 @@ import { MessageService } from 'primeng/api';
     TabsModule,
     Detalles,
     Anexos,
-    Historial
+    Historial,
+    FontAwesomeModule
   ],
   providers: [MessageService],
   templateUrl: './solicitud.html',
@@ -29,6 +32,8 @@ export class Solicitud {
   mostrar:boolean=false
   radicado!: string;
   ciudad!: string;
+
+  faCaretLeft=faCaretLeft
 
   constructor(private solicitudService: SolicitudService, private route: ActivatedRoute, private cdr: ChangeDetectorRef, 
     private router: Router , private messageService:MessageService ){}
