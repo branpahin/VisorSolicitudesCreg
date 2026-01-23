@@ -28,7 +28,7 @@ export class Home {
 
   ciudades = [
     { name: 'Pereira', code: '1' },
-    { name: 'Dosquebradas', code: '2' },
+    { name: 'Cartago', code: '2' },
   ];
 
   cregs = [
