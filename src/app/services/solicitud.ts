@@ -12,7 +12,7 @@ export class SolicitudService {
   private getSolicitudes174 = 'api/Solicitudes174/GetById';
   private getSolicitudes075 = 'api/Solicitudes075/GetById';
   private getDatosGenerales174= 'api/Solicitudes174/GetDatosGenerales';
-  private getDatosGenerales075= 'api/Solicitudes075/GetInitialParams';
+  private getDatosGenerales075= 'api/Solicitudes075/GetDatosGenerales';
   private getDepartamento= 'api/Departamento/GetDepartamentos';
   private getCiudad= 'api/Ciudad/GetDptoCiudad';
 
