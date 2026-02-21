@@ -10,6 +10,9 @@ import { MessageService } from 'primeng/api';
 import { Detalles } from '../../tabs/detalles-075/detalles';
 import { faCaretLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { Factibilidad } from "../../tabs/factibilidad/factibilidad";
+import { Diseno } from '../../tabs/diseno/diseno';
+import { ReciboTecnico } from '../../tabs/recibo_tecnico/recibo_tecnico';
 
 @Component({
   selector: 'app-solicitud',
@@ -20,8 +23,11 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     Detalles,
     Anexos,
     Historial,
-    FontAwesomeModule
-  ],
+    FontAwesomeModule,
+    Factibilidad,
+    Diseno,
+    ReciboTecnico
+],
   providers: [MessageService],
   templateUrl: './solicitud.html',
   styleUrl: './solicitud.css',

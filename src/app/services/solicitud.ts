@@ -15,6 +15,7 @@ export class SolicitudService {
   private getDatosGenerales075= 'api/Solicitudes075/GetDatosGenerales';
   private getDepartamento= 'api/Departamento/GetDepartamentos';
   private getCiudad= 'api/Ciudad/GetDptoCiudad';
+  private postDownload= 'api/Files/DownloadFile';
 
   constructor(private http: HttpClient) {}
 
@@ -42,5 +43,12 @@ export class SolicitudService {
     return this.http.get<any>(this.apiUrl+this.getCiudad+"?CodDepartamento="+departamento);
   }
 
+  postDownloadFile(data:any): Observable<any> {
+    const APIREST = `${this.apiUrl}${this.postDownload}`;
+
+    return this.http.post(APIREST, data,{
+      responseType: 'blob'
+    });
+  }
   
 }

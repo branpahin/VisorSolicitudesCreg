@@ -1,0 +1,350 @@
+
+   <div class=" bg-gray-50 p-6 overflow-hidden">
+    <div class="card flex justify-center h-full force-light">
+        <form [formGroup]="form">
+          <p-accordion #formTabsItem [(value)]="activeFormIndex" (valueChange)="onActiveIndexChange($event)">
+            <p-accordion-panel value="0" >
+              <p-accordion-header>Información General</p-accordion-header>
+              <p-accordion-content>
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel"> No de solicitud de servicio</label>
+                    <input class="form-control formInput" type="text" [readonly]="true" maxlength="15"
+                      formControlName="numeroSolicitud" />
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel"> No de factibilidad del Servicio</label>
+                    <input class="form-control formInput" type="text" [readonly]="true" maxlength="15"
+                      formControlName="numeroFactibilidad" />
+                  </div>
+                </div>
+
+                <!-- Fecha de Respuesta de la Factibilidad -->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">
+                      Fecha de respuesta de factibilidad de servicio</label>
+                    <input id="fechaRespuestaFactibilidad" class="form-control formInput" type="date" required
+                      formControlName="fechaRespuestaFactibilidad" [ngClass]="formDataValidate('fechaRespuestaFactibilidad')" />
+                  </div>
+                </div>
+
+                <!-- Vigencia de la factibilidad en meses -->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel"> Vigencia de la factibilidad en meses*</label>
+                    <input id="vigenciaFactibilidad" class="form-control formInput" type="number"
+                      formControlName="vigenciaFactibilidad" />
+                  </div>
+                </div>
+
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">
+                      Fecha de vigencia de la factibilidad</label>
+                    <input id="fechaVigenciaFactibilidad" class="form-control formInput" type="date" required
+                      formControlName="fechaVigenciaFactibilidad" [value]="fechaActual"
+                      [ngClass]="formDataValidate('fechaVigenciaFactibilidad')" />
+                    
+                  </div>
+                </div>
+
+                <!--Tipo de solicitud-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Tipo de solicitud</label>
+                    <select id="tipoSolicitudServicio" class="form-select formInput" name="tipoSolicitudServicio"
+                      formControlName="tipoSolicitudServicio" required [ngClass]="formDataValidate('fechaVigenciaFactibilidad')">
+                      <option *ngFor="let typeRequest of lstTypeRequest" [value]="typeRequest.id">
+                        {{ typeRequest.descripcion }}
+                      </option>
+                    </select>
+                    
+                  </div>
+                </div>
+              </p-accordion-content>
+            </p-accordion-panel>
+            <!-- <p-accordionTab header="Información General">
+              
+            </p-accordionTab> -->
+
+            <p-accordion-panel value="1" >
+              <p-accordion-header>Conexión Aprobada</p-accordion-header>
+              <p-accordion-content>
+                <!-- Conexión aprobada-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Carga aprobada en kVA*(Máxima capacidad que corresponde a la carga aprobada
+                      sin perjuicio de la capacidad instalada existente)</label>
+                    <input id="cargaMaximaAprobada" class="form-control formInput" type="number" required
+                      formControlName="cargaMaximaAprobada" [ngClass]="formDataValidate('cargaMaximaAprobada')" />
+                    
+                  </div>
+                </div>
+                <!-- Carga existente antes de la aprobada, en kVA-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Carga existente Antes de la aprobada en kVA</label>
+                    <input id="cargaKva" class="form-control formInput" type="number" required formControlName="cargaKva"
+                      [ngClass]="formDataValidate('cargaKva')" />
+                    
+                  </div>
+                </div>
+                <!-- Nivel de tensión Aprobado de la conexión-->
+                <div>
+                  <label class="formLabel">Nivel de tensión Aprobado de la conexión</label>
+                  <select id="nivelDeTensionAprobado" class="form-select formInput" name="nivelDeTensionAprobado"
+                    formControlName="nivelDeTensionAprobado" required [ngClass]="formDataValidate('nivelDeTensionAprobado')">
+                    <option *ngFor="let TypeRequestedVoltageLevel of lstTypeRequestedVoltageLevel"
+                      [value]="TypeRequestedVoltageLevel.id">{{ TypeRequestedVoltageLevel.descripcion }}
+                    </option>
+                  </select>
+                  
+                </div>
+                <!-- 4.Tipo de Proyecto-->
+                <div class="row mb-2">
+                  <div id="divTipoProyecto" class="form-group col mt-2">
+                    <label class="formLabel">Tipo de Proyecto*</label>
+                    <div>
+                      <div class="form-check form-check-inline" *ngFor="let type of lstTipoProyecto; let i =index">
+                        <input class="form-check-input form-check-label formInput mt-1" type="checkbox" [checked]="type.selected"
+                          disabled>
+                        <label class="form-check-label form-check-label formInput" for="inlineRadio1">{{type.descripcion}}</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Nombre de Circuito BT-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel"> Nombre de Circuito BT </label>
+                    <input id="nombreCircuitoBT" class="form-control formInput" type="text" formControlName="nombreCircuitoBT" />
+                  </div>
+                </div>
+
+                <!-- No de Circuito BT-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel"> No de Circuito BT </label>
+                    <input id="numeroCircuitoBT" class="form-control formInput" type="text" formControlName="numeroCircuitoBT" />
+                  </div>
+                </div>
+
+                <!-- Nombre de Circuito MT-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel"> Nombre de Circuito MT </label>
+                    <input id="nombreCircuitoMT" class="form-control formInput" type="text" required
+                      formControlName="nombreCircuitoMT" [ngClass]="formDataValidate('nombreCircuitoMT')" />
+                    
+                  </div>
+                </div>
+
+                <!-- No de Circuito MT-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel"> No de Circuito MT </label>
+                    <input id="numeroCircuitoMT" class="form-control formInput" type="text" required
+                      formControlName="numeroCircuitoMT" [ngClass]="formDataValidate('numeroCircuitoMT')" />
+                    
+                  </div>
+                </div>
+
+                <!-- Subestación de Potencia-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel"> Subestación de Potencia </label>
+                    <input id="subestacionPotencia" class="form-control formInput" type="text" required
+                      formControlName="subestacionPotencia" [ngClass]="formDataValidate('subestacionPotencia')" />
+                    
+                  </div>
+                </div>
+
+                <!-- Transformador de Distribución-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel"> Transformador de Distribución </label>
+                    <input id="transformadorDistribucion" class="form-control formInput" type="text"
+                      formControlName="transformadorDistribucion" />
+                  </div>
+                </div>
+
+                <!-- Distancia desde punto de conexión a la subestación de potencia-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel"> Distancia desde punto de conexión a la subestación de potencia </label>
+                    <input id="distanciaPuntoConexion" class="form-control formInput" type="number" required
+                      formControlName="distanciaPuntoConexion" [ngClass]="formDataValidate('distanciaPuntoConexion')" />
+                    
+                  </div>
+                </div>
+
+                <!-- Número de Nodo o identificación del poste o apoyo donde se conectará -->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel"> Número de Nodo o identificación del poste o apoyo donde se conectará
+                    </label>
+                    <input id="numeroNodo" class="form-control formInput" type="text" required formControlName="numeroNodo"
+                      [ngClass]="formDataValidate('numeroNodo')" />
+                    
+                  </div>
+                </div>
+
+                <!-- Nivel de cortocircuito trifásico  (kA)-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel"> Nivel de cortocircuito trifasico (kA)</label>
+                    <input id="nivelCortocircuitoTrifasico" class="form-control formInput" type="number" required
+                      formControlName="nivelCortocircuitoTrifasico" [ngClass]="formDataValidate('nivelCortocircuitoTrifasico')" />
+                    
+                  </div>
+                </div>
+
+                <!-- Nivel de cortocircuito monofásico  (kA)-->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel"> Nivel de cortocircuito monofásico (kA)</label>
+                    <input id="nivelCortocircuitoMonofasico" class="form-control formInput" type="number" required
+                      formControlName="nivelCortocircuitoMonofasico"
+                      [ngClass]="formDataValidate('nivelCortocircuitoMonofasico')" />
+                    
+                  </div>
+                </div>
+
+                <!-- Ubicación georreferenciada WGS 84 *-->
+                <div class="row mb-3">
+                  <div class="form-group col">
+                    <label class="formLabel form-text-center">Ubicación georreferenciada WGS 84 *</label>
+                  </div>
+                  <!--Long | Lat | Altura (h) | m -->
+                  <!--Long -->
+                  <div class="form-group col">
+                    <label class="formLabel">Long*</label>
+                    <input id="Long" formControlName="Long" class="form-control formInput" type="number"
+                      [ngClass]="formDataValidate('Long')" />
+                    
+                  </div>
+                  <!--Lat -->
+                  <div class="form-group col">
+                    <label class="formLabel">Lat*</label>
+                    <input id="Lat" formControlName="Lat" class="form-control formInput" type="number"
+                      [ngClass]="formDataValidate('Lat')" />
+                    
+                  </div>
+                  <!--Altura (h)-->
+                  <div class="form-group col">
+                    <label class="formLabel">Altura (h) </label>
+                    <input id="altura" formControlName="altura" class="form-control formInput" type="number" />
+                  </div>
+                </div>
+
+                <!--Número de cuentas por tipo  y clase de carga acordeon -->
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Tipo y clase de carga aprobada</label>
+                    <section class="SectionTCCarga">
+                      <table *ngIf="listadoDetalleCuentas && listadoDetalleCuentas.length > 0">
+                        <thead>
+                          <tr>
+                            <th>Tipo Carga</th>
+                            <th>Monofásica</th>
+                            <th>Bifásica</th>
+                            <th>Trifásica</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <ng-container *ngFor="let tipoCarga of lstTypeUse; let i = index">
+                            <ng-container *ngIf="getDetalleCarga(tipoCarga.id, 1) > 0 || getDetalleCarga(tipoCarga.id, 2) > 0 || 
+                                                        getDetalleCarga(tipoCarga.id, 3) > 0">
+                              <tr>
+                                <td>{{ tipoCarga.descripcion }}</td>
+                                <td>{{ getDetalleCarga(tipoCarga.id, 1) }}</td>
+                                <td>{{ getDetalleCarga(tipoCarga.id, 2) }}</td>
+                                <td>{{ getDetalleCarga(tipoCarga.id, 3) }}</td>
+                              </tr>
+                            </ng-container>
+                          </ng-container>
+                          <tr>
+                            <td>Total por Clase</td>
+                            <td>{{ getTotalPorClase(1) }}</td>
+                            <td>{{ getTotalPorClase(2) }}</td>
+                            <td>{{ getTotalPorClase(3) }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table>
+                        <tr>
+                          <td>Total General</td>
+                          <td>{{ getTotalGeneral() }}</td>
+                        </tr>
+                      </table>
+                    </section>
+                  </div>
+                </div>
+              </p-accordion-content>
+            </p-accordion-panel>
+            <!-- <p-accordionTab header="Conexión Aprobada">
+              
+            </p-accordionTab> -->
+
+            <!-- Documentos tecnicos-->
+            <p-accordion-panel value="2" >
+              <p-accordion-header>Documentos técnicos requeridos según tipo de conexión</p-accordion-header>
+              <p-accordion-content>
+                <div class="row mb-2">
+                  <div id="divDocsTecnicos" class="form-group col mt-2">
+                    <div>
+                      <div class="form-check" *ngFor="let type of lstDocumentosTecnicos; let i =index">
+                        <input formControlName="docTecnicos" class="form-check-input form-check-label formInput mt-1"
+                          type="checkbox" [checked]="type.selected">
+                        <label class="form-check-label form-check-label formInput" for="inlineRadio1">{{type.descripcion
+                          }}</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </p-accordion-content>
+            </p-accordion-panel>
+            <!-- <p-accordionTab header="Documentos técnicos requeridos según tipo de conexión">
+              
+            </p-accordionTab> -->
+
+            <p-accordion-panel value="3" >
+              <p-accordion-header>Observaciones operador de red</p-accordion-header>
+              <p-accordion-content>
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Nombre del proyecto</label>
+                    <input id="nombreProyecto" class="form-control formInput" type="text" required
+                      formControlName="nombreProyecto" [ngClass]="formDataValidate('nombreProyecto')" />
+                    
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Observaciones</label>
+                    <textarea id="observacionesUno" class="form-control formInput" type="text" required maxlength="1200"
+                      formControlName="observacionesUno" [ngClass]="formDataValidate('observacionesUno')">
+                    </textarea>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <div class="form-group col">
+                    <label class="formLabel">Gestionado por</label>
+                    <input id="gestionadoPor" class="form-control formInput" type="text" required formControlName="gestionadoPor"
+                      [ngClass]="formDataValidate('gestionadoPor')" />
+                    <!--Validacion de error -->
+                    
+                  </div>
+                </div>
+              </p-accordion-content>
+            </p-accordion-panel>
+            <!-- <p-accordionTab header="Observaciones operador de red">
+              
+            </p-accordionTab> -->
+          </p-accordion>
+        </form>
+      </div>
+    </div>

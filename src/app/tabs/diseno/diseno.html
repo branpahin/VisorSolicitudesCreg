@@ -1,0 +1,299 @@
+
+<div class=" bg-gray-50 p-6 overflow-hidden">
+  <div class="card flex justify-center h-full force-light">
+    <form [formGroup]="form">
+      <p-accordion #formTabsItem [(value)]="activeFormIndex" (valueChange)="onActiveIndexChange($event)">
+        <p-accordion-panel value="0" >
+          <p-accordion-header>Datos Solicitud</p-accordion-header>
+          <p-accordion-content>
+            <div class="row mb-2">
+              <div class="form-group col">
+                <label class="formLabel"> No de solicitud de servicio</label>
+                <input class="form-control formInput" type="text" [readonly]="true" maxlength="15"
+                  formControlName="numeroSolicitud" id="numeroSolicitud" />
+              </div>
+            </div>
+            <div class="row mb-2">
+              <div class="form-group col">
+                <label class="formLabel"> No de factibilidad del Servicio</label>
+                <input class="form-control formInput" type="text" [readonly]="true" maxlength="15"
+                  formControlName="numeroFactibilidad" id="numeroFactibilidad" />
+              </div>
+            </div>
+
+            <div class="row mb-2">
+              <div class="form-group col">
+                <label class="formLabel"> Nombre del proyecto</label>
+                <input class="form-control formInput" type="text" formControlName="nombreProyecto" id="nombreProyecto"
+                  required [ngClass]="formDataValidate('nombreProyecto')" />
+                
+              </div>
+            </div>
+
+            <!--Tipo documento-->
+            <div class="row mb-2">
+              <div class="form-group col">
+                <label class="formLabel">Documento que se presenta para revisión</label>
+                <select id="tipoDocumento" class="form-select formInput" name="tipoDocumento"
+                  formControlName="tipoDocumento" required [ngClass]="formDataValidate('tipoDocumento')">
+                  <option *ngFor="let tipo of lstTipoDocumento" [value]="tipo.idDocumentoXFormulario">
+                    {{ tipo.nombre }}
+                  </option>
+                </select>
+                
+              </div>
+            </div>
+          </p-accordion-content>
+        </p-accordion-panel>
+        <!-- <p-accordionTab header="Datos Solicitud">
+          
+        </p-accordionTab> -->
+
+        <p-accordion-panel value="1" >
+          <p-accordion-header>Información propietario e ingeniero diseñador</p-accordion-header>
+          <p-accordion-content>
+            <!-- Nombre Constructora-->
+            <div class="row mb-2">
+              <div class="form-group col">
+                <label class="formLabel">Nombre Constructora</label>
+                <input id="nombreConstructora" class="form-control formInput" type="text"
+                  formControlName="nombreConstructora" />
+              </div>
+            </div>
+
+            <!-- Nit-->
+            <div class="row mb-2">
+              <div class="form-group col">
+                <label class="formLabel">NIT</label>
+                <input id="nit" class="form-control formInput" type="text" formControlName="nit" />
+              </div>
+            </div>
+
+            <!--Ingeniero responsable-->
+            <div class="row mb-3">
+              <div class="form-group ">
+                <label class="formLabel form-text-center">Ingeniero responsable</label>
+              </div>
+              <div class="form-group ">
+                <label class="formLabel">Nombre*</label>
+                <input id="nombreIngeniero" formControlName="nombreIngeniero" class="form-control formInput" type="text"
+                  required [ngClass]="formDataValidate('nombreIngeniero')" />
+                
+              </div>
+
+              <div class="row mb-2">
+                <div class="form-group ">
+                  <label class="formLabel">¿Desea generar la firma digital?*</label>
+                  <div class="mt-2">
+                    <div class="form-check form-check-inline">
+                      <label class="form-check-label formInput">SI</label>
+                      <input class="form-check-input formInput" type="radio" [value]="true"
+                        (change)="onChangeDigitalSignatureIngeniero()" formControlName="isDigitalSignatureIngeniero">
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <label class="form-check-label formInput">NO</label>
+                      <input class="form-check-input formInput" type="radio" [value]="false"
+                        (change)="onChangeDigitalSignatureIngeniero()" formControlName="isDigitalSignatureIngeniero">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--Firma Digital-->
+              <div class="row mb-2" *ngIf="isDigitalSignatureIngeniero">
+                <div class="col">
+                  <div class="d-flex justify-content-start mb-2"
+                    *ngIf="signatureIngeniero && signatureIngeniero.length>0">
+                    <div class="signatureIngenieroDiv">
+                      <img [src]="signatureIngeniero" />
+                    </div>
+                  </div>
+                  <div class="d-grid gap-2 mb-2">
+                    <button type="button" class="btn btn-block formButtons"
+                      (click)="isSignatureIngenieroModalVisible=true">GENERAR FIRMA</button>
+                    <button type="button" class="btn btn-block btn-outline-danger"
+                      style="font-weight: bold;font-size: 14px;" (click)="onCleanSirnatureIngeniero()">LIMPIAR</button>
+                  </div>
+                </div>
+              </div>
+
+              <!--Cedula de Ciudadanía-->
+              <div class="form-group ">
+                <label class="formLabel">Cédula de Ciudadanía*</label>
+                <input id="cedulaIngeniero" formControlName="cedulaIngeniero" class="form-control formInput" type="text"
+                  [ngClass]="formDataValidate('cedulaIngeniero')" />
+               
+              </div>
+
+              <!-- Teléfono contacto -->
+              <div class="form-group ">
+                <label class="formLabel">Teléfono contacto*</label>
+                <input id="telefonoIngeniero" formControlName="telefonoIngeniero" class="form-control formInput"
+                  type="text" [ngClass]="formDataValidate('telefonoIngeniero')" />
+               
+              </div>
+
+              <!--Correo electronico-->
+              <div class="form-group ">
+                <label class="formLabel">Correo electrónico*</label>
+                <input id="emailIngeniero" formControlName="emailIngeniero" class="form-control formInput" type="email"
+                  [ngClass]="formDataValidate('emailIngeniero')" />
+                
+              </div>
+            </div>
+
+            <!--Propietario-->
+            <div class="row mb-3">
+              <div class="form-group ">
+                <label class="formLabel form-text-center">Propietario o representante legal</label>
+              </div>
+              <div class="form-group ">
+                <label class="formLabel">Nombre*</label>
+                <input id="nombrePropietario" formControlName="nombrePropietario" class="form-control formInput"
+                  type="text" required [ngClass]="formDataValidate('nombrePropietario')" />
+                
+              </div>
+
+              <div class="row mb-2">
+                <div class="form-group ">
+                  <label class="formLabel">¿Desea generar la firma digital?*</label>
+                  <div class="mt-2">
+                    <div class="form-check form-check-inline">
+                      <label class="form-check-label formInput">SI</label>
+                      <input class="form-check-input formInput" type="radio" [value]="true"
+                        (change)="onChangeDigitalSignaturePropietario()"
+                        formControlName="isDigitalSignaturePropietario">
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <label class="form-check-label formInput">NO</label>
+                      <input class="form-check-input formInput" type="radio" [value]="false"
+                        (change)="onChangeDigitalSignaturePropietario()"
+                        formControlName="isDigitalSignaturePropietario">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--Firma Digital-->
+              <div class="row mb-2" *ngIf="isDigitalSignaturePropietario">
+                <div class="col">
+                  <div class="d-flex justify-content-start mb-2"
+                    *ngIf="signaturePropietario && signaturePropietario.length>0">
+                    <div class="signatureDivPropietario">
+                      <img [src]="signaturePropietario" />
+                    </div>
+                  </div>
+                  <div class="d-grid gap-2 mb-2">
+                    <button type="button" class="btn btn-block formButtons"
+                      (click)="isSignaturePropietarioModalVisible=true">GENERAR FIRMA</button>
+                    <button type="button" class="btn btn-block btn-outline-danger"
+                      style="font-weight: bold;font-size: 14px;"
+                      (click)="onCleanSirnaturePropietario()">LIMPIAR</button>
+                  </div>
+                </div>
+              </div>
+
+              <!--Cedula de Ciudadanía-->
+              <div class="form-group ">
+                <label class="formLabel">Cédula de Ciudadanía*</label>
+                <input id="cedulaPropietario" formControlName="cedulaPropietario" class="form-control formInput"
+                  type="text" [ngClass]="formDataValidate('cedulaPropietario')" />
+                
+              </div>
+
+              <!-- Teléfono contacto -->
+              <div class="form-group ">
+                <label class="formLabel">Teléfono contacto*</label>
+                <input id="telefonoPropietario" formControlName="telefonoPropietario" class="form-control formInput"
+                  type="text" [ngClass]="formDataValidate('telefonoPropietario')" />
+                
+              </div>
+
+              <!--Correo electronico-->
+              <div class="form-group">
+                <label class="formLabel">Correo electrónico*</label>
+                <input id="emailPropietario" formControlName="emailPropietario" class="form-control formInput"
+                  type="email" [ngClass]="formDataValidate('emailPropietario')" />
+                
+              </div>
+            </div>
+          </p-accordion-content>
+        </p-accordion-panel>
+        <!-- <p-accordionTab header="Información propietario e ingeniero diseñador">
+          
+        </p-accordionTab> -->
+
+        <!-- Observaciones adicionales-->
+        <p-accordion-panel value="2" >
+          <p-accordion-header>Observaciones adicionales</p-accordion-header>
+          <p-accordion-content>
+            <div class="form-group col">
+              <label class="formLabel">Declaro que soy mayor de edad y actúo de manera personal y voluntaria.
+                Doy fe que la información que registro en este formulario es real y verídica, además indico que los
+                documentos que anexo son copia
+                100% originales del documento original, por lo que responderé ante la autoridad competente por cualquier
+                irregularidad que se
+                identifique en los mismos. Declaro conocer que es necesario que adjunte todos los requisitos solicitados
+                y que de no hacerlo,
+                el trámite no podrá ser diligenciado satisfactoriamente.</label>
+            </div>
+
+            <div class="row mb-2">
+              <div class="form-group col">
+                <label class="formLabel">¿Desea generar la firma digital?*</label>
+                <div class="mt-2">
+                  <div class="form-check form-check-inline">
+                    <label class="form-check-label formInput">SI</label>
+                    <input class="form-check-input formInput" type="radio" [value]="true"
+                      (change)="onChangeDigitalSignatureObservaciones()"
+                      formControlName="isDigitalSignatureObservaciones">
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <label class="form-check-label formInput">NO</label>
+                    <input class="form-check-input formInput" type="radio" [value]="false"
+                      (change)="onChangeDigitalSignatureObservaciones()"
+                      formControlName="isDigitalSignatureObservaciones">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--Firma Digital-->
+            <div class="row mb-2" *ngIf="isDigitalSignatureObservaciones">
+              <div class="col">
+                <div class="d-flex justify-content-start mb-2"
+                  *ngIf="signatureObservaciones && signatureObservaciones.length>0">
+                  <div class="signatureDivObservaciones">
+                    <img [src]="signatureObservaciones" />
+                  </div>
+                </div>
+                <div class="d-grid gap-2 mb-2">
+                  <button type="button" class="btn btn-block formButtons"
+                    (click)="isSignatureObservacionesModalVisible=true">GENERAR
+                    FIRMA</button>
+                  <button type="button" class="btn btn-block btn-outline-danger"
+                    style="font-weight: bold;font-size: 14px;"
+                    (click)="onCleanSirnatureObservaciones()">LIMPIAR</button>
+                </div>
+              </div>
+            </div>
+            <div class="form-group col">
+              <label class="formLabel">Nombre</label>
+              <input id="nombreFirma" formControlName="nombreFirma" class="form-control formInput" type="text"
+                [ngClass]="formDataValidate('nombreFirma')" />
+            </div>
+            <div class="row mb-2">
+              <div class="form-group col">
+                <label class="formLabel">Cédula</label>
+                <input id="cedulaFirma" formControlName="cedulaFirma" class="form-control formInput" type="text"
+                  [ngClass]="formDataValidate('cedulaFirma')" />
+                
+              </div>
+            </div>
+            
+          </p-accordion-content>
+        </p-accordion-panel>
+        <!-- <p-accordionTab header="Observaciones adicionales">
+          
+        </p-accordionTab> -->
+      </p-accordion>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,145 @@
+.validation-error {
+    color: #FF4A55;
+    font-size: 12px;
+    text-align: left;
+    font-weight: bold;
+  }
+
+  .nextItemButtons {
+    font-size: 14px;
+    font-weight: bold;
+    background: #fff 0% 0% no-repeat padding-box;
+    color:#e2650f;
+    border: 2px solid #e2650f;
+    border-radius: 10px;
+  }
+
+  .nextItemButtons:hover {
+    font-size: 14px;
+    font-weight: bold;
+    background: #e2650f 0% 0% no-repeat padding-box;
+    box-shadow: 0px 4px 4px #0000000A;
+    color: #FFFFFF;
+    border-radius: 10px;
+  }
+
+  .ng-select.custom {
+    border-width: 1.8px;
+    min-height: 0px;
+    border-radius: 5px;
+  }
+
+  .btn-upload-file{
+    font-size: 12px;
+    color: #000;
+    font-weight: bold;
+    text-align: left;
+    border-radius: 12px;
+    background: #F5F5F5 0% 0% no-repeat padding-box;
+    border: 2px dotted #C2C2C2;
+    padding-left: 10px;
+    padding-top: 10px;
+  }
+
+  .btn-upload-file:active {
+    font-size: 12px;
+    color: #000;
+    font-weight: bold;
+    border-radius: 12px;
+    background: #fff 0% 0% no-repeat padding-box;
+    border: 2px solid #C2C2C2;
+  }
+
+  .btn-upload-file-subtitle{
+    font-size: 10px;
+    color: #A5A5A5;
+  }
+
+  .icon-upload-file{
+    background: #e2650f;
+    color: #F5F5F5;
+    text-align: left;
+  }
+
+  .label-upload-file{
+    border: 1px solid #e2650f;
+    border-radius: 12px;
+    font-size: 12px;
+    color: #000;
+    font-weight: bold;
+    padding-left: 10px;
+    padding-top: 15px;
+  }
+
+  .icon-label-upload-file{
+    background: #f1873048;
+    color: #000;
+    font-weight: bolder;
+    text-align: left;
+  }
+
+  .formTermsAndConditionsLabel {
+    text-align: left;
+    letter-spacing: 0px;
+    color: #000000;
+    font-size: 14px;
+    font-weight: bold;
+    opacity: 1;
+  }
+
+  .formTermsAndConditionsChecked:checked {
+    background-color: #38E25D;
+    box-shadow: 0px 1px 28px #0000001F;
+    border: 2px #FFFFFF;
+  }
+
+  .formButtons {
+    font-size: 14px;
+    justify-items: center;
+    text-align: center;
+    font-weight: bold;
+    background: #e2650f 0% 0% no-repeat padding-box;
+    box-shadow: 0px 4px 4px #0000000A;
+    color: #FFFFFF;
+  }
+
+  .accept-terms-message {
+    color: #C7C7C7;
+    font-weight: bold;
+  }
+
+  .accept-terms-message-a {
+    color: #e2650f;
+    text-decoration: none;
+  }
+
+  .accept-terms-message-a:hover {
+    text-decoration: underline;
+    color: #e2650f;
+    cursor: pointer;
+  }
+
+  .signatureDiv{
+    height: 100%;
+    width: 100px;
+    margin-left: 10%;
+  }
+
+  .lblNoteTitle{
+    font-weight: bold;
+  }
+
+  .dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  button[mat-icon-button] {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    border: none;   
+    outline: none; 
+    box-shadow: none; 
+  }

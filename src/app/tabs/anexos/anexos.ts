@@ -9,8 +9,11 @@ import {
   faFileArchive,
   faFileImage,
   faFileLines,
-  faFile
+  faFile,
+  faDownload,
+  faEye
 } from '@fortawesome/free-solid-svg-icons';
+import { SolicitudService } from '../../services/solicitud';
 
 @Component({
   selector: 'app-anexos',
@@ -21,7 +24,8 @@ import {
 export class Anexos {
 
   @Input() documentos : any[] = []
-
+  faDownload=faDownload
+  faEye=faEye
   icons: Record<string, IconDefinition> = {
     pdf: faFilePdf,
     doc: faFileWord,
@@ -37,11 +41,43 @@ export class Anexos {
     default: faFile
   };
 
+  constructor(private solicitudService: SolicitudService){
+    
+  }
+
   getIcon(ext: string): IconDefinition {
     if (!ext) return this.icons['default'];
 
     const cleanExt = ext.replace('.', '').toLowerCase();
     return this.icons[cleanExt] ?? this.icons['default'];
+  }
+
+  descargar(doc:any){
+    const data = {
+      url:doc.urlDocument,
+      nombreArchivo: doc.nameDocument
+    }
+    this.solicitudService.postDownloadFile(data).subscribe({
+      next: (blob: Blob) => {
+
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${doc.nameDocument}${doc.extDocument}`;
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('Error descargando Excel', err);
+      }
+    });
+  }
+
+  verArchivo(doc: any) {
+    if (doc?.urlDocument) {
+      window.open(doc.urlDocument, '_blank');
+    }
   }
 
 }

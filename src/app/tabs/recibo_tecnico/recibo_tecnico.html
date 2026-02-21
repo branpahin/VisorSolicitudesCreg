@@ -1,0 +1,340 @@
+
+<div class=" bg-gray-50 p-6 overflow-hidden">
+  <div class="card flex justify-center h-full force-light">
+    <p-tabs [value]="requestReciboTecnico[0]?.etapa.toString()" scrollable>
+      <p-tablist>
+          @for (item of requestReciboTecnico; track item.etapa.toString()) {
+              <p-tab [value]="item.etapa.toString()">Etapa - {{ item.etapa.toString() }}</p-tab>
+          }
+      </p-tablist>
+
+          @for (item of requestReciboTecnico; track item.etapa.toString()) {
+              <p-tabpanel [value]="item.etapa.toString()">
+                  <form [formGroup]="form">
+                    <p-accordion #formTabsItem [(value)]="activeFormIndex" (valueChange)="onActiveIndexChange($event)">
+                      <p-accordion-panel value="0" >
+                        <p-accordion-header>Información General</p-accordion-header>
+                        <p-accordion-content>
+                          <!-- Fecha de solicitud del recibo técnico-->
+                          <div class="row mb-2">
+                            <div class="form-group col">
+                              <label class="formLabel">Fecha de solicitud del recibo técnico</label>
+                              <input id="fechaSolicitud" name="fechaSolicitud" class="form-control formInput" type="date" required
+                                value="{{item.recibosTecnicos[0].fechaSolicitud.split('T')[0]}}" disabled /> 
+                            </div>
+                          </div>
+                          <div class="row mb-2">
+                            <div class="form-group col">
+                              <label class="formLabel"> No de solicitud de servicio</label>
+                              <input class="form-control formInput" type="text" disabled id="numeroSolicitud" value="{{reference}}" />
+                            </div>
+                          </div>
+                          <div class="row mb-2">
+                            <div class="form-group col">
+                              <label class="formLabel"> Medio u oficina de radicación</label>
+                              <input class="form-control formInput" type="text" disabled id="mediooficina"
+                                value="{{item.recibosTecnicos[0].oficinaRadicacion}}" />
+                            </div>
+                          </div>
+
+                          <!--Opción Siguiente-->
+                          <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
+                            <button type="button" class="btn btn-block btn-outline-primary nextItemButtons" (click)="nextItem(true)">
+                              Siguiente
+                              <fa-icon [icon]="faAnglesRight"></fa-icon>
+                            </button>
+                          </div>
+                        </p-accordion-content>
+                      </p-accordion-panel>
+                      <!-- <p-accordionTab header="Información General">
+                        
+                      </p-accordionTab> -->
+
+                      <p-accordion-panel value="1" >
+                        <p-accordion-header>Datos solicitud</p-accordion-header>
+                        <p-accordion-content>
+                          <div class="row mb-2">
+                            <div class="form-group col">
+                              <label class="formLabel"> No de factibilidad del servicio</label>
+                              <input class="form-control formInput" type="text"
+                                value="{{item.recibosTecnicos[0].numeroFactibilidad}}" />
+                            </div>
+                          </div>
+
+                          <!--Tipo de solicitud-->
+                          <div class="row mb-2">
+                            <div class="form-group col">
+                              <label class="formLabel">Tipo de solicitud</label>
+                              <select id="tipoSolicitudServicio" class="form-select formInput" disabled
+                                value="{{item.recibosTecnicos[0].codTipoSolicitud}}">
+                                <option *ngFor="let typeRequest of lstTypeRequest" [value]="typeRequest.id">
+                                  {{ typeRequest.descripcion }}
+                                </option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <!-- 4.Tipo de Proyecto-->
+                          <div class="row mb-2">
+                            <div id="divTipoProyecto" class="form-group col mt-2">
+                              <label class="formLabel">Tipo de Proyecto</label>
+                              <div>
+                                <div class="form-check form-check-inline" *ngFor="let type of lstTipoProyecto; let i =index">
+                                  <input class="form-check-input form-check-label formInput mt-1" type="checkbox"
+                                    [checked]="isChecked(type.id, item.recibosTecnicos[0].codTiposProyectos)" disabled>
+                                  <label class="form-check-label form-check-label formInput"
+                                    for="inlineRadio1">{{type.descripcion}}</label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </p-accordion-content>
+                      </p-accordion-panel>
+                      <!-- <p-accordionTab header="Datos solicitud">
+                        
+                      </p-accordionTab> -->
+
+                      <p-accordion-panel value="2" >
+                        <p-accordion-header>Información de la obra</p-accordion-header>
+                        <p-accordion-content>
+                          <div class="row mb-2">
+                            <div class="form-group col">
+                              <label class="formLabel"> Nombre del proyecto</label>
+                              <input class="form-control formInput" type="text" id="nombreProyecto" disabled
+                                value="{{item.recibosTecnicos[0].nombreProyecto}}" />
+                            </div>
+                          </div>
+                          <div class="row mb-2">
+                            <div class="form-group col">
+                              <label class="formLabel"> Dirección</label>
+                              <input class="form-control formInput" type="text" disabled value="{{item.recibosTecnicos[0].direccion}}"
+                                id="direccion" />
+                            </div>
+                          </div>
+                        </p-accordion-content>
+                      </p-accordion-panel>
+                      <!-- <p-accordionTab header="Información de la obra">
+                        
+                      </p-accordionTab> -->
+
+                      <p-accordion-panel value="3" >
+                        <p-accordion-header>Información comercial</p-accordion-header>
+                        <p-accordion-content>
+                          <div class="row mb-2">
+                            <div class="form-group col">
+                              <label class="formLabel"> Comercializador</label>
+                              <input class="form-control formInput" type="text" disabled
+                                value="{{item.recibosTecnicos[0].comercializador}}" id="comercializador" />
+                            </div>
+                          </div>
+                          <div class="row mb-2">
+                            <div class="form-group col">
+                              <label class="formLabel"> Número de matrícula inmobiliaria</label>
+                              <input class="form-control formInput" type="text" disabled
+                                value="{{item.recibosTecnicos[0].numeroMatricula}}" />
+                            </div>
+                          </div>
+                          <div class="row mb-2">
+                            <div class="form-group col">
+                              <label class="formLabel"> No Cliente activo para cargar cobro de medidores</label>
+                              <input class="form-control formInput" type="text" disabled
+                                value="{{item.recibosTecnicos[0].clienteCargoCobroMedidores}}" />
+                            </div>
+                          </div>
+                          <div class="row mb-2">
+                            <div class="form-group col">
+                              <label class="formLabel">Persona que autoriza</label>
+                              <select id="personaAutoriza" class="form-select formInput" name="personaAutoriza" disabled
+                                value="{{item.recibosTecnicos[0].codPersonaAutorizacion}}">
+                                <option *ngFor="let item of lstPersonaAutoriza" [value]="item.id">
+                                  {{ item.descripcion }}
+                                </option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="row mb-2">
+                            <div class="form-group col">
+                              <label class="formLabel">Solicitud de la conexión</label>
+                              <select id="solicitudConexion" class="form-select formInput" name="solicitudConexion" disabled
+                                value="{{item.recibosTecnicos[0].codSolServicioConexion}}">
+                                <option *ngFor="let item of lstSolConexion" [value]="item.id">
+                                  {{ item.descripcion }}
+                                </option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="row mb-2">
+                            <div class="form-group col">
+                              <label class="formLabel">Etapa del proyecto</label>
+                              <input class="form-control formInput" type="number" disabled
+                                value="{{item.recibosTecnicos[0].etapaProyecto}}" />
+                            </div>
+                          </div>
+
+                          <div class="container">
+                            <div class="row justify-content-between">
+                              <div class="col-4 ">
+                                <button type="button" class="btn btn-block btn-outline-primary nextItemButtons"
+                                  (click)="nextItem(false)">
+                                  <fa-icon [icon]="faAnglesLeft"></fa-icon>
+                                  Anterior
+                                </button>
+                              </div>
+                              <div class="col-4">
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                  <button type="button" class="btn nextItemButtons" (click)="nextItem(true)">
+                                    Siguiente
+                                    <fa-icon [icon]="faAnglesRight"></fa-icon>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </p-accordion-content>
+                      </p-accordion-panel>
+                      <!-- <p-accordionTab header="Información comercial">
+                        
+                      </p-accordionTab> -->
+
+                      <p-accordion-panel value="4" >
+                        <p-accordion-header>Información propietario e ingeniero diseñador</p-accordion-header>
+                        <p-accordion-content>
+                          <!-- Nombre Constructora-->
+                          <div class="row mb-2">
+                            <div class="form-group col">
+                              <label class="formLabel">Nombre Constructora</label>
+                              <input id="nombreConstructora" class="form-control formInput" type="text" disabled
+                                value="{{item.recibosTecnicos[0].nombreConstructora}}" />
+                            </div>
+                          </div>
+
+                          <!-- Nit-->
+                          <div class="row mb-2">
+                            <div class="form-group col">
+                              <label class="formLabel">NIT</label>
+                              <input id="nit" class="form-control formInput" type="text" disabled
+                                value="{{item.recibosTecnicos[0].nitConstructora}}" />
+                            </div>
+                          </div>
+
+                          <!--Ingeniero responsable-->
+                          <div class="row mb-3">
+                            <div class="form-group ">
+                              <label class="formLabel form-text-center">Ingeniero responsable</label>
+                            </div>
+                            <div class="form-group ">
+                              <label class="formLabel">Nombre*</label>
+                              <input id="nombreIngeniero" class="form-control formInput" type="text" disabled
+                                value="{{item.recibosTecnicos[0].nombreIngeniero}}" />
+                            </div>
+
+                            <!--Cedula de Ciudadanía-->
+                            <div class="form-group ">
+                              <label class="formLabel">Cédula de Ciudadanía*</label>
+                              <input id="cedulaIngeniero" class="form-control formInput" type="text" disabled
+                                value="{{item.recibosTecnicos[0].cedulaIngeniero}}" />
+                            </div>
+
+                            <!--Matricula profesional-->
+                            <div class="form-group ">
+                              <label class="formLabel">Matrícula profesional</label>
+                              <input id="matriculaProfesional" type="text" class="form-control formInput" disabled
+                                value="{{item.recibosTecnicos[0].matriculaProfesional}}" />
+                            </div>
+
+                            <!-- Teléfono contacto -->
+                            <div class="form-group ">
+                              <label class="formLabel">Teléfono contacto*</label>
+                              <input id="telefonoIngeniero" type="text" class="form-control formInput" disabled
+                                value="{{item.recibosTecnicos[0].telefonoIngeniero}}" />
+                            </div>
+
+                            <!--Correo electronico-->
+                            <div class="form-group ">
+                              <label class="formLabel">Correo electrónico*</label>
+                              <input id="emailIngeniero" class="form-control formInput" type="email" disabled
+                                value="{{item.recibosTecnicos[0].emailIngeniero}}" />
+                            </div>
+                          </div>
+
+                          <!--Propietario-->
+                          <div class="row mb-3">
+                            <div class="form-group ">
+                              <label class="formLabel form-text-center">Propietario o representante legal</label>
+                            </div>
+                            <div class="form-group ">
+                              <label class="formLabel">Nombre*</label>
+                              <input id="nombrePropietario" type="text" class="form-control formInput" disabled
+                                value="{{item.recibosTecnicos[0].nombrePropietario}}" />
+                            </div>
+
+                            <!--Cedula de Ciudadanía-->
+                            <div class="form-group ">
+                              <label class="formLabel">Cédula de Ciudadanía*</label>
+                              <input id="cedulaPropietario" type="text" class="form-control formInput" disabled
+                                value="{{item.recibosTecnicos[0].cedulaPropietario}}" />
+                            </div>
+
+                            <!-- Teléfono contacto -->
+                            <div class="form-group ">
+                              <label class="formLabel">Teléfono contacto*</label>
+                              <input id="telefonoPropietario" type="text" class="form-control formInput" disabled
+                                value="{{item.recibosTecnicos[0].telefonoPropietario}}" />
+                            </div>
+
+                            <!--Correo electronico-->
+                            <div class="form-group">
+                              <label class="formLabel">Correo electrónico*</label>
+                              <input id="emailPropietario" type="email" class="form-control formInput" disabled
+                                value="{{item.recibosTecnicos[0].emailPropietario}}" />
+                            </div>
+                          </div>
+                          <div class="container">
+                            <div class="row justify-content-between">
+                              <div class="col-4 ">
+                                <button type="button" class="btn btn-block btn-outline-primary nextItemButtons"
+                                  (click)="nextItem(false)">
+                                  <fa-icon [icon]="faAnglesLeft"></fa-icon>
+                                  Anterior
+                                </button>
+                              </div>
+                              <div class="col-4">
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                  <button type="button" class="btn nextItemButtons" (click)="nextItem(true)">
+                                    Siguiente
+                                    <fa-icon [icon]="faAnglesRight"></fa-icon>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </p-accordion-content>
+                      </p-accordion-panel>
+                      <!-- <p-accordionTab header="Información propietario e ingeniero diseñador">
+                        
+                      </p-accordionTab> -->
+
+                      <!-- Observaciones solicitante-->
+                      <p-accordion-panel value="5" >
+                        <p-accordion-header>Observaciones solicitante</p-accordion-header>
+                        <p-accordion-content>
+                          <div class="form-group col">
+                            <label class="formLabel">Observaciones</label>
+                            <textarea id="observaciones" type="text" class="form-control formInput" disabled
+                              value="{{item.recibosTecnicos[0].observaciones}}"></textarea>
+                          </div>
+                        </p-accordion-content>
+                      </p-accordion-panel>
+                      <!-- <p-accordionTab header="Observaciones solicitante">
+                        
+                      </p-accordionTab> -->
+                    </p-accordion>
+                  </form>
+              </p-tabpanel>
+          }
+      <!-- <p-tabpanel *ngFor="let item of requestReciboTecnico" [header]="'Etapa' + '-' + item.etapa.toString()">
+        
+      </p-tabpanel> -->
+    </p-tabs>
+  </div>
+</div>

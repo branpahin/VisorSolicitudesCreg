@@ -47,6 +47,9 @@
                 <p-tab value="0">Detalles</p-tab>
                 <p-tab value="1">Anexos</p-tab>
                 <p-tab value="2">Historial</p-tab>
+                <p-tab value="3">Diseño</p-tab>
+                <p-tab value="4">Factibilidad</p-tab>
+                <p-tab value="5">Recibo Tecnico</p-tab>
             </p-tablist>
             <p-tabpanels>
                 <p-tabpanel value="0">
@@ -59,6 +62,15 @@
 
                 <p-tabpanel value="2">
                     <app-historial [historico]="solicitud.creg075Historico"></app-historial>
+                </p-tabpanel>
+                <p-tabpanel value="3">
+                    <app-diseno [request]="solicitud" [requestDisenio]="solicitud"></app-diseno>
+                </p-tabpanel>
+                <p-tabpanel value="4">
+                    <app-factibilidad [request]="solicitud"></app-factibilidad>
+                </p-tabpanel>
+                <p-tabpanel value="5">
+                    <app-recibo_tecnico [request]="solicitud" [requestReciboTecnico]="solicitud"></app-recibo_tecnico>
                 </p-tabpanel>
             </p-tabpanels>
         </p-tabs>
