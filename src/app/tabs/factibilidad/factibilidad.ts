@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { Accordion, AccordionModule } from 'primeng/accordion';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
@@ -96,6 +96,8 @@ export class Factibilidad {
   showSi = false;
   showNo = true;
   minDate: string = '';
+  radicado!: string;
+  ciudad!: string;
   cronogramaCargaFile: any = {
     id: 0,
     descripcion: 'Cronograma de cargas aprobado',
@@ -119,7 +121,9 @@ export class Factibilidad {
 
   constructor(private route: ActivatedRoute,
     private storageService: StorageService,
+    private solicitudService: SolicitudService, 
     private fb: FormBuilder,
+    private cdr: ChangeDetectorRef,
     private elementRef: ElementRef){
     this.setForm();
   }
@@ -162,9 +166,9 @@ export class Factibilidad {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
-      const id = params.get('id');
-      if (id) {
-        this.storageService.save('view', 'conexiones/solicitudes');
+      this.radicado = this.route.snapshot.paramMap.get('radicado')!;
+      this.ciudad = this.route.snapshot.paramMap.get('ciudad')!;
+      if (this.radicado) {
         // this.requestId = Number(id);
         this.form.disable();
         this.getDataFactibilidad();
@@ -202,19 +206,45 @@ export class Factibilidad {
     this.activeFormIndex = event;
   }
 
-  getDataFactibilidad() {
-    // const url = this.urlGetFactibilidadxId.replace('{id}', this.requestId.toString());
+  // getDataFactibilidad() {
+  //   // const url = this.urlGetFactibilidadxId.replace('{id}', this.requestId.toString());
 
-    // this.httpService.Get(url)
-    //   .pipe(
-    //     filter((resp) => resp.status === 200 && resp.data),
-    //     tap((resp) => this.requestFactibilidad = resp.data),
-    //     catchError((error) => {
-    //       this.requestFactibilidad = {};
-    //       return of(error);
-    //     })
-    //   )
-    //   .subscribe(() => { this.getInitialParameters(); });
+  //   // this.httpService.Get(url)
+  //   //   .pipe(
+  //   //     filter((resp) => resp.status === 200 && resp.data),
+  //   //     tap((resp) => this.requestFactibilidad = resp.data),
+  //   //     catchError((error) => {
+  //   //       this.requestFactibilidad = {};
+  //   //       return of(error);
+  //   //     })
+  //   //   )
+  //   //   .subscribe(() => { this.getInitialParameters(); });
+  // }
+
+  getDataFactibilidad() {
+    this.solicitudService.getFactibilidadSolicitud075(this.radicado, this.ciudad).subscribe({
+      next: (data) => {
+        this.requestFactibilidad = data.data;
+        this.setRequestData();
+        this.cdr.detectChanges();  
+      },
+      error: (err) => {
+        console.error('Error al cargar solicitud', err);
+        // this.messageService.add({
+        //   severity: 'error',
+        //   summary: 'Error',
+        //   detail: err?.error || 'No fue posible cargar la solicitud'
+        // });
+
+        // setTimeout(() => {
+        //   this.router.navigate(['/']);
+        // }, 3000); // espera 3 segundos
+
+        // setTimeout(() => {
+        //   this.router.navigate(['/']);
+        // }, 3000);
+      }
+    });
   }
 
   getInitialParametersFactibilidad() {
@@ -222,9 +252,24 @@ export class Factibilidad {
     //   this.lstFilesToUpLoad = res.data.documentosAnexos ? res.data.documentosAnexos : [];
     //   this.lstDocumentosTecnicos = res.data.documentosRequeridosAnexos ? res.data.documentosRequeridosAnexos : [];
     // });
+    
   }
 
   getInitialParameters() {
+    const res = this.storageService.read('datosGenCreg')
+    console.log("data: ",res)
+    this.lstTypeRequest = res.data.listadoTipoSolicitudServicio;
+    this.lstTypePeople = res.data.listadoTipoPersona;
+    this.lstTypeZona = res.data.listadoTipoZona;
+    this.lstTypeUse = res.data.listadoTipoCliente;
+    this.lstSocioEconomicStratum = res.data.listadoEstratoSocioeconomico;
+    this.lstIndustrialEconomicActivity = res.data.listadoActividadEconomica;
+    this.lstTypeServiceRequested = res.data.listadoTipoServicio;
+    this.lstTypeRequestedVoltageLevel = res.data.listadoTipoTension;
+    this.lstIdTypeDocument = res.data.listadoTipoIdentificacion;
+    this.lstExistingProject = res.data.listadoTipoConstruccion;
+    this.lstTipoProyecto = res.data.listadoTipoProyecto;
+    this.lstTypeLoadClass = res.data.listadoTipoClaseCarga;
     // this.httpService.Get('SolServicioConexion/GetInitialParams')
     //   .subscribe((res) => {
     //     this.lstTypePeople = res.data.listadoTipoPersona;
@@ -247,7 +292,7 @@ export class Factibilidad {
 
   setRequestData() {
     // Detalle del Servicio
-    const detalleData = this.request.solServicioConexionDetalle;
+    const detalleData = this.request.creg075Detalles;
 
     this.form.controls['numeroSolicitud'].setValue(this.reference);
     this.form.controls['numeroFactibilidad'].setValue(this.reference);
@@ -259,7 +304,7 @@ export class Factibilidad {
     this.form.controls['nivelDeTensionAprobado'].setValue(detalleData.codNivelTension);
 
     // Detalle de cuentas
-    const cuentasData = this.request.solServicioConexionDetalleCuenta;
+    const cuentasData = this.request.creg075DetallesCuentas;
     this.pintarCuentasExistentes(cuentasData);
     this.form.controls['transformadorDistribucion'].setValue("No aplica");
 
@@ -267,12 +312,13 @@ export class Factibilidad {
 
     const dataObservaciones = factibilidadData.solServicioConexionFactibilidadObservaciones;
 
-    if (factibilidadData && factibilidadData.id !== 0) {
+    // if (factibilidadData && factibilidadData.id !== 0) {
+    if (factibilidadData) {
       this.hasFactibilidad = true;
 
       const fechaRespFactibilidad = factibilidadData.fechaRespuestaFactibilidad;
       const fechaFactibilidad = factibilidadData.fechaFactibilidad;
-
+      console.log("factibilidadData: ",factibilidadData)
       const fechaRespuestaFactibilidadFinal = fechaRespFactibilidad && fechaRespFactibilidad !== '0001-01-01T00:00:00'
         ? fechaRespFactibilidad.split('T')[0]
         : new Date().toISOString().split('T')[0];
@@ -299,6 +345,7 @@ export class Factibilidad {
       this.form.controls['nivelCortocircuitoTrifasico'].setValue(factibilidadData.nivelCortocircuitoTrifasico);
       this.form.controls['nivelCortocircuitoMonofasico'].setValue(factibilidadData.nivelCortocircuitoMonofasico);
 
+      console.log("fechaFactibilidad: ",fechaFactibilidad)
       const fechaFactibilidadFinal = fechaFactibilidad && fechaFactibilidad !== '0001-01-01T00:00:00'
         ? fechaFactibilidad.split('T')[0]
         : new Date().toISOString().split('T')[0];

@@ -16,6 +16,9 @@ export class SolicitudService {
   private getDepartamento= 'api/Departamento/GetDepartamentos';
   private getCiudad= 'api/Ciudad/GetDptoCiudad';
   private postDownload= 'api/Files/DownloadFile';
+  private getFactibilidadSolicitudes075 = 'api/Solicitudes075Factibilidad/GetById';
+  private getDisenoSolicitudes075 = 'api/Solicitudes075Disenio/GetById';
+  private getReciboTecnicoSolicitudes075 = 'api/Solicitudes075ReciboTecnico/GetById';
 
   constructor(private http: HttpClient) {}
 
@@ -25,6 +28,18 @@ export class SolicitudService {
 
   getSolicitud075(radicado:string, ciudad:string): Observable<any> {
     return this.http.get<any>(this.apiUrl+this.getSolicitudes075+'?Id='+radicado+'&Empresa='+ciudad);
+  }
+
+  getFactibilidadSolicitud075(radicado:string, ciudad:string): Observable<any> {
+    return this.http.get<any>(this.apiUrl+this.getFactibilidadSolicitudes075+'?Numero_Radicado='+radicado+'&Empresa='+ciudad);
+  }
+
+  getDisenoSolicitud075(id:number): Observable<any> {
+    return this.http.get<any>(this.apiUrl+this.getDisenoSolicitudes075+'?Id='+id);
+  }
+
+  getReciboTecnicoSolicitud075(id:number, radicado:string, ciudad:string): Observable<any> {
+    return this.http.get<any>(this.apiUrl+this.getReciboTecnicoSolicitudes075+'?Id='+id+'&Numero_Radicado='+radicado+'&Empresa='+ciudad);
   }
 
   getDatosGeneralesCreg174(): Observable<any> {

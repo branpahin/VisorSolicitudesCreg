@@ -13,6 +13,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Factibilidad } from "../../tabs/factibilidad/factibilidad";
 import { Diseno } from '../../tabs/diseno/diseno';
 import { ReciboTecnico } from '../../tabs/recibo_tecnico/recibo_tecnico';
+import { StorageService } from '../../services/storage.service';
 
 @Component({
   selector: 'app-solicitud',
@@ -42,7 +43,7 @@ export class Solicitud075 {
   faCaretLeft=faCaretLeft
 
   constructor(private solicitudService: SolicitudService, private route: ActivatedRoute, private cdr: ChangeDetectorRef, 
-    private router: Router , private messageService:MessageService ){}
+    private router: Router , private messageService:MessageService, private storageService:StorageService ){}
 
   ngOnInit(): void {
     this.radicado = this.route.snapshot.paramMap.get('radicado')!;
@@ -54,7 +55,7 @@ export class Solicitud075 {
     this.solicitudService.getSolicitud075(this.radicado, this.ciudad).subscribe({
       next: (data) => {
         this.solicitud = data.data;
-        console.log('Solicitud:', this.solicitud);
+        this.storageService.save('id',this.solicitud.id)
         this.cdr.detectChanges();  
       },
       error: (err) => {

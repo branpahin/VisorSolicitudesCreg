@@ -100,6 +100,8 @@ export class ReciboTecnico {
 
   //Formulario
   activeFormIndex: string = '0';
+  radicado!: string;
+  ciudad!: string;
 
   listadoDetalleCuentas: Array<any> = [];
   showSi = false;
@@ -168,23 +170,25 @@ export class ReciboTecnico {
   isSignaturePropietarioModalVisible: boolean = false;
   isSignatureIngenieroModalVisible: boolean = false;
   isSignatureObservacionesModalVisible: boolean = false;
-  @Input() requestReciboTecnico: any;
+  requestReciboTecnico: any;
 
   constructor(private route: ActivatedRoute,
     private storageService: StorageService,
     private fb: FormBuilder,
+    private solicitudService: SolicitudService,
     private elementRef: ElementRef){
     this.setForm();
   }
 
  ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
-      const id = params.get('id');
+      this.radicado = this.route.snapshot.paramMap.get('radicado')!;
+      this.ciudad = this.route.snapshot.paramMap.get('ciudad')!;
+      const id = this.storageService.read('id')
       if (id) {
-        this.storageService.save('view', 'conexiones/solicitudes');
         this.requestId = Number(id);
         this.getInitialParametersReciboTecnico();
-
+        this.getDataReciboTecnico(this.requestId);
         this.form.disable();
       }
     });
@@ -226,7 +230,36 @@ export class ReciboTecnico {
     }, { updateOn: 'change' });
   }
 
+  getDataReciboTecnico(id : number) {
+    this.solicitudService.getReciboTecnicoSolicitud075(id, this.radicado, this.ciudad).subscribe({
+      next: (data) => {
+        this.requestReciboTecnico = data.data;
+      },
+      error: (err) => {
+        console.error('Error al cargar solicitud', err);
+        // this.messageService.add({
+        //   severity: 'error',
+        //   summary: 'Error',
+        //   detail: err?.error || 'No fue posible cargar la solicitud'
+        // });
+
+        // setTimeout(() => {
+        //   this.router.navigate(['/']);
+        // }, 3000); // espera 3 segundos
+
+        // setTimeout(() => {
+        //   this.router.navigate(['/']);
+        // }, 3000);
+      }
+    });
+  }
+
   getInitialParametersReciboTecnico() {
+    const res = this.storageService.read('datosGenCreg')
+    console.log("data: ",res)
+    this.lstTypeRequest = res.data.listadoTipoSolicitudRecibo;
+    this.lstPersonaAutoriza = res.data.listadoPersonaAutorizaRecibo;
+    this.lstSolConexion = res.data.listadoTipoCompletitud;
     // this.httpService.Get(this.urlGetDatosInicialesReciboTecnico).subscribe((res) => {
     //   this.lstDocumentosOtrosAnexos = res.data.documentosAnexos;
     //   this.lstTipoProyecto = res.data.tiposProyectos;
@@ -430,18 +463,18 @@ export class ReciboTecnico {
     // }
   }
 
-  getDataReciboTecnico() {
-    // if (!this.requestReciboTecnico) {
-    //   const url = this.urlGetReciboTecnico.replace('{id}', this.requestId.toString());
-    //   this.httpService.Get(url).subscribe((resp) => {
-    //     if (resp.status == 200 && resp.data) {
-    //       this.requestReciboTecnico = resp.data;
-    //     }
-    //   });
-    // }
+  // getDataReciboTecnico() {
+  //   // if (!this.requestReciboTecnico) {
+  //   //   const url = this.urlGetReciboTecnico.replace('{id}', this.requestId.toString());
+  //   //   this.httpService.Get(url).subscribe((resp) => {
+  //   //     if (resp.status == 200 && resp.data) {
+  //   //       this.requestReciboTecnico = resp.data;
+  //   //     }
+  //   //   });
+  //   // }
 
-    // this.getInitialParameters();
-  }
+  //   // this.getInitialParameters();
+  // }
 
   getInitialParameters() {
     // this.httpService.Get('SolServicioConexion/GetInitialParams')
@@ -463,13 +496,13 @@ export class ReciboTecnico {
     return !!(tipoProyectos.find(x => x == id))
   }
 
-  onUpdateComments() {
-    this.getDataReciboTecnico();
-  }
+  // onUpdateComments() {
+  //   this.getDataReciboTecnico();
+  // }
 
-  onChangeStatus() {
-    this.getDataReciboTecnico();
-  }
+  // onChangeStatus() {
+  //   this.getDataReciboTecnico();
+  // }
 
   limpiarSelectores() {
     this.form.patchValue({

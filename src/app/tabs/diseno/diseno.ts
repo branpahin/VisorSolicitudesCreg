@@ -157,31 +157,31 @@ export class Diseno {
   isSignaturePropietarioModalVisible: boolean = false;
   isSignatureIngenieroModalVisible: boolean = false;
   isSignatureObservacionesModalVisible: boolean = false;
-  @Input() requestDisenio: any;
+  requestDisenio: any;
 
 
   constructor(private route: ActivatedRoute,
     private storageService: StorageService,
     private fb: FormBuilder,
+    private solicitudService: SolicitudService,
     private elementRef: ElementRef){
     this.setForm();
   }
 
  ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
-      const id = params.get('id');
+      const id = this.storageService.read('id')
       if (id) {
-        this.storageService.save('view', 'conexiones/solicitudes');
         this.requestId = Number(id);
         this.form.disable();
-        this.getInitialParametersDiseno();
-        if (this.requestDisenio) {
-          this.getInitialParameters();
-          this.setRequestData();
-        }
-        else {
-          this.getDataDisenio();
-        }
+        this.getDataDiseno(this.requestId);
+        // if (this.requestDisenio) {
+        //   this.getInitialParameters();
+        //   this.setRequestData();
+        // }
+        // else {
+        //   this.getDataDisenio();
+        // }
       }
     });
   }
@@ -228,6 +228,31 @@ export class Diseno {
       requerido: f.requiered,
       limitLoad: f.limitLoad > 0 ? f.limitLoad : 10485760
     }));
+  }
+
+  getDataDiseno(id : number) {
+    this.solicitudService.getDisenoSolicitud075(id).subscribe({
+      next: (data) => {
+        this.requestDisenio = data.data;
+        this.setRequestData();
+      },
+      error: (err) => {
+        console.error('Error al cargar solicitud', err);
+        // this.messageService.add({
+        //   severity: 'error',
+        //   summary: 'Error',
+        //   detail: err?.error || 'No fue posible cargar la solicitud'
+        // });
+
+        // setTimeout(() => {
+        //   this.router.navigate(['/']);
+        // }, 3000); // espera 3 segundos
+
+        // setTimeout(() => {
+        //   this.router.navigate(['/']);
+        // }, 3000);
+      }
+    });
   }
 
   setSignatures() {
@@ -443,6 +468,7 @@ export class Diseno {
   setRequestData() {
     this.form.controls['numeroSolicitud'].setValue(this.reference);
     this.form.controls['numeroFactibilidad'].setValue(this.reference);
+    console.log("this.requestDisenio:", this.requestDisenio)
     this.form.controls['nombreProyecto'].setValue(this.requestDisenio?.nombreProyecto);
     this.form.controls['tipoDocumento'].setValue(this.requestDisenio?.tipoDocumento);
     this.form.controls['nombreConstructora'].setValue(this.requestDisenio?.nombreConstructora);
