@@ -175,6 +175,7 @@ export class Diseno {
         this.requestId = Number(id);
         this.form.disable();
         this.getDataDiseno(this.requestId);
+        this.getInitialParameters();
         // if (this.requestDisenio) {
         //   this.getInitialParameters();
         //   this.setRequestData();
@@ -444,6 +445,24 @@ export class Diseno {
   }
 
   getInitialParameters() {
+    const res = this.storageService.read('datosGenCreg')
+    console.log("data: ",res)
+    this.lstTypePeople = res.data.listadoTipoPersona;
+        this.lstTypeZona = res.data.listadoTipoZona;
+        this.lstTypeUse = res.data.listadoTipoCliente;
+        this.lstSocioEconomicStratum = res.data.listadoEstratoSocioeconomico;
+        this.lstIndustrialEconomicActivity = res.data.listadoActividadEconomica;
+        this.lstTypeRequest = res.data.listadoTipoSolicitudServicio;
+        this.lstTypeServiceRequested = res.data.listadoTipoServicio;
+        this.lstTypeRequestedVoltageLevel = res.data.listadoTipoTension;
+        this.lstIdTypeDocument = res.data.listadoTipoIdentificacion;
+        this.lstExistingProject = res.data.listadoTipoConstruccion;
+        this.lstTipoProyecto = res.data.listadoTipoProyecto;
+        this.lstTypeLoadClass = res.data.listadoTipoClaseCarga;
+
+        for (let index = 0; index < this.lstTipoProyecto.length; index++) {
+          this.lstTipoProyecto[index].selected = false;
+        }
     // this.httpService.Get('SolServicioConexion/GetInitialParams')
     //   .subscribe((res) => {
     //     this.lstTypePeople = res.data.listadoTipoPersona;
@@ -476,7 +495,7 @@ export class Diseno {
     this.form.controls['nombreFirma'].setValue(this.requestDisenio?.nombreObservaciones);
     this.form.controls['cedulaFirma'].setValue(this.requestDisenio?.cedulaObservaciones);
 
-    this.requestDisenio?.solServicioConexionDisenioActores.forEach((element: any) => {
+    this.requestDisenio?.creg075DisenioActor.forEach((element: any) => {
       if (element.tipoActor == 0) {
         this.form.controls['nombreIngeniero'].setValue(element.nombre);
         this.form.controls['cedulaIngeniero'].setValue(element.cedula);

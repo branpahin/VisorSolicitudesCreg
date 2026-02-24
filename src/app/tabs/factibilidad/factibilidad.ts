@@ -168,11 +168,12 @@ export class Factibilidad {
     this.route.paramMap.subscribe((params) => {
       this.radicado = this.route.snapshot.paramMap.get('radicado')!;
       this.ciudad = this.route.snapshot.paramMap.get('ciudad')!;
-      if (this.radicado) {
-        // this.requestId = Number(id);
+      const id = this.storageService.read('id')
+      if (id) {
         this.form.disable();
-        this.getDataFactibilidad();
+        this.getDataFactibilidad(id);
         this.getInitialParametersFactibilidad();
+        this.getInitialParameters();
       }
     });
   }
@@ -221,8 +222,8 @@ export class Factibilidad {
   //   //   .subscribe(() => { this.getInitialParameters(); });
   // }
 
-  getDataFactibilidad() {
-    this.solicitudService.getFactibilidadSolicitud075(this.radicado, this.ciudad).subscribe({
+  getDataFactibilidad(id : number) {
+    this.solicitudService.getFactibilidadSolicitud075(id,this.radicado, this.ciudad).subscribe({
       next: (data) => {
         this.requestFactibilidad = data.data;
         this.setRequestData();
@@ -301,7 +302,7 @@ export class Factibilidad {
     this.form.controls['tipoSolicitudServicio'].setValue(detalleData.codTipoSolicitud);
     this.form.controls['cargaMaximaAprobada'].setValue(detalleData.cargaMaximaRequerida);
     this.form.controls['cargaKva'].setValue(detalleData.cargaExistente);
-    this.form.controls['nivelDeTensionAprobado'].setValue(detalleData.codNivelTension);
+    this.form.controls['nivelDeTensionAprobado'].setValue(detalleData.codTension);
 
     // Detalle de cuentas
     const cuentasData = this.request.creg075DetallesCuentas;
@@ -310,7 +311,7 @@ export class Factibilidad {
 
     const factibilidadData = this.requestFactibilidad;
 
-    const dataObservaciones = factibilidadData.solServicioConexionFactibilidadObservaciones;
+    const dataObservaciones = factibilidadData.creg075FactibilidadObs;
 
     // if (factibilidadData && factibilidadData.id !== 0) {
     if (factibilidadData) {
@@ -330,7 +331,7 @@ export class Factibilidad {
       this.form.controls['cargaKva'].setValue(factibilidadData.cargaExistente);
       this.form.controls['nivelDeTensionAprobado'].setValue(factibilidadData.codigoNivelAprobacion);
 
-      factibilidadData.solServicioConexionFactibilidadPorProyectos.forEach((tipoProyecto: any) => {
+      factibilidadData.creg075FactibilidadProye.forEach((tipoProyecto: any) => {
         const proyecto = this.lstTipoProyecto.find((x: any) => x.id === tipoProyecto.codTipoProyecto)
         if (proyecto)
           proyecto.selected = true;
@@ -356,17 +357,17 @@ export class Factibilidad {
       this.form.controls['Lat'].setValue(factibilidadData.geoReferenciaLatitud);
       this.form.controls['altura'].setValue(factibilidadData.geoReferenciaH);
 
-      this.pintarCuentasExistentes(factibilidadData.solServicioConexionFactibilidadDetalleCuentas);
+      this.pintarCuentasExistentes(factibilidadData.creg075FactibilidadDetCuen);
 
       this.lstDocumentosTecnicos.forEach((doc) => {
-        if (factibilidadData.solServicioConexionFactibilidadPorDocumentos.find(
+        if (factibilidadData.creg075FactibilidadDocu.find(
           (x: any) => x.codDocumentosXFormulario === doc.idDocumentoXFormulario)
         ) {
           doc.selected = true;
         }
       });
 
-      this.form.controls['observacionesUno'].setValue(dataObservaciones.observaciones || '');
+      this.form.controls['observacionesUno'].setValue(dataObservaciones.observacion || '');
       this.form.controls['nombreProyecto'].setValue(dataObservaciones.nombreProyecto);
       this.form.controls['gestionadoPor'].setValue(dataObservaciones.gestionadoPor);
     }

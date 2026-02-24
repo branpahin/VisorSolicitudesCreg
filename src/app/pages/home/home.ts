@@ -9,6 +9,8 @@ import { SelectModule } from 'primeng/select';
 import { Router } from '@angular/router';
 import { SolicitudService } from '../../services/solicitud';
 import { StorageService } from '../../services/storage.service';
+import { Toast } from "primeng/toast";
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-home',
@@ -18,7 +20,10 @@ import { StorageService } from '../../services/storage.service';
     DialogModule,
     ButtonModule,
     InputTextModule,
-    SelectModule],
+    SelectModule,
+    Toast
+],
+  providers: [MessageService],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -40,13 +45,14 @@ export class Home {
   creg!: string;
   numeroSolicitud!: string;
   mostrarDialog: boolean =  true;
+  cargando: boolean = false;
 
-  constructor(private router: Router, private solicitudService: SolicitudService, private storageService:StorageService) {
+  constructor(private router: Router, private solicitudService: SolicitudService, private messageService:MessageService, private storageService:StorageService) {
   }
 
   buscar() {
     if (!this.numeroSolicitud || !this.ciudad) return;
-
+    this.cargando = true;
     this.mostrarDialog = false;
 
     if(this.creg=='1'){
@@ -60,7 +66,8 @@ export class Home {
   cargarSolicitud174() {
     this.solicitudService.getDatosGeneralesCreg174().subscribe({
       next: (data) => {
-        this.storageService.save('datosGenCreg',data)
+        this.storageService.save('datosGenCreg',data);
+        this.cargando = false;
         this.router.navigate([
           '/solicitud174',
           this.numeroSolicitud,
@@ -69,6 +76,11 @@ export class Home {
       },
       error: (err) => {
         console.error('Error al cargar solicitud', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: err?.error || 'No fue posible cargar la solicitud'
+        });
       }
     });
   }
@@ -76,8 +88,9 @@ export class Home {
   cargarSolicitud075() {
     this.solicitudService.getDatosGeneralesCreg075().subscribe({
       next: (data) => {
-        this.storageService.save('datosGenCreg',data)
-          this.router.navigate([
+        this.storageService.save('datosGenCreg',data);
+        this.cargando = false;
+        this.router.navigate([
           '/solicitud075',
           this.numeroSolicitud,
           this.ciudad
@@ -85,6 +98,11 @@ export class Home {
       },
       error: (err) => {
         console.error('Error al cargar solicitud', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: err?.error || 'No fue posible cargar la solicitud'
+        });
       }
     });
   }

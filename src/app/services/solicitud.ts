@@ -30,8 +30,8 @@ export class SolicitudService {
     return this.http.get<any>(this.apiUrl+this.getSolicitudes075+'?Id='+radicado+'&Empresa='+ciudad);
   }
 
-  getFactibilidadSolicitud075(radicado:string, ciudad:string): Observable<any> {
-    return this.http.get<any>(this.apiUrl+this.getFactibilidadSolicitudes075+'?Numero_Radicado='+radicado+'&Empresa='+ciudad);
+  getFactibilidadSolicitud075(id:number, radicado:string, ciudad:string): Observable<any> {
+    return this.http.get<any>(this.apiUrl+this.getFactibilidadSolicitudes075+'?Id='+id+'&Numero_Radicado='+radicado+'&Empresa='+ciudad);
   }
 
   getDisenoSolicitud075(id:number): Observable<any> {
