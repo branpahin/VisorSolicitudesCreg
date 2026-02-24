@@ -286,6 +286,7 @@ export class Detalles {
     this.form.controls['localidad'].setValue(predioData.localidad);
     this.form.controls['codeDepartamentoSite'].setValue(predioData.codDepartamento);
     this.onSelectTownsSite();
+    console.log("predioData: ",predioData)
     this.form.controls['municipioPredio'].setValue(predioData.codMunicipio);
     this.form.controls['direccionDelPredio'].setValue(predioData.direccionPredio);
     this.form.controls['Long'].setValue(predioData.ubicacionLong);

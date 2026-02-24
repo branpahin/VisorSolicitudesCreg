@@ -1,3 +1,4 @@
+@if(!cargando){
 <div class="login-bg min-h-screen flex items-center justify-center force-light">
     <a>
         <img class="img-fluid" src="assets/eep/logoEEP_dynamic.svg" alt="img logo login" />
@@ -67,3 +68,18 @@
         </div>
     </div>
 </div>
+
+}@else {<div class="min-h-screen flex flex-col items-center justify-center bg-gray-50 gap-4">
+
+    <!-- Spinner -->
+    <div
+      class="w-12 h-12 border-4 border-orange-200 border-t-[#e2650f] rounded-full animate-spin">
+    </div>
+
+    <!-- Texto -->
+    <span class="text-gray-600 text-sm animate-pulse">
+      Buscando solicitud...
+    </span>
+
+  </div>}
+<p-toast position="top-right"></p-toast>
