@@ -329,7 +329,7 @@ export class Factibilidad {
       this.form.controls['tipoSolicitudServicio'].setValue(factibilidadData.codTipoSolicitud);
       this.form.controls['cargaMaximaAprobada'].setValue(factibilidadData.cargaAprobada);
       this.form.controls['cargaKva'].setValue(factibilidadData.cargaExistente);
-      this.form.controls['nivelDeTensionAprobado'].setValue(factibilidadData.codigoNivelAprobacion);
+      this.form.controls['nivelDeTensionAprobado'].setValue(factibilidadData.nivelAprobacion);
 
       factibilidadData.creg075FactibilidadProye.forEach((tipoProyecto: any) => {
         const proyecto = this.lstTipoProyecto.find((x: any) => x.id === tipoProyecto.codTipoProyecto)
@@ -337,10 +337,10 @@ export class Factibilidad {
           proyecto.selected = true;
       });
 
-      this.form.controls['nombreCircuitoBT'].setValue(factibilidadData.nombreCircuitoBt);
-      this.form.controls['numeroCircuitoBT'].setValue(factibilidadData.numeroCircuitoBt);
-      this.form.controls['nombreCircuitoMT'].setValue(factibilidadData.nombreCircuitoMt);
-      this.form.controls['numeroCircuitoMT'].setValue(factibilidadData.numeroCircuitoMt);
+      this.form.controls['nombreCircuitoBT'].setValue(factibilidadData.nombreCircuitobt);
+      this.form.controls['numeroCircuitoBT'].setValue(factibilidadData.numeroCircuitobt);
+      this.form.controls['nombreCircuitoMT'].setValue(factibilidadData.nombreCircuitomt);
+      this.form.controls['numeroCircuitoMT'].setValue(factibilidadData.numeroCircuitomt);
       this.form.controls['subestacionPotencia'].setValue(factibilidadData.subEstacionPotencia);
       this.form.controls['distanciaPuntoConexion'].setValue(factibilidadData.distanciaPuntoConexion);
       this.form.controls['nivelCortocircuitoTrifasico'].setValue(factibilidadData.nivelCortocircuitoTrifasico);
@@ -353,9 +353,9 @@ export class Factibilidad {
 
       this.form.controls['fechaVigenciaFactibilidad'].setValue(fechaFactibilidadFinal);
       this.form.controls['numeroNodo'].setValue(factibilidadData.numeroNodo);
-      this.form.controls['Long'].setValue(factibilidadData.geoReferenciaLongitud);
-      this.form.controls['Lat'].setValue(factibilidadData.geoReferenciaLatitud);
-      this.form.controls['altura'].setValue(factibilidadData.geoReferenciaH);
+      this.form.controls['Long'].setValue(factibilidadData.longitud);
+      this.form.controls['Lat'].setValue(factibilidadData.latitud);
+      this.form.controls['altura'].setValue(factibilidadData.altura);
 
       this.pintarCuentasExistentes(factibilidadData.creg075FactibilidadDetCuen);
 

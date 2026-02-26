@@ -260,6 +260,7 @@ export class ReciboTecnico {
     this.lstTypeRequest = res.data.listadoTipoSolicitudRecibo;
     this.lstPersonaAutoriza = res.data.listadoPersonaAutorizaRecibo;
     this.lstSolConexion = res.data.listadoTipoCompletitud;
+    this.lstTipoProyecto = res.data.listadoTipoProyecto;
     // this.httpService.Get(this.urlGetDatosInicialesReciboTecnico).subscribe((res) => {
     //   this.lstDocumentosOtrosAnexos = res.data.documentosAnexos;
     //   this.lstTipoProyecto = res.data.tiposProyectos;
@@ -493,7 +494,7 @@ export class ReciboTecnico {
   }
 
   isChecked(id: any, tipoProyectos: any[]): boolean {
-    return !!(tipoProyectos.find(x => x == id))
+    return (tipoProyectos?.find(x => x == id))
   }
 
   // onUpdateComments() {
