@@ -343,7 +343,7 @@ export class Detalles {
         let selected: boolean = false;
 
         const validate = lstTecnUtilizada.find(
-          (tu) => tu.cod174Autogen == this.lstTechnologyType[i].id
+          (tu) => tu.codTipoTecnologia == this.lstTechnologyType[i].id
         );
 
         if (validate) {
@@ -385,152 +385,152 @@ export class Detalles {
 
     //Información de la tecnología de generación de energía (aplica para generación basada en inversores)
 
-    if (this.request.solConexionAutogenBasadaInv) {
+    if (this.request.creg174BasInv) {
       this.form.controls['potenciaPorPanel'].setValue(
-        this.request.solConexionAutogenBasadaInv.potenciaPanel
+        this.request.creg174BasInv.potenciaPanel
       );
       this.form.controls['numeroDePaneles'].setValue(
-        this.request.solConexionAutogenBasadaInv.numPaneles
+        this.request.creg174BasInv.numPaneles
       );
       this.form.controls['poseeReleDeFlujoInverso'].setValue(
-        this.request.solConexionAutogenBasadaInv.poseeRele
+        this.request.creg174BasInv.poseeRele
       );
       this.form.controls['capacidadDCInversor'].setValue(
-        this.request.solConexionAutogenBasadaInv.capacidadDc
+        this.request.creg174BasInv.capacidadDc
       );
       this.form.controls['potenciaTotalACInversor'].setValue(
-        this.request.solConexionAutogenBasadaInv.potTotalAc
+        this.request.creg174BasInv.potTotalAc
       );
       this.form.controls['voltajeSalidaInversor'].setValue(
-        this.request.solConexionAutogenBasadaInv.voltSalInv
+        this.request.creg174BasInv.voltSalInv
       );
       this.form.controls['voltajeEntradaInversor'].setValue(
-        this.request.solConexionAutogenBasadaInv.voltEntInv
+        this.request.creg174BasInv.voltEntInv
       );
       this.form.controls['numeroInversores'].setValue(
-        this.request.solConexionAutogenBasadaInv.numInversores
+        this.request.creg174BasInv.numInversores
       );
       this.form.controls['numeroFases'].setValue(
-        this.request.solConexionAutogenBasadaInv.numFases
+        this.request.creg174BasInv.numFases
       );
       this.form.controls['cuentaControlCentralPlanta'].setValue(
-        this.request.solConexionAutogenBasadaInv.poseePpc
+        this.request.creg174BasInv.poseePpc
       );
       this.form.controls['fabricanteInversores'].setValue(
-        this.request.solConexionAutogenBasadaInv.fabricanteInv
+        this.request.creg174BasInv.fabricanteInv
       );
       this.form.controls['modeloInversores'].setValue(
-        this.request.solConexionAutogenBasadaInv.modeloInv
+        this.request.creg174BasInv.modeloInv
       );
       this.form.controls['cumpleEstandarUL1741_2010'].setValue(
-        this.request.solConexionAutogenBasadaInv.cumpleUl1741
+        this.request.creg174BasInv.cumpleUl1741
       );
       this.form.controls['versionEstandarUL1741_2010'].setValue(
-        this.request.solConexionAutogenBasadaInv?.anioIec61727
+        this.request.creg174BasInv?.anioIec61727
       );
       this.form.controls['cumpleEstandarIEC61727_2004'].setValue(
-        this.request.solConexionAutogenBasadaInv.cumpleIec61727
+        this.request.creg174BasInv.cumpleIec61727
       );
       this.form.controls['versionEstandarIEC61727_2004'].setValue(
-        this.request.solConexionAutogenBasadaInv?.anioIec61727
+        this.request.creg174BasInv?.anioIec61727
       );
       this.form.controls['transfoPotNominalInv'].setValue(
-        this.request.solConexionAutogenBasadaInv.transfoPotNominal
+        this.request.creg174BasInv.transfoPotNominal
       );
       this.form.controls['transfoImpedanciaCcInv'].setValue(
-        this.request.solConexionAutogenBasadaInv.transfoImpedanciaCc
+        this.request.creg174BasInv.transfoImpedanciaCc
       );
       this.form.controls['transfoGrupoConexInv'].setValue(
-        this.request.solConexionAutogenBasadaInv.transfoGrupoConex
+        this.request.creg174BasInv.transfoGrupoConex
       );
       this.form.controls['notaTecnoInversores'].setValue(
-        this.request.solConexionAutogenBasadaInv.descripcionElementos
+        this.request.creg174BasInv.descripcionElementos
       );
     }
 
     //Información de la tecnología de generación de energía NO basada en inversores
 
-    if (this.request.solConexionAutogenNoBasadaInv) {
+    if (this.request.creg174NoBasInv) {
       this.form.controls['fabricanteGenerador'].setValue(
-        this.request.solConexionAutogenNoBasadaInv.fabricanteGenerador
+        this.request.creg174NoBasInv.fabricanteGenerador
       );
       this.form.controls['modeloGenerador'].setValue(
-        this.request.solConexionAutogenNoBasadaInv.modeloGenerador
+        this.request.creg174NoBasInv.modeloGenerador
       );
       this.form.controls['voltajeGenerador'].setValue(
-        this.request.solConexionAutogenNoBasadaInv.voltajeGenerador
+        this.request.creg174NoBasInv.voltajeGenerador
       );
       this.form.controls['potenciaNominal'].setValue(
-        this.request.solConexionAutogenNoBasadaInv.potenciaNominal
+        this.request.creg174NoBasInv.potenciaNominal
       );
       this.form.controls['factorPotencia'].setValue(
-        this.request.solConexionAutogenNoBasadaInv.factorPotencia
+        this.request.creg174NoBasInv.factorPotencia
       );
       this.form.controls['numeroFasesNoBasadaEnInversores'].setValue(
-        this.request.solConexionAutogenNoBasadaInv.numeroFases
+        this.request.creg174NoBasInv.numeroFases
       );
       this.form.controls['transfoPotNominal'].setValue(
-        this.request.solConexionAutogenNoBasadaInv.transfoPotNominal
+        this.request.creg174NoBasInv.transfoPotNominal
       );
       this.form.controls['transfoImpedanciaCc'].setValue(
-        this.request.solConexionAutogenNoBasadaInv.transfoImpedanciaCc
+        this.request.creg174NoBasInv.transfoImpedanciaCc
       );
       this.form.controls['transfoGrupoConex'].setValue(
-        this.request.solConexionAutogenNoBasadaInv.transfoGrupoConex
+        this.request.creg174NoBasInv.transfoGrupoConex
       );
       this.form.controls['descripcionElementos'].setValue(
-        this.request.solConexionAutogenNoBasadaInv.descripcionElementos
+        this.request.creg174NoBasInv.descripcionElementos
       );
       this.form.controls['cumpleEstandarIEEE1547_2003'].setValue(
-        this.request.solConexionAutogenNoBasadaInv.cumpleIeee1547
+        this.request.creg174NoBasInv.cumpleIeee1547
       );
       this.form.controls['anioIeee1547'].setValue(
-        this.request.solConexionAutogenNoBasadaInv.anioIeee1547
+        this.request.creg174NoBasInv.anioIeee1547
       );
 
     }
 
     //this.form.controls.notaTecnoNoInversores.setValue(this.request.solConexionAutogenNoBasadaInv);
     // Información de la tecnología de generación de energía eólica
-    if (this.request.solConexionAutogenInfoEolica) {
+    if (this.request.creg174Infoeolica) {
       this.form.controls['fabricanteAerogenerador'].setValue(
-        this.request.solConexionAutogenInfoEolica.fabricanteAerogenerador
+        this.request.creg174Infoeolica.fabricanteAerogenerador
       );
       this.form.controls['modeloAerogenerador'].setValue(
-        this.request.solConexionAutogenInfoEolica.fabricanteAerogenerador
+        this.request.creg174Infoeolica.fabricanteAerogenerador
       );
       this.form.controls['voltajeAc'].setValue(
-        this.request.solConexionAutogenInfoEolica.voltajeAc
+        this.request.creg174Infoeolica.voltajeAc
       );
       this.form.controls['potenciaNominalEol'].setValue(
-        this.request.solConexionAutogenInfoEolica.potenciaNominal
+        this.request.creg174Infoeolica.potenciaNominal
       );
       this.form.controls['numAerogeneradores'].setValue(
-        this.request.solConexionAutogenInfoEolica.numAerogeneradores
+        this.request.creg174Infoeolica.numAerogeneradores
       );
       this.form.controls['codTipoAerogenerador'].setValue(
-        this.request.solConexionAutogenInfoEolica.codTipoAerogenerador
+        this.request.creg174Infoeolica.codTipoAerogenerador
       );
       this.form.controls['cuentaConControlCentralPlanta'].setValue(
-        this.request.solConexionAutogenInfoEolica.poseePpc
+        this.request.creg174Infoeolica.poseePpc
       );
       this.form.controls['transfoPotNominalEol'].setValue(
-        this.request.solConexionAutogenInfoEolica.transfoPotNominal
+        this.request.creg174Infoeolica.transfoPotNominal
       );
       this.form.controls['transfoImpedanciaCcEol'].setValue(
-        this.request.solConexionAutogenInfoEolica.transfoImpedanciaCc
+        this.request.creg174Infoeolica.transfoImpedanciaCc
       );
       this.form.controls['transfoGrupoConexEol'].setValue(
-        this.request.solConexionAutogenInfoEolica.transfoGrupoConex
+        this.request.creg174Infoeolica.transfoGrupoConex
       );
       this.form.controls['descripcionElementosEol'].setValue(
-        this.request.solConexionAutogenInfoEolica.descripcionElementos
+        this.request.creg174Infoeolica.descripcionElementos
       );
       this.form.controls['cumpleEstandarIEEE1547_2003_Eolica'].setValue(
-        this.request.solConexionAutogenInfoEolica.cumpleIeee1547
+        this.request.creg174Infoeolica.cumpleIeee1547
       );
       this.form.controls['anioIeee1547_Eolica'].setValue(
-        this.request.solConexionAutogenInfoEolica.anioIeee1547
+        this.request.creg174Infoeolica.anioIeee1547
       );
     }
 

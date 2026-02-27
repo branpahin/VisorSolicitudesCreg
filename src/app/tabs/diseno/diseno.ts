@@ -26,6 +26,7 @@ import { Notes } from '../../enums/notes';
 import { StorageService } from '../../services/storage.service';
 import { SolicitudService } from '../../services/solicitud';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-diseno',
@@ -164,7 +165,8 @@ export class Diseno {
     private storageService: StorageService,
     private fb: FormBuilder,
     private solicitudService: SolicitudService,
-    private elementRef: ElementRef){
+    private elementRef: ElementRef,
+    private messageService:MessageService,){
     this.setForm();
   }
 
@@ -176,6 +178,7 @@ export class Diseno {
         this.form.disable();
         this.getDataDiseno(this.requestId);
         this.getInitialParameters();
+        this.getInitialParametersDiseno();
         // if (this.requestDisenio) {
         //   this.getInitialParameters();
         //   this.setRequestData();
@@ -212,6 +215,21 @@ export class Diseno {
   }
 
   getInitialParametersDiseno() {
+    this.solicitudService.getDatosGeneralesCreg075Diseno().subscribe({
+      next: (res) => {
+        this.lstFilesToUpLoad = res.data.documentosRequeridosAnexos ? res.data.documentosRequeridosAnexos : [];
+        this.lstTipoDocumento = res.data.documentosQuePresenta;
+        this.lstDocumentosFirma = res.data.documentosAnexos;
+      },
+      error: (err) => {
+        console.error('Error al cargar solicitud', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: err?.error || 'No fue obtener algunos datos'
+        });
+      }
+    });
     // this.httpService.Get(this.urlGetDatosInicialesDiseno).subscribe((res) => {
     //   this.lstFilesToUpLoad = res.data.documentosRequeridosAnexos ? res.data.documentosRequeridosAnexos : [];
     //   this.lstTipoDocumento = res.data.documentosQuePresenta;

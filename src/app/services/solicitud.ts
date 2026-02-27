@@ -18,6 +18,7 @@ export class SolicitudService {
   private postDownload= 'api/Files/DownloadFile';
   private getFactibilidadSolicitudes075 = 'api/Solicitudes075Factibilidad/GetById';
   private getDisenoSolicitudes075 = 'api/Solicitudes075Disenio/GetById';
+  private getDisenoSolicitudes075ParamsGenerales = 'api/Solicitudes075Disenio/GetDatosGenerales';
   private getReciboTecnicoSolicitudes075 = 'api/Solicitudes075ReciboTecnico/GetById';
 
   constructor(private http: HttpClient) {}
@@ -48,6 +49,10 @@ export class SolicitudService {
 
   getDatosGeneralesCreg075(): Observable<any> {
     return this.http.get<any>(this.apiUrl+this.getDatosGenerales075);
+  }
+
+  getDatosGeneralesCreg075Diseno(): Observable<any> {
+    return this.http.get<any>(this.apiUrl+this.getDisenoSolicitudes075ParamsGenerales);
   }
 
   getDepartamentos(): Observable<any> {
