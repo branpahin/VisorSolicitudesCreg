@@ -6,5 +6,5 @@ import { faLessThanEqual } from "@fortawesome/free-solid-svg-icons";
 
 export const environment = {
   production: false,
-  apiUrl: 'https://api.midominio.com'
+  apiUrl: 'https://localhost:44339/'
 };
