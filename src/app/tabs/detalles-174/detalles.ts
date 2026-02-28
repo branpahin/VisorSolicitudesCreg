@@ -435,13 +435,13 @@ export class Detalles {
         this.request.creg174BasInv?.anioIec61727
       );
       this.form.controls['transfoPotNominalInv'].setValue(
-        this.request.creg174BasInv.transfoPotNominal
+        this.request.creg174BasInv.trafoPotNominal
       );
       this.form.controls['transfoImpedanciaCcInv'].setValue(
-        this.request.creg174BasInv.transfoImpedanciaCc
+        this.request.creg174BasInv.trafoImpedanciaCc
       );
       this.form.controls['transfoGrupoConexInv'].setValue(
-        this.request.creg174BasInv.transfoGrupoConex
+        this.request.creg174BasInv.trafoGrupoConex
       );
       this.form.controls['notaTecnoInversores'].setValue(
         this.request.creg174BasInv.descripcionElementos
@@ -473,7 +473,7 @@ export class Detalles {
         this.request.creg174NoBasInv.transfoPotNominal
       );
       this.form.controls['transfoImpedanciaCc'].setValue(
-        this.request.creg174NoBasInv.transfoImpedanciaCc
+        this.request.creg174NoBasInv.transfoImpedancia
       );
       this.form.controls['transfoGrupoConex'].setValue(
         this.request.creg174NoBasInv.transfoGrupoConex
@@ -551,10 +551,10 @@ export class Detalles {
 
     //Protección Anti Isla
     this.form.controls['proteccionAntiIslaInstalada'].setValue(
-      this.request.protAntiIslaFuncionProteccion
+      this.request.protantiIsla
     );
     this.form.controls['proteccionAntiIslaNoInstaladaDescripcion'].setValue(
-      this.request.protAntiIslaDescFuncionAntiIsla
+      this.request.protantiIslaDesc
     );
 
     //Información Sistema de Medición
