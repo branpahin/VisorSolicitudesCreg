@@ -257,11 +257,11 @@ export class Diseno {
       },
       error: (err) => {
         console.error('Error al cargar solicitud', err);
-        // this.messageService.add({
-        //   severity: 'error',
-        //   summary: 'Error',
-        //   detail: err?.error || 'No fue posible cargar la solicitud'
-        // });
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: err?.error.data[0].error || 'No fue posible cargar la solicitud'
+        });
 
         // setTimeout(() => {
         //   this.router.navigate(['/']);

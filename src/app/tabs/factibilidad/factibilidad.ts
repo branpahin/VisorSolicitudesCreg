@@ -26,6 +26,7 @@ import { Notes } from '../../enums/notes';
 import { StorageService } from '../../services/storage.service';
 import { SolicitudService } from '../../services/solicitud';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-factibilidad',
@@ -124,7 +125,8 @@ export class Factibilidad {
     private solicitudService: SolicitudService, 
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef,
-    private elementRef: ElementRef){
+    private elementRef: ElementRef,
+    private messageService:MessageService ){
     this.setForm();
   }
 
@@ -231,11 +233,11 @@ export class Factibilidad {
       },
       error: (err) => {
         console.error('Error al cargar solicitud', err);
-        // this.messageService.add({
-        //   severity: 'error',
-        //   summary: 'Error',
-        //   detail: err?.error || 'No fue posible cargar la solicitud'
-        // });
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: err?.error.data[0].error || 'No fue posible cargar la solicitud'
+        });
 
         // setTimeout(() => {
         //   this.router.navigate(['/']);

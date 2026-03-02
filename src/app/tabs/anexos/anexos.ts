@@ -14,6 +14,7 @@ import {
   faEye
 } from '@fortawesome/free-solid-svg-icons';
 import { SolicitudService } from '../../services/solicitud';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-anexos',
@@ -41,7 +42,7 @@ export class Anexos {
     default: faFile
   };
 
-  constructor(private solicitudService: SolicitudService){
+  constructor(private solicitudService: SolicitudService, private messageService:MessageService ){
     
   }
 
@@ -70,6 +71,11 @@ export class Anexos {
       },
       error: (err) => {
         console.error('Error descargando Excel', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: err?.error.data[0].error || 'No fue posible cargar la solicitud'
+        });
       }
     });
   }

@@ -27,6 +27,7 @@ import { StorageService } from '../../services/storage.service';
 import { SolicitudService } from '../../services/solicitud';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Tabs, TabList, TabPanel, Tab } from "primeng/tabs";
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-recibo_tecnico',
@@ -176,7 +177,8 @@ export class ReciboTecnico {
     private storageService: StorageService,
     private fb: FormBuilder,
     private solicitudService: SolicitudService,
-    private elementRef: ElementRef){
+    private elementRef: ElementRef,
+    private messageService:MessageService ){
     this.setForm();
   }
 
@@ -237,11 +239,11 @@ export class ReciboTecnico {
       },
       error: (err) => {
         console.error('Error al cargar solicitud', err);
-        // this.messageService.add({
-        //   severity: 'error',
-        //   summary: 'Error',
-        //   detail: err?.error || 'No fue posible cargar la solicitud'
-        // });
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: err?.error.data[0].error || 'No fue posible cargar la solicitud'
+        });
 
         // setTimeout(() => {
         //   this.router.navigate(['/']);

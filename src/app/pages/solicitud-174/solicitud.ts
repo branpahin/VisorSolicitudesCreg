@@ -56,7 +56,7 @@ export class Solicitud {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: err?.error || 'No fue posible cargar la solicitud'
+          detail: err?.error.data[0].error || 'No fue posible cargar la solicitud'
         });
 
         setTimeout(() => {
