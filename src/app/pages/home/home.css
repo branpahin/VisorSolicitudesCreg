@@ -75,3 +75,16 @@ img.img-fluid{
   font-family: 'Montserrat-Bold';
 }
 
+.codigo-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.codigo-input {
+  width: 45px;
+  height: 55px;
+  text-align: center;
+  font-size: 22px;
+  border-radius: 8px;
+}

@@ -67,6 +67,7 @@
         </div>
         </div>
     </div>
+    
 </div>
 
 }@else {<div class="min-h-screen flex flex-col items-center justify-center bg-gray-50 gap-4">
@@ -83,3 +84,45 @@
 
   </div>}
 <p-toast position="top-right"></p-toast>
+<p-dialog 
+    header="Verificación de Código"
+    [(visible)]="displayCodigoDialog"
+    [modal]="true"
+    [closable]="false"
+    [style]="{ width: '400px' }"
+    [draggable]="false"
+    [resizable]="false">
+
+    <div class="text-center">
+        <p>
+            Hemos enviado un código al correo:
+        </p>
+        <strong>{{ correoEnviado }}</strong>
+    </div>
+
+    <div class="codigo-container mt-4">
+        <input 
+            *ngFor="let item of codigo; let i = index"
+            #codigoInput
+            pInputText
+            maxlength="1"
+            [(ngModel)]="codigo[i]"
+            (keydown)="manejarTecla($event, i)"
+            (input)="onInput($event, i)"
+            (paste)="onPaste($event)"
+            class="codigo-input"
+        />
+    </div>
+
+    <ng-template pTemplate="footer">
+        <button pButton label="Cancelar" 
+                class="p-button-text"
+                (click)="cerrarDialog()"></button>
+
+        <button pButton label="Validar"
+                (click)="validarCodigo()"
+                [disabled]="codigo.join('').length !== 6">
+        </button>
+    </ng-template>
+
+</p-dialog>

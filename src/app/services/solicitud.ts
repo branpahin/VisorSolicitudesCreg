@@ -11,11 +11,13 @@ export class SolicitudService {
   private apiUrl = environment.apiUrl;
   private getSolicitudes174 = 'api/Solicitudes174/GetById';
   private getSolicitudes075 = 'api/Solicitudes075/GetById';
-  private getDatosGenerales174= 'api/Solicitudes174/GetDatosGenerales';
-  private getDatosGenerales075= 'api/Solicitudes075/GetDatosGenerales';
-  private getDepartamento= 'api/Departamento/GetDepartamentos';
-  private getCiudad= 'api/Ciudad/GetDptoCiudad';
-  private postDownload= 'api/Files/DownloadFile';
+  private getDatosGenerales174 = 'api/Solicitudes174/GetDatosGenerales';
+  private getDatosGenerales075 = 'api/Solicitudes075/GetDatosGenerales';
+  private getDepartamento = 'api/Departamento/GetDepartamentos';
+  private getCiudad = 'api/Ciudad/GetDptoCiudad';
+  private postDownload = 'api/Files/DownloadFile';
+  private codigoVerificacion = 'api/CodigoVerificacionEmail/CrearCodigoVerificacion';
+  private verificarCodigo = 'api/CodigoVerificacionEmail/VerificarCodigo';
   private getFactibilidadSolicitudes075 = 'api/Solicitudes075Factibilidad/GetById';
   private getDisenoSolicitudes075 = 'api/Solicitudes075Disenio/GetById';
   private getDisenoSolicitudes075ParamsGenerales = 'api/Solicitudes075Disenio/GetDatosGenerales';
@@ -61,6 +63,14 @@ export class SolicitudService {
 
   getCiudades(departamento:string): Observable<any> {
     return this.http.get<any>(this.apiUrl+this.getCiudad+"?CodDepartamento="+departamento);
+  }
+
+  postCodigoVerificacion(data:any): Observable<any> {
+    return this.http.post<any>(this.apiUrl+this.codigoVerificacion,data);
+  }
+
+  postVerificarCodigo(data:any): Observable<any> {
+    return this.http.post<any>(this.apiUrl+this.verificarCodigo,data, { observe: 'response' });
   }
 
   postDownloadFile(data:any): Observable<any> {
