@@ -38,8 +38,8 @@ export class Home {
   ];
 
   cregs = [
-    { name: 'Autogeneración', code: '1' },
-    { name: 'Servicio', code: '2' },
+    { name: 'Autogeneración', code: '2' },
+    { name: 'Servicio', code: '1' },
   ];
 
   ciudad!: string;
@@ -177,7 +177,7 @@ export class Home {
         }
 
         this.displayCodigoDialog = false;
-        if(this.creg=='1'){
+        if(this.creg=='2'){
           this.cargarSolicitud174();
         }else{
           this.cargarSolicitud075();
