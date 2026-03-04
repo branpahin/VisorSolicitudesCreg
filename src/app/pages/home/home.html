@@ -101,17 +101,13 @@
     </div>
 
     <div class="codigo-container mt-4">
-        <input 
-            *ngFor="let item of codigo; let i = index"
-            #codigoInput
-            pInputText
-            maxlength="1"
-            [(ngModel)]="codigo[i]"
-            (keydown)="manejarTecla($event, i)"
-            (input)="onInput($event, i)"
-            (paste)="onPaste($event)"
-            class="codigo-input"
-        />
+        <p-inputOtp
+        class="mi-otp"
+  [(ngModel)]="codigo"
+  [length]="6"
+  [integerOnly]="true"
+  (ngModelChange)="limpiarCodigo($event)"
+></p-inputOtp>
     </div>
 
     <ng-template pTemplate="footer">
@@ -121,7 +117,7 @@
 
         <button pButton label="Validar"
                 (click)="validarCodigo()"
-                [disabled]="codigo.join('').length !== 6">
+                [disabled]="codigo.length !== 6">
         </button>
     </ng-template>
 

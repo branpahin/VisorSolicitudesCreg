@@ -11,6 +11,7 @@ import { SolicitudService } from '../../services/solicitud';
 import { StorageService } from '../../services/storage.service';
 import { Toast } from "primeng/toast";
 import { MessageService } from 'primeng/api';
+import { InputOtpModule } from 'primeng/inputotp';
 
 @Component({
   selector: 'app-home',
@@ -21,6 +22,7 @@ import { MessageService } from 'primeng/api';
     ButtonModule,
     InputTextModule,
     SelectModule,
+    InputOtpModule,
     Toast
 ],
   providers: [MessageService],
@@ -28,7 +30,7 @@ import { MessageService } from 'primeng/api';
   styleUrl: './home.css',
 })
 export class Home {
-  @ViewChildren('codigoInput') inputs!: QueryList<ElementRef>;
+  @ViewChildren('inputRef') inputs!: QueryList<ElementRef>;
 
   logo: string = 'assets/eep/logoEEP_dynamic.svg';
 
@@ -48,7 +50,7 @@ export class Home {
  
   displayCodigoDialog: boolean = false;
   correoEnviado: string = '';
-  codigo: string[] = ['', '', '', '', '', ''];
+  codigo: string = '';
   mostrarDialog: boolean =  true;
   cargando: boolean = false;
 
@@ -76,92 +78,21 @@ export class Home {
     // }
   }
 
-  moverSiguiente(event: any, index: number) {
-    const input = event.target;
-    if (input.value.length === 1 && input.nextElementSibling) {
-      input.nextElementSibling.focus();
-    }
+  limpiarCodigo(valor: string) {
+    this.codigo = (valor || '').replace(/\D/g, '');
   }
 
   cerrarDialog() {
     this.displayCodigoDialog = false;
-    this.codigo = ['', '', '', '', '', ''];
-  }
-
-  manejarTecla(event: KeyboardEvent, index: number) {
-
-    const key = event.key;
-
-    // Permitir combinaciones Ctrl o Cmd (copiar, pegar, cortar)
-    if (event.ctrlKey || event.metaKey) {
-      return;
-    }
-
-    // Permitir teclas especiales
-    const teclasPermitidas = [
-      'Backspace',
-      'Delete',
-      'ArrowLeft',
-      'ArrowRight',
-      'Tab'
-    ];
-
-    if (teclasPermitidas.includes(key)) {
-
-      // Si es Backspace y está vacío → ir al anterior
-      if (key === 'Backspace' && !this.codigo[index] && index > 0) {
-        this.focusInput(index - 1);
-      }
-
-      return;
-    }
-
-    // Permitir solo números
-    if (!/^\d$/.test(key)) {
-      event.preventDefault();
-    }
-  }
-
-  onInput(event: any, index: number) {
-    const value = event.target.value;
-
-    if (!/^\d$/.test(value)) {
-      this.codigo[index] = '';
-      return;
-    }
-
-    if (index < this.codigo.length - 1) {
-      this.focusInput(index + 1);
-    }
-  }
-
-  onPaste(event: ClipboardEvent) {
-    event.preventDefault();
-
-    const pastedData = event.clipboardData?.getData('text') || '';
-    const numeros = pastedData.replace(/\D/g, '').slice(0, 6);
-
-    numeros.split('').forEach((num, i) => {
-      this.codigo[i] = num;
-    });
-
-    const nextIndex = numeros.length < 6 ? numeros.length : 5;
-    this.focusInput(nextIndex);
-  }
-
-  focusInput(index: number) {
-    const inputArray = this.inputs.toArray();
-    if (inputArray[index]) {
-      inputArray[index].nativeElement.focus();
-    }
+    this.cargando = false;
+    this.cd.detectChanges();
+    this.codigo = '';
   }
 
   validarCodigo() {
-    const codigoCompleto = this.codigo.join('');
-    console.log("Código ingresado:", codigoCompleto);
     const data = {
       id:this.numeroSolicitud,
-      codigo:codigoCompleto,
+      codigo:this.codigo,
       email: this.correoEnviado 
     }
     this.solicitudService.postVerificarCodigo(data).subscribe({
@@ -177,6 +108,7 @@ export class Home {
         }
 
         this.displayCodigoDialog = false;
+        this.cd.detectChanges();
         if(this.creg=='2'){
           this.cargarSolicitud174();
         }else{
@@ -191,6 +123,7 @@ export class Home {
           summary: 'Error',
           detail: err?.error.data[0].error || 'No fue posible cargar la solicitud'
         });
+        this.cargando = false;
       }
     });
   }
@@ -198,9 +131,8 @@ export class Home {
   codigoVerificacion(data:any) {
     this.solicitudService.postCodigoVerificacion(data).subscribe({
       next: (resp) => {
-        console.log("data: ", resp);
 
-        this.correoEnviado = resp?.data?.email; // ajusta según tu respuesta real
+        this.correoEnviado = resp?.data?.email;
         this.displayCodigoDialog  = true;
         this.cd.detectChanges();
       },
@@ -211,6 +143,7 @@ export class Home {
           summary: 'Error',
           detail: err?.error.data[0].error || 'No fue posible cargar la solicitud'
         });
+        this.cargando = false;
       }
     });
   }
