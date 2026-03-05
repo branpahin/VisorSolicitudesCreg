@@ -15,7 +15,7 @@
 
                     <!-- Tipo -->
                     <div class="form-group">
-                      <label class="formLabel">Tipo*</label>
+                      <label class="formLabel">Tipo<span class="required">*</span></label>
                       <select
                         id="codTipoGeneracion"
                         class="formInput w-full"
@@ -33,8 +33,7 @@
                     <!-- Entrega excedentes -->
                     <div *ngIf="canDeliverSurplusesNetwork" class="form-group">
                       <label class="formLabel">
-                        Si es GD, AGPE o AGGE, ¿Entrega excedentes a la red?:*
-                      </label>
+                        Si es GD, AGPE o AGGE, ¿Entrega excedentes a la red?:<span class="required">*</span></label>
 
                       <div class="mt-2 flex gap-6">
                         <label class="flex items-center gap-2 cursor-pointer">
@@ -60,8 +59,7 @@
                     <!-- OR instala activos -->
                     <div class="form-group">
                       <label class="formLabel">
-                        ¿El OR suministra o instala los activos de conexión?:*
-                      </label>
+                        ¿El OR suministra o instala los activos de conexión?:<span class="required">*</span></label>
 
                       <div class="mt-2 flex gap-6">
                         <label class="flex items-center gap-2 cursor-pointer">
@@ -92,8 +90,7 @@
                     <!-- Fecha prevista -->
                     <div class="form-group">
                       <label class="formLabel">
-                        Fecha prevista de entrada en operación*
-                      </label>
+                        Fecha prevista de entrada en operación<span class="required">*</span></label>
                       <input
                         id="fechaPrevistaOper"
                         type="date"
@@ -107,8 +104,7 @@
                     <!-- Clasificación -->
                     <div class="form-group">
                       <label class="formLabel">
-                        Clasificación del proyecto según su capacidad*
-                      </label>
+                        Clasificación del proyecto según su capacidad<span class="required">*</span></label>
                       <select
                         id="codClasificacionProyecto"
                         class="formInput w-full"
@@ -141,7 +137,7 @@
 
                   <!-- Comercializador -->
                   <div class="form-group">
-                    <label class="formLabel">Comercializador que lo atiende*</label>
+                    <label class="formLabel">Comercializador que lo atiende<span class="required">*</span></label>
 
                     <div class="mt-2 flex flex-col md:flex-row gap-4 flex-wrap">
 
@@ -177,7 +173,7 @@
                   <!-- No. cuenta cliente -->
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="form-group">
-                      <label class="formLabel">No. de cuenta cliente*</label>
+                      <label class="formLabel">No. de cuenta cliente<span class="required">*</span></label>
                       <input
                         id="codCuentaCliente"
                         type="number"
@@ -190,7 +186,7 @@
 
                   <!-- Nombre cliente -->
                   <div class="form-group">
-                    <label class="formLabel">Nombre del cliente*</label>
+                    <label class="formLabel">Nombre del cliente<span class="required">*</span></label>
                     <input
                       id="nombreCliente"
                       type="text"
@@ -203,7 +199,7 @@
                   <!-- Identificación -->
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="form-group">
-                      <label class="formLabel">Tipo Identificación*</label>
+                      <label class="formLabel">Tipo Identificación<span class="required">*</span></label>
                       <select
                         id="codTipoIdentificacionCliente"
                         class="formInput w-full"
@@ -218,7 +214,7 @@
                     </div>
 
                     <div class="form-group">
-                      <label class="formLabel">N° Identificación*</label>
+                      <label class="formLabel">N° Identificación<span class="required">*</span></label>
                       <input
                         id="numeroIdentificacionCliente"
                         type="text"
@@ -231,7 +227,7 @@
 
                   <!-- Dirección -->
                   <div class="form-group">
-                    <label class="formLabel">Dirección*</label>
+                    <label class="formLabel">Dirección<span class="required">*</span></label>
                     <input
                       id="direccionCliente"
                       type="text"
@@ -243,8 +239,8 @@
 
                   <!-- Municipio -->
                   <div class="form-group">
-                    <label class="formLabel">Municipio*</label>
-                    <ng-select
+                    <label class="formLabel">Municipio<span class="required">*</span></label>
+                    <!-- <select
                       class="formInput custom w-full"
                       [items]="filteredTowns"
                       bindLabel="nombreCompleto"
@@ -256,13 +252,25 @@
                       (search)="onSearch($event)"
                       [ngClass]="formDataValidate('codMunicipioCliente')"
                     >
-                    </ng-select>
+                    </select> -->
+
+                    <select
+                      id="codMunicipioCliente"
+                      class="formInput w-full"
+                      formControlName="codMunicipioCliente"
+                      [ngClass]="formDataValidate('codMunicipioCliente')"
+                    >
+                      <option value="-1"></option>
+                      <option *ngFor="let idType of filteredTowns" [value]="idType.id">
+                        {{ idType.nombreCompleto }}
+                      </option>
+                    </select>
                   </div>
 
                   <!-- Email / Teléfono -->
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="form-group">
-                      <label class="formLabel">Email*</label>
+                      <label class="formLabel">Email<span class="required">*</span></label>
                       <input
                         id="emailCliente"
                         type="email"
@@ -273,7 +281,7 @@
                     </div>
 
                     <div class="form-group">
-                      <label class="formLabel">Teléfono/Celular*</label>
+                      <label class="formLabel">Teléfono/Celular<span class="required">*</span></label>
                       <input
                         id="telefonoCliente"
                         type="text"
@@ -287,7 +295,7 @@
                   <!-- Tipo cliente -->
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="form-group">
-                      <label class="formLabel">Tipo de cliente*</label>
+                      <label class="formLabel">Tipo de cliente<span class="required">*</span></label>
                       <select
                         id="codTipoCliente"
                         class="formInput w-full"
@@ -310,6 +318,7 @@
                         id="otroTipoCliente"
                         class="formInput w-full"
                         formControlName="otroTipoCliente"
+                        readonly
                         [ngClass]="formDataValidate('otroTipoCliente')"
                       />
                     </div>
@@ -320,7 +329,7 @@
                     *ngIf="form.get('codTipoCliente')?.value == 1 && form.get('codEstratoCliente')?.value"
                     class="form-group"
                   >
-                    <label class="formLabel">Estrato*</label>
+                    <label class="formLabel">Estrato<span class="required">*</span></label>
                     <select
                       id="codEstratoCliente"
                       class="formInput w-full"
@@ -348,7 +357,7 @@
 
                   <!-- Dirección inmueble -->
                   <div class="form-group">
-                    <label class="formLabel">Dirección de ubicación del proyecto*</label>
+                    <label class="formLabel">Dirección de ubicación del proyecto<span class="required">*</span></label>
                     <input
                       id="direccionInmueble"
                       type="text"
@@ -362,8 +371,8 @@
 
                   <!-- Municipio -->
                   <div class="form-group">
-                    <label class="formLabel">Municipio*</label>
-                    <ng-select
+                    <label class="formLabel">Municipio<span class="required">*</span></label>
+                    <!-- <ng-select
                       class="formInput custom w-full"
                       id="codMunicipioCliente"
                       [items]="filteredTowns"
@@ -376,7 +385,19 @@
                       (search)="onSearch($event)"
                       [ngClass]="formDataValidate('codMunicipioInmueble')"
                     >
-                    </ng-select>
+                    </ng-select> -->
+
+                    <select
+                      id="codMunicipioInmueble"
+                      class="formInput w-full"
+                      formControlName="codMunicipioInmueble"
+                      [ngClass]="formDataValidate('codMunicipioInmueble')"
+                    >
+                      <option value="-1"></option>
+                      <option *ngFor="let idType of filteredTowns" [value]="idType.id">
+                        {{ idType.nombreCompleto }}
+                      </option>
+                    </select>
                   </div>
 
                   <!-- Corregimiento / Vereda -->
@@ -447,7 +468,7 @@
 
                   <!-- Tecnología utilizada -->
                   <div class="form-group">
-                    <label class="formLabel">Tecnología Utilizada*</label>
+                    <label class="formLabel">Tecnología Utilizada<span class="required">*</span></label>
 
                     <div class="mt-2 flex flex-wrap gap-4">
                       <label
@@ -470,11 +491,12 @@
                     *ngIf="isAnotherTechnologyTypeSelected"
                     class="form-group"
                   >
-                    <label class="formLabel">Otro tipo de tecnología*</label>
+                    <label class="formLabel">Otro tipo de tecnología<span class="required">*</span></label>
                     <input
                       id="otroTipoTecnologia"
                       type="text"
                       class="formInput w-full"
+                      readonly
                       formControlName="otroTipoTecnologia"
                       [ngClass]="formDataValidate('otroTipoTecnologia')"
                     />
@@ -503,8 +525,7 @@
 
                     <div class="form-group">
                       <label class="formLabel">
-                        Cuenta con almacenamiento de energía:*
-                      </label>
+                        Cuenta con almacenamiento de energía:<span class="required">*</span></label>
                       <select
                         id="cuentaConAlmacenamientoEnergia"
                         class="formInput w-full"
@@ -562,8 +583,7 @@
 
                     <div class="form-group">
                       <label class="formLabel">
-                        Sistema basado en inversores:*
-                      </label>
+                        Sistema basado en inversores:<span class="required">*</span></label>
                       <label class="text-xs text-gray-500 block">
                         (Incluye fotovoltaico y eólico full converte)
                       </label>
@@ -585,8 +605,7 @@
 
                     <div class="form-group">
                       <label class="formLabel">
-                        Sistema basado en máquinas sincrónicas:*
-                      </label>
+                        Sistema basado en máquinas sincrónicas:<span class="required">*</span></label>
                       <select
                         id="sistemaBasadoMaquinasSincronicas"
                         class="formInput w-full"
@@ -605,8 +624,7 @@
 
                     <div class="form-group">
                       <label class="formLabel">
-                        Sistema basado en máquinas asincrónicas:*
-                      </label>
+                        Sistema basado en máquinas asincrónicas:<span class="required">*</span></label>
                       <select
                         id="sistemaBasadoMaquinasNoSincronicas"
                         class="formInput w-full"
@@ -631,6 +649,7 @@
                       <input
                         id="otroAlmacenamientoEnergia"
                         type="checkbox"
+                        disabled
                         (change)="onAnotherEnergyStorageChange($event)"
                       />
                       <span class="formLabel">Otro</span>
@@ -640,6 +659,7 @@
                       *ngIf="form.get('otroAlmacenamientoEnergia')?.value"
                       id="otroSistema"
                       type="text"
+                      readonly
                       class="formInput w-full mt-2"
                       formControlName="otroSistema"
                       [ngClass]="formDataValidate('otroSistema')"
@@ -661,7 +681,7 @@
                   <!-- -->
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
-                      <label class="formLabel">Potencia por panel (W):*</label>
+                      <label class="formLabel">Potencia por panel (W):<span class="required">*</span></label>
                       <input id="potenciaPorPanel" type="text"
                         class="w-full formInput"
                         formControlName="potenciaPorPanel"
@@ -669,7 +689,7 @@
                     </div>
 
                     <div>
-                      <label class="formLabel">Número de paneles:*</label>
+                      <label class="formLabel">Número de paneles:<span class="required">*</span></label>
                       <input id="numeroDePaneles" type="text"
                         class="w-full formInput"
                         formControlName="numeroDePaneles"
@@ -678,7 +698,7 @@
                   </div>
                   <!--Posee relé de flujo inverso-->
                   <div class="mb-4">
-                    <label class="formLabel">Posee relé de flujo inverso:*</label>
+                    <label class="formLabel">Posee relé de flujo inverso:<span class="required">*</span></label>
                     <select id="poseeReleDeFlujoInverso"
                       class="w-full formInput"
                       formControlName="poseeReleDeFlujoInverso"
@@ -732,7 +752,7 @@
                   <!--Cuenta con control central de planta (PPC)-->
                   <div class="row mb-2">
                     <div class="form-group col">
-                      <label class="formLabel">Cuenta con control central de planta (PPC):*</label>
+                      <label class="formLabel">Cuenta con control central de planta (PPC):<span class="required">*</span></label>
                       <select id="cuentaControlCentralPlanta" class="form-select formInput"
                         formControlName="cuentaControlCentralPlanta"
                         [ngClass]="formDataValidate('cuentaControlCentralPlanta')">
@@ -746,13 +766,13 @@
                   <!-- -->
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
-                      <label class="formLabel">Fabricante de los inversores:*</label>
+                      <label class="formLabel">Fabricante de los inversores:<span class="required">*</span></label>
                       <input class="w-full formInput"
                         formControlName="fabricanteInversores" />
                     </div>
 
                     <div>
-                      <label class="formLabel">Modelo de los inversores:*</label>
+                      <label class="formLabel">Modelo de los inversores:<span class="required">*</span></label>
                       <input class="w-full formInput"
                         formControlName="modeloInversores" />
                     </div>
@@ -760,7 +780,7 @@
                   <!--Cumple estándar UL 1741-2010 o superior-->
                   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                     <div class="md:col-span-2">
-                      <label class="formLabel">Cumple estándar UL 1741-2010 o superior:*</label>
+                      <label class="formLabel">Cumple estándar UL 1741-2010 o superior:<span class="required">*</span></label>
                       <select class="w-full formInput"
                         formControlName="cumpleEstandarUL1741_2010"
                         (change)="onStandardChanges('cumpleEstandarUL1741_2010','versionEstandarUL1741_2010')">
@@ -780,7 +800,7 @@
                   <!--Cumple estándar IEC 61727-2004 o superior-->
                   <div class="row mb-2">
                     <div class="form-group col">
-                      <label class="formLabel">Cumple estándar IEC 61727-2004 o superior:*</label>
+                      <label class="formLabel">Cumple estándar IEC 61727-2004 o superior:<span class="required">*</span></label>
                       <select id="cumpleEstandarIEC61727_2004" class="form-select formInput"
                         formControlName="cumpleEstandarIEC61727_2004"
                         (change)="onStandardChanges('cumpleEstandarIEC61727_2004','versionEstandarIEC61727_2004')"
@@ -872,14 +892,14 @@
                   <!-- -->
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
-                      <label class="formLabel">Fabricante del Generador:*</label>
+                      <label class="formLabel">Fabricante del Generador:<span class="required">*</span></label>
                       <input type="text" class="w-full formInput"
                         formControlName="fabricanteGenerador"
                         [ngClass]="formDataValidate('fabricanteGenerador')" />
                     </div>
 
                     <div>
-                      <label class="formLabel">Modelo del Generador:*</label>
+                      <label class="formLabel">Modelo del Generador:<span class="required">*</span></label>
                       <input type="text" class="w-full formInput"
                         formControlName="modeloGenerador"
                         [ngClass]="formDataValidate('modeloGenerador')" />
@@ -895,21 +915,21 @@
                     </div>
 
                     <div>
-                      <label class="formLabel">Potencia nominal (kVA):*</label>
+                      <label class="formLabel">Potencia nominal (kVA):<span class="required">*</span></label>
                       <input type="number" class="w-full formInput"
                         formControlName="potenciaNominal"
                         [ngClass]="formDataValidate('potenciaNominal')" />
                     </div>
 
                     <div>
-                      <label class="formLabel">Factor de potencia:*</label>
+                      <label class="formLabel">Factor de potencia:<span class="required">*</span></label>
                       <input type="number" class="w-full formInput"
                         formControlName="factorPotencia"
                         [ngClass]="formDataValidate('factorPotencia')" />
                     </div>
 
                     <div>
-                      <label class="formLabel">Número de fases:*</label>
+                      <label class="formLabel">Número de fases:<span class="required">*</span></label>
                       <input type="number" class="w-full formInput"
                         formControlName="numeroFasesNoBasadaEnInversores"
                         [ngClass]="formDataValidate('numeroFasesNoBasadaEnInversores')" />
@@ -957,7 +977,7 @@
                   <!--Cumple estándar IEEE 1547-2003 o superior-->
                   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                     <div class="md:col-span-2">
-                      <label class="formLabel">Cumple estándar IEEE 1547-2003 o superior:*</label>
+                      <label class="formLabel">Cumple estándar IEEE 1547-2003 o superior:<span class="required">*</span></label>
                       <select class="w-full formInput"
                         formControlName="cumpleEstandarIEEE1547_2003"
                         (change)="onStandardChanges('cumpleEstandarIEEE1547_2003','anioIeee1547')"
@@ -1007,7 +1027,7 @@
                   <!-- Fabricante / Modelo -->
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label class="formLabel">Fabricante del Aerogenerador:*</label>
+                      <label class="formLabel">Fabricante del Aerogenerador:<span class="required">*</span></label>
                       <input
                         id="fabricanteAerogenerador"
                         type="text"
@@ -1018,7 +1038,7 @@
                     </div>
 
                     <div>
-                      <label class="formLabel">Modelo:*</label>
+                      <label class="formLabel">Modelo:<span class="required">*</span></label>
                       <input
                         id="modeloAerogenerador"
                         type="text"
@@ -1043,7 +1063,7 @@
                     </div>
 
                     <div>
-                      <label class="formLabel">Potencia nominal (kW):*</label>
+                      <label class="formLabel">Potencia nominal (kW):<span class="required">*</span></label>
                       <input
                         id="potenciaNominalEol"
                         type="number"
@@ -1054,7 +1074,7 @@
                     </div>
 
                     <div>
-                      <label class="formLabel">Número de aerogeneradores:*</label>
+                      <label class="formLabel">Número de aerogeneradores:<span class="required">*</span></label>
                       <input
                         id="numAerogeneradores"
                         type="number"
@@ -1085,7 +1105,7 @@
 
                   <!-- Control central de planta -->
                   <div>
-                    <label class="formLabel">Cuenta con control central de planta (PPC)*</label>
+                    <label class="formLabel">Cuenta con control central de planta (PPC)<span class="required">*</span></label>
                     <select
                       id="cuentaConControlCentralPlanta"
                       class="formInput w-full"
@@ -1159,7 +1179,7 @@
                   <!-- IEEE -->
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label class="formLabel">Cumple estándar IEEE 1547-2003 o superior:*</label>
+                      <label class="formLabel">Cumple estándar IEEE 1547-2003 o superior:<span class="required">*</span></label>
                       <select
                         id="cumpleEstandarIEEE1547_2003_Eolica"
                         class="formInput w-full"
@@ -1225,7 +1245,7 @@
                 <!-- Capacidad nominal o instalada del sistema (kW) -->
                 <div class="row mb-2">
                   <div class="form-group col">
-                    <label class="formLabel">Capacidad nominal o instalada del sistema (kW)*</label>
+                    <label class="formLabel">Capacidad nominal o instalada del sistema (kW)<span class="required">*</span></label>
                     <label class="formLabel">Es la capacidad continua a plena carga del sistema de
                       generación del autogenerador o el generador que se conecta al SIN, bajo las
                       condiciones especificadas según el diseño del fabricante. Si la conexión es
@@ -1240,7 +1260,7 @@
                 <!--Potencia máxima declarada -->
                 <div class="row mb-2">
                   <div class="form-group col">
-                    <label class="formLabel">Potencia máxima declarada (kW)*</label>
+                    <label class="formLabel">Potencia máxima declarada (kW)<span class="required">*</span></label>
                     <label class="formLabel">Deberá ser menor o igual a la capacidad instalada o
                       nominal, y será la máxima capacidad que se puede entregar a la red en la
                       frontera comercial. En caso de que no cuente con un elemento que limite la
@@ -1253,7 +1273,7 @@
                 <!-- Nivel de tensión -->
                 <div class="row mb-2">
                   <div class="form-group col">
-                    <label class="formLabel">Nivel de tensión (kV)*</label>
+                    <label class="formLabel">Nivel de tensión (kV)<span class="required">*</span></label>
                     <input id="nivelTension" type="number" class="form-control formInput" formControlName="nivelTension"
                       [ngClass]="formDataValidate('nivelTension')" readonly>
                   </div>
@@ -1262,7 +1282,7 @@
                 <div class="row mb-2">
                   <div class="form-group col">
                     <label class="formLabel">Si entrega excedentes, código de la subestación, transformador o circuito
-                      al cual se realizará la conexión*</label>
+                      al cual se realizará la conexión<span class="required">*</span></label>
                     <input id="codTransformador" type="text" class="form-control formInput"
                       formControlName="codTransformador" [ngClass]="formDataValidate('codTransformador')" readonly>
                   </div>
@@ -1365,7 +1385,7 @@
                   <!--¿El cliente suministrará el medidor?-->
                   <div class="row mb-2">
                     <div class="form-group col">
-                      <label class="formLabel">¿El cliente suministrará el medidor?*</label>
+                      <label class="formLabel">¿El cliente suministrará el medidor?<span class="required">*</span></label>
                       <select id="clienteSuministraraMedidor" class="form-select formInput"
                         formControlName="clienteSuministraraMedidor"
                         [ngClass]="formDataValidate('clienteSuministraraMedidor')">
@@ -1379,7 +1399,7 @@
                   <!--¿El medidor tiene perfil horario?-->
                   <div class="row mb-2">
                     <div class="form-group col">
-                      <label class="formLabel">¿El medidor tiene perfil horario?*</label>
+                      <label class="formLabel">¿El medidor tiene perfil horario?<span class="required">*</span></label>
                       <select id="medidorTienePerfilHorario" class="form-select formInput"
                         [ngClass]="formDataValidate('medidorTienePerfilHorario')"
                         formControlName="medidorTienePerfilHorario">
@@ -1393,7 +1413,7 @@
                   <!--¿El medidor es bidireccional?-->
                   <div class="row mb-2">
                     <div class="form-group col">
-                      <label class="formLabel">¿El medidor es bidireccional?*</label>
+                      <label class="formLabel">¿El medidor es bidireccional?<span class="required">*</span></label>
                       <select id="medidorBidireccional" class="form-select formInput"
                         formControlName="medidorBidireccional" [ngClass]="formDataValidate('medidorBidireccional')">
                         <option selected></option>
